@@ -8,7 +8,7 @@ for (var i = 0; i < array_length(road_list) - 1; i++) {
 		next_road.y, 
 		c_white, c_white
 	);
-	if ((i % 5 == 0) or (i == array_length(road_list)-1)) {
+	if ((i % road_steps == 0) or (i == array_length(road_list)-1)) {
 		draw_circle_color(road.x, road.y, 4, c_white, c_white, false);
 	}
 	else {

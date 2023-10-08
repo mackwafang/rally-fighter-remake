@@ -53,17 +53,28 @@ function bezier_n(_x, _y, _primary_segments, _steps, _primary_segment_dist=128) 
 	/// @param {float} _y						y start of road
 	/// @param {int} _primary_segments			number of primary points
 	/// @param {int} _steps						number of secondary points between primary points
+	
+	assert(_primary_segments > 20, "Model cannot handle more than 20 primary segments");
+	
 	_road_node_list = array_create(_primary_segments * _steps); // hold the road nodes for rendering
 	
 	var init_coord = vec2(_x, _y);
 	
 	// initialize control points
 	var P = array_create(_primary_segments);
-	P[0] = new vec2();
+	P[0] = new vec2(_x, _y);
 	for (var s = 1; s < _primary_segments; s++) {
+		var next_dir = point_direction(
+			P[s-1].x,
+			P[s-1].y,
+			P[s].x,
+			P[s].y
+		) + irandom_range(-5, 5) * 30;
+		if (s == 1) {next_dir = 0;}
+		show_debug_message(next_dir);
 		P[s] = new vec2(
-			P[@s-1].x + (_primary_segment_dist * (1 + irandom(2))),
-			P[@s-1].y + irandom_range(-128, 128)
+			P[s-1].x + (cos(degtorad(next_dir)) * _primary_segment_dist),
+			P[s-1].y + (sin(degtorad(next_dir)) * _primary_segment_dist)
 		);
 	}
 	
