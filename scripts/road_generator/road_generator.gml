@@ -63,7 +63,7 @@ function bezier_n(_x, _y, _primary_segments, _steps, _primary_segment_dist=128) 
 	
 	// initialize control points
 	var P = array_create(_primary_segments);
-	var next_dir = 0;
+	var next_dir = 04;
 	P[0] = new vec2(_x, _y);
 	for (var s = 1; s < _primary_segments; s++) {
 		show_debug_message(next_dir);
