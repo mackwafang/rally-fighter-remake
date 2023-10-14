@@ -63,20 +63,15 @@ function bezier_n(_x, _y, _primary_segments, _steps, _primary_segment_dist=128) 
 	
 	// initialize control points
 	var P = array_create(_primary_segments);
+	var next_dir = 0;
 	P[0] = new vec2(_x, _y);
 	for (var s = 1; s < _primary_segments; s++) {
-		var next_dir = point_direction(
-			P[s-1].x,
-			P[s-1].y,
-			P[s].x,
-			P[s].y
-		) + irandom_range(-5, 5) * 30;
-		if (s == 1) {next_dir = 0;}
 		show_debug_message(next_dir);
 		P[s] = new vec2(
 			P[s-1].x + (cos(degtorad(next_dir)) * _primary_segment_dist),
 			P[s-1].y + (sin(degtorad(next_dir)) * _primary_segment_dist)
 		);
+		next_dir = irandom_range(-90, 90);
 	}
 	
 	//calculate secondary points
