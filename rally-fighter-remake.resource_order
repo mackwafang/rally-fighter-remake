@@ -18,6 +18,7 @@
     {"name":"Timelines","order":8,"path":"folders/Timelines.yy",},
   ],
   "ResourceOrderSettings": [
+    {"name":"globals","order":5,"path":"scripts/globals/globals.yy",},
     {"name":"constants","order":1,"path":"scripts/constants/constants.yy",},
     {"name":"assert","order":4,"path":"scripts/assert/assert.yy",},
     {"name":"math","order":1,"path":"scripts/math/math.yy",},

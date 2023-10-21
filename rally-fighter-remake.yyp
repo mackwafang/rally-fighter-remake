@@ -36,6 +36,7 @@
   },
   "resources": [
     {"id":{"name":"road_generator","path":"scripts/road_generator/road_generator.yy",},},
+    {"id":{"name":"globals","path":"scripts/globals/globals.yy",},},
     {"id":{"name":"constants","path":"scripts/constants/constants.yy",},},
     {"id":{"name":"lib_vectors","path":"scripts/lib_vectors/lib_vectors.yy",},},
     {"id":{"name":"assert","path":"scripts/assert/assert.yy",},},

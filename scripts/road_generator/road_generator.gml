@@ -67,7 +67,6 @@ function generate_roads(control_points, _steps) {
 	/// @param {array} control_points			array of control points
 	/// @param {int} _steps						number of secondary points between primary points
 	
-	
 	// initialize control points
 	var P = control_points;
 	var nP = array_length(control_points);
@@ -79,9 +78,9 @@ function generate_roads(control_points, _steps) {
 		var p = [];
 		array_copy(p, 0, P, i, 4); // "array slice"
 		show_debug_message(p)
-		for (var j = 0; j <= _steps; j++) {
+		for (var j = 0; j < _steps; j++) {
 			var t = j/_steps;
-			var point = cutmull_rom(p, t);
+			var point = new RoadNode(cutmull_rom(p, t));
 			_road_node_list[array_length(_road_node_list)] = point;
 		}
 	}
