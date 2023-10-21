@@ -19,6 +19,7 @@
   ],
   "ResourceOrderSettings": [
     {"name":"globals","order":5,"path":"scripts/globals/globals.yy",},
+    {"name":"camera_in_view","order":6,"path":"scripts/camera_in_view/camera_in_view.yy",},
     {"name":"constants","order":1,"path":"scripts/constants/constants.yy",},
     {"name":"assert","order":4,"path":"scripts/assert/assert.yy",},
     {"name":"math","order":1,"path":"scripts/math/math.yy",},
