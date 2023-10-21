@@ -1,11 +1,24 @@
 randomize();
 //random_set_seed(0);
 
-primary_count = 20;
-road_segments = primary_count * 10;
+primary_count = 4 * 10;
+road_segments = 20;
+control_points = array_create(primary_count);
 
 var t = current_time;
-road_list = bezier_n(0, y+256, primary_count, 10, 1024);
+var next_dir = 0;
+control_points[0] = new vec2();
+for (var s = 1; s < primary_count; s++) {
+	next_dir = irandom_range(-90, 90);
+	control_points[s] = new vec2(
+		control_points[s-1].x + (cos(degtorad(next_dir)) * 1024),
+		control_points[s-1].y + (sin(degtorad(next_dir)) * 1024)
+	);
+}
+
+show_debug_message(control_points);
+
+road_list = generate_roads(control_points, 10);
 
 //control_points = [];
 //var prev_x, prev_y, prev_dir;

@@ -43,66 +43,47 @@ function RoadNode(_vec2) constructor {
 	
 }
 
-function bernstein_poly(i, n, t) {
-	return ncr(n, i) * power(t,i) * (power(1 - t, n - i));
+function cutmull_rom(P, t) {
+	var tt = t*t;
+	var ttt = tt*t;
+	
+	var px = P[1].x * 2;
+	px += (-P[0].x + P[2].x) * t;
+	px += ((2*P[0].x) - (5*P[1].x) + (4*P[2].x) - P[3].x) * tt;
+	px += (-P[0].x + (3*P[1].x) - (3*P[2].x) + P[3].x) * ttt;
+	
+	var py = P[1].y * 2;
+	py += (-P[0].y + P[2].y) * t;
+	py += ((2*P[0].y) - (5*P[1].y) + (4*P[2].y) - P[3].y) * tt;
+	py += (-P[0].y + (3*P[1].y) - (3*P[2].y) + P[3].y) * ttt;
+	
+	
+	return new vec2(px / 2, py / 2);
 }
 
-function bezier_n(_x, _y, _primary_segments, _steps, _primary_segment_dist=128) {
-	/// @function								bezier_n(_x, _y, _primary_segments, _steps, _primary_segment_dist)
+function generate_roads(control_points, _steps) {
+	/// @function								generate_roads(control_points, _steps, _primary_segment_dist)
 	/// @description							Generate roads
-	/// @param {float} _x						x start of road
-	/// @param {float} _y						y start of road
-	/// @param {int} _primary_segments			number of primary points
+	/// @param {array} control_points			array of control points
 	/// @param {int} _steps						number of secondary points between primary points
 	
-	//assert(_primary_segments > 20, "Model cannot handle more than 20 primary segments");
-	
-	_road_node_list = array_create(_primary_segments * _steps); // hold the road nodes for rendering
-	
-	var init_coord = vec2(_x, _y);
 	
 	// initialize control points
-	var P = array_create(_primary_segments);
-	var next_dir = 04;
-	P[0] = new vec2(_x, _y);
-	for (var s = 1; s < _primary_segments; s++) {
-		show_debug_message(next_dir);
-		P[s] = new vec2(
-			P[s-1].x + (cos(degtorad(next_dir)) * _primary_segment_dist),
-			P[s-1].y + (sin(degtorad(next_dir)) * _primary_segment_dist)
-		);
-		next_dir = irandom_range(-90, 90);
-	}
+	var P = control_points;
+	var nP = array_length(control_points);
+	
+	_road_node_list = []; // hold the road nodes for rendering
 	
 	//calculate secondary points
-	for (var i = 0; i < _steps * _primary_segments; i++) {
-		var t = i / (_steps * _primary_segments);
-		var p = new vec2();
-		for (var s = 0; s < _primary_segments; s++) {
-			p = p.add(P[@s].multiply(bernstein_poly(s, _primary_segments - 1, t)));
+	for (var i = 0; i < nP-3; i++) {
+		var p = [];
+		array_copy(p, 0, P, i, 4); // "array slice"
+		show_debug_message(p)
+		for (var j = 0; j <= _steps; j++) {
+			var t = j/_steps;
+			var point = cutmull_rom(p, t);
+			_road_node_list[array_length(_road_node_list)] = point;
 		}
-		_road_node_list[i] = new RoadNode(p);
 	}
 	return _road_node_list;
-}
-	
-function decasteljau(control_points, t=0.1) {
-	/// @function			decasteljau(a, b)
-	/// @description		calcuate the line from de casteljau's algorthim
-	/// @param{array}		control_points	list of control points
-	/// @param{float}		ratio t
-	/// @return {vec2}
-	if (array_length(control_points) == 1) {
-		return control_points[0];
-	}
-	else {
-		var new_cp = [];
-		for (var i = 0; i < array_length(control_points) - 1; i++) {
-			var a = control_points[i].multiply(1-t);
-			var b = control_points[i+1].multiply(t);
-			var lerp_point = a.add(b);
-			new_cp = array_concat(new_cp, [lerp_point]);
-		}
-		return decasteljau(new_cp, t);
-	}
 }
