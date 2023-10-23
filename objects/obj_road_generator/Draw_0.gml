@@ -45,10 +45,10 @@ if (global.DEBUG_ROAD_DRAW_ROAD_POINTS) {
 		if (!camera_in_view(road.x, road.y, 256)) {continue;}
 		
 		var segments = [
-			new vec2(road.x+lengthdir_x(64*road.get_left_lanes(), road.direction+90), road.y+lengthdir_y(64*road.get_left_lanes(), road.direction+90)),
-			new vec2(road.x+lengthdir_x(64*road.get_right_lanes(), road.direction-90), road.y+lengthdir_y(64*road.get_right_lanes(), road.direction-90)),
-			new vec2(next_road.x+lengthdir_x(64*next_road.get_left_lanes(), next_road.direction+90), next_road.y+lengthdir_y(64*next_road.get_left_lanes(), next_road.direction+90)),
-			new vec2(next_road.x+lengthdir_x(64*next_road.get_right_lanes(), next_road.direction-90), next_road.y+lengthdir_y(64*next_road.get_right_lanes(), next_road.direction-90)),
+			new vec2(road.x+lengthdir_x(64*road.get_lanes_left(), road.direction+90), road.y+lengthdir_y(64*road.get_lanes_left(), road.direction+90)),
+			new vec2(road.x+lengthdir_x(64*road.get_lanes_right(), road.direction-90), road.y+lengthdir_y(64*road.get_lanes_right(), road.direction-90)),
+			new vec2(next_road.x+lengthdir_x(64*next_road.get_lanes_left(), next_road.direction+90), next_road.y+lengthdir_y(64*next_road.get_lanes_left(), next_road.direction+90)),
+			new vec2(next_road.x+lengthdir_x(64*next_road.get_lanes_right(), next_road.direction-90), next_road.y+lengthdir_y(64*next_road.get_lanes_right(), next_road.direction-90)),
 		];
 		draw_line_color(
 			road.x,

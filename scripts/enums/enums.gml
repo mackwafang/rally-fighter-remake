@@ -1,0 +1,6 @@
+enum ROAD_LANE_CHANGE_AFFECT {
+	NONE,
+	LEFT,
+	RIGHT,
+	BOTH
+}

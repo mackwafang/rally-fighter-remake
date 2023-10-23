@@ -9,6 +9,10 @@ function RoadNode(_vec2) constructor {
 		return $"({x}, {y}). Lanes {lanes}\n";
 	}
 	
+	set_lanes_left = function(_lanes) {lanes[0] = _lanes;}
+	set_lanes_right = function(_lanes) {lanes[2] = _lanes;}
+	set_lanes_side = function(_lanes) {lanes[0] = _lanes; lanes[2] = _lanes;}
+	
 	get_lanes = function() {
 		/// @function			get_lanes()
 		/// @description		Return the total number of lanes this sector has
@@ -20,22 +24,22 @@ function RoadNode(_vec2) constructor {
 		return sum;
 	}
 	
-	get_left_lanes = function() {
-		/// @function			get_left_lanes()
+	get_lanes_left = function() {
+		/// @function			get_lanes_left()
 		/// @description		Return the number of left lanes
 		/// @return {real}
 		return lanes[0];
 	}
 	
-	get_right_lanes = function() {
-		/// @function			get_right_lanes()
+	get_lanes_right = function() {
+		/// @function			get_lanes_right()
 		/// @description		Return the number of right lanes
 		/// @return {real}
 		return lanes[2];
 	}
 	
-	get_middle_lanes = function() {
-		/// @function			get_right_lanes()
+	get_lanes_middle = function() {
+		/// @function			get_lanes_right()
 		/// @description		Return the number of median lanes
 		/// @return {real}
 		return lanes[1];
