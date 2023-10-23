@@ -77,7 +77,6 @@ function generate_roads(control_points, _steps) {
 	for (var i = 0; i < nP-3; i++) {
 		var p = [];
 		array_copy(p, 0, P, i, 4); // "array slice"
-		show_debug_message(p)
 		for (var j = 0; j < _steps; j++) {
 			var t = j/_steps;
 			var point = new RoadNode(cutmull_rom(p, t));
