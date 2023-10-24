@@ -9,7 +9,7 @@ if (is_player) {
 }
 
 if (accelerating) {
-	velocity += 0.1;
+	engine += 0.1;
 }
 
 if (braking) {
@@ -31,9 +31,14 @@ if (turning != 0) {
 // moving car
 if (can_move) {
 	//slowly loosing velocity
-	if (!accelerating) {velocity -= 0.05;}
+	if (!accelerating) {
+		engine = lerp(0, 1, engine);
+	}
+	rpm = clamp(rpm, 0, 10000);
 	
-	velocity = clamp(velocity, 0, velocity_max);
+	velocity += pi * tire_d * rpm * gear_ratio[gear-1] / global.M_TO_MPH;
+	
+	velocity *= 0.99;
 	
 	// move car in direction
 	x += cos(degtorad(direction)) * velocity;

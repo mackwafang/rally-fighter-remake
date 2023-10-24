@@ -1,14 +1,13 @@
-// draw secondary points
+// draw roads
 for (var rpi = 0; rpi < array_length(road_points); rpi+=4) {
 	// begin drawing road strip
 	//check end of side
 	//if (!camera_in_view(road_points[rpi][0].x, road_points[rpi][0].y, 256)) {continue;}
 	draw_set_color(c_white);
 	
-	var subimage = 0;
-	if (rpi > 0) {subimage = (road_points[rpi][2] != 0) ? 1:0;}
-	
+	var subimage = road_points[rpi][2];
 	var texture = sprite_get_texture(spr_road, subimage);
+	
 	draw_primitive_begin_texture(pr_trianglestrip, texture);
 	for (var k = rpi; k < rpi+4; k++) {
 		var coordinate = road_points[k][0];

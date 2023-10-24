@@ -3,6 +3,8 @@ global.DEBUG_ROAD_DRAW_ROAD_POINTS = false;
 global.DEBUG_ROAD_DRAW_ROAD_LANES_POINTS = false;
 
 
+global.M_TO_MPH = 60 * 1000;
+
 // player_input
 global.player_input = {
 	accelerate: ord("C"),

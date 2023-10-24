@@ -4,12 +4,12 @@ randomize();
 primary_count = 50;
 road_segments = 10;
 control_points = array_create(primary_count);
-control_points_dist = 1024;
+control_points_dist = 2048;
 lane_width = 32;
 
 var t = current_time;
 var next_dir = 0;
-control_points[0] = new vec2(x-256,y+256);
+control_points[0] = new vec2(x,y);
 for (var s = 1; s < primary_count; s++) {
 	next_dir += choose(-1,0,1)*15;
 	control_points[s] = new vec2(
@@ -59,20 +59,30 @@ for (var i = 0; i < array_length(road_list) - 2; i++) {
 	var next_road = road_list[@ i + 1];
 	//compile left lanes
 	for (var l = 0; l < road.get_lanes_left(); l++) {
+		var subimage = 0;
+		if (l == 0) {subimage = 0;}
+		else if (l == road.get_lanes_left()-1) {subimage = 2;}
+		else {subimage = 1}
+		
 		road_points = array_concat(road_points, [
-			[new vec2(road.x+lengthdir_x(lane_width*l, road.direction+90), road.y+lengthdir_y(lane_width*l, road.direction+90)), new vec2(0,0), l],
-			[new vec2(road.x+lengthdir_x(lane_width*(l+1), road.direction+90), road.y+lengthdir_y(lane_width*(l+1), road.direction+90)), new vec2(0,1), l],
-			[new vec2(next_road.x+lengthdir_x(lane_width*l, next_road.direction+90), next_road.y+lengthdir_y(lane_width*l, next_road.direction+90)), new vec2(1,0), l],
-			[new vec2(next_road.x+lengthdir_x(lane_width*(l+1), next_road.direction+90), next_road.y+lengthdir_y(lane_width*(l+1), next_road.direction+90)), new vec2(1,1), l],
+			[new vec2(road.x+lengthdir_x(lane_width*l, road.direction+90), road.y+lengthdir_y(lane_width*l, road.direction+90)), new vec2(0,0), subimage],
+			[new vec2(road.x+lengthdir_x(lane_width*(l+1), road.direction+90), road.y+lengthdir_y(lane_width*(l+1), road.direction+90)), new vec2(0,1), subimage],
+			[new vec2(next_road.x+lengthdir_x(lane_width*l, next_road.direction+90), next_road.y+lengthdir_y(lane_width*l, next_road.direction+90)), new vec2(1,0), subimage],
+			[new vec2(next_road.x+lengthdir_x(lane_width*(l+1), next_road.direction+90), next_road.y+lengthdir_y(lane_width*(l+1), next_road.direction+90)), new vec2(1,1), subimage],
 		]);
 	}
 	//compile right lanes
 	for (var l = 0; l < road.get_lanes_right(); l++) {
+		var subimage = 0;
+		if (l == 0) {subimage = 0;}
+		else if (l == road.get_lanes_right()-1) {subimage = 2;}
+		else {subimage = 1}
+		
 		road_points = array_concat(road_points, [
-			[new vec2(road.x+lengthdir_x(lane_width*l, road.direction-90), road.y+lengthdir_y(lane_width*l, road.direction-90)), new vec2(0,0), l],
-			[new vec2(road.x+lengthdir_x(lane_width*(l+1), road.direction-90), road.y+lengthdir_y(lane_width*(l+1), road.direction-90)), new vec2(0,1), l],
-			[new vec2(next_road.x+lengthdir_x(lane_width*min(l, next_road.get_lanes_right()), next_road.direction-90), next_road.y+lengthdir_y(lane_width*min(l, next_road.get_lanes_right()), next_road.direction-90)), new vec2(1,0), l],
-			[new vec2(next_road.x+lengthdir_x(lane_width*min(l+1, next_road.get_lanes_right()), next_road.direction-90), next_road.y+lengthdir_y(lane_width*min(l+1, next_road.get_lanes_right()), next_road.direction-90)), new vec2(1,1), l],
+			[new vec2(road.x+lengthdir_x(lane_width*l, road.direction-90), road.y+lengthdir_y(lane_width*l, road.direction-90)), new vec2(0,0), subimage],
+			[new vec2(road.x+lengthdir_x(lane_width*(l+1), road.direction-90), road.y+lengthdir_y(lane_width*(l+1), road.direction-90)), new vec2(0,1), subimage],
+			[new vec2(next_road.x+lengthdir_x(lane_width*min(l, next_road.get_lanes_right()), next_road.direction-90), next_road.y+lengthdir_y(lane_width*min(l, next_road.get_lanes_right()), next_road.direction-90)), new vec2(1,0), subimage],
+			[new vec2(next_road.x+lengthdir_x(lane_width*min(l+1, next_road.get_lanes_right()), next_road.direction-90), next_road.y+lengthdir_y(lane_width*min(l+1, next_road.get_lanes_right()), next_road.direction-90)), new vec2(1,1), subimage],
 		]);
 	}
 }

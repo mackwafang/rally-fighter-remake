@@ -7,19 +7,6 @@ if (mouse_wheel_down()) {cam_zoom -= 0.1;}
 
 cam_zoom = clamp(cam_zoom, 0.1, 10);
 
-var cam_dist = point_distance(
-	main_camera_target.x - (main_camera_size.width/2),
-	main_camera_target.y - (main_camera_size.height/2),
-	main_camera_target.x - (main_camera_size.width/2) + (main_camera_size.width/4),
-	main_camera_target.y - (main_camera_size.height/2)
-);
-var cam_dir = point_direction(
-	main_camera_target.x - (main_camera_size.width/2),
-	main_camera_target.y - (main_camera_size.height/2),
-	main_camera_target.x - (main_camera_size.width/2) + (main_camera_size.width/4),
-	main_camera_target.y - (main_camera_size.height/2)
-);
-
 camera_set_view_pos(
 	view_camera[0],
 	main_camera_target.x - (main_camera_size.width/2) + lengthdir_x(main_camera_size.width/3, -main_camera_target.direction),
