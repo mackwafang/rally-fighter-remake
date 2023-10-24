@@ -13,7 +13,7 @@ if (accelerating) {
 }
 
 if (braking) {
-	velocity *= 0.6;
+	velocity *= 0.8;
 }
 
 if (turning != 0) {
@@ -31,7 +31,7 @@ if (turning != 0) {
 // moving car
 if (can_move) {
 	//slowly loosing velocity
-	if (!accelerating) {velocity *= 0.95;}
+	if (!accelerating) {velocity -= 0.05;}
 	
 	velocity = clamp(velocity, 0, velocity_max);
 	
