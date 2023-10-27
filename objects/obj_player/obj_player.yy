@@ -12,8 +12,8 @@
     "path": "folders/Objects.yy",
   },
   "parentObjectId": {
-    "name": "obj_car",
-    "path": "objects/obj_car/obj_car.yy",
+    "name": "obj_car_parent",
+    "path": "objects/obj_car_parent/obj_car_parent.yy",
   },
   "persistent": false,
   "physicsAngularDamping": 0.1,
