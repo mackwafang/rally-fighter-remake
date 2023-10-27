@@ -19,9 +19,12 @@ if (is_player) {
 		c_red,
 		c_red
 	)
+	draw_set_valign(fa_bottom);
+	draw_set_halign(fa_center);
+	draw_text(odometer_x, odometer_y - 32, $"{round(engine_rpm)} RPM");
 	
 	// speed odometer
-	odometer_x = 96;
+	odometer_x = 128;
 	odometer_y = port_height - 48;
 	odometer_speed += ((velocity / 18) - odometer_speed) * 0.2;
 	draw_line_width_color(
@@ -33,6 +36,9 @@ if (is_player) {
 		c_red,
 		c_red
 	)
+	draw_set_valign(fa_bottom);
+	draw_set_halign(fa_center);
+	draw_text(odometer_x, odometer_y - 32, $"{round(velocity*10)} MPH");
 	
 	// gear
 	draw_set_valign(fa_top);

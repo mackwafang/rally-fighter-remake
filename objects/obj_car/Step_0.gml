@@ -29,6 +29,9 @@ if (turning != 0) {
 	}
 }
 
+if (keyboard_check_pressed(vk_up)) {gear_shift_up();}
+if (keyboard_check_pressed(vk_down)) {gear_shift_down();}
+
 // moving car
 if (can_move) {
 	// surface friction
@@ -47,14 +50,14 @@ if (can_move) {
 		on_road = pnpoly(4, p_x, p_y, x, y);
 		if (on_road) {break;}
 	}
-	engine_rpm = clamp(engine_rpm, 1000, engine_rpm_max);
 	
 	var engine_to_wheel_ratio = gear_ratio[gear-1] * diff_ratio;
 	var engine_torque_max = 5252 * horsepower / engine_rpm_max;
 	var engine_torque = engine_torque_max * engine_rpm / engine_rpm_max;
 	var drive_torque = engine_torque * gear_ratio[gear-1] * diff_ratio * transfer_eff;
 	var inertia = mass * (wheel_radius * wheel_radius) / 2;
-	var u = 0.8 * mass * 9.8;
+	var surface_friction_coef = (on_road) ? 0.8 : 2;
+	var u = surface_friction_coef * mass * 9.8;
 	
 	acceleration = (drive_torque / inertia);
 	
@@ -64,18 +67,18 @@ if (can_move) {
 		drive_torque = drive_force * wheel_radius
 		acceleration = (drive_torque / inertia);
 		
-		engine_rpm *= 0.95;
+		engine_rpm -= 100 * gear_ratio[gear-1];
 		engine_power -= 0.05;
 	}
 	else {
-		engine_rpm += engine_power * 50 * gear_ratio[gear-1];
+		engine_rpm += engine_power * 25 * gear_ratio[gear-1];
 		acceleration = (drive_torque / inertia);
-		if (velocity > 10 / gear_ratio[gear-1]) {
+		if (velocity > 14 / gear_ratio[gear-1]) {
 			acceleration = 0;
 		}
 	}
 	
-	velocity += (acceleration / 200) * gear_ratio[gear-1];
+	velocity += (acceleration / 100);// * gear_ratio[gear-1];
 	velocity = clamp(velocity, 0, 18);
 	
 	// move car in direction
@@ -85,6 +88,7 @@ if (can_move) {
 	y += sin(degtorad(direction)) * velocity;
 	image_angle = -direction;
 	
-	gear_shift();
+	//gear_shift(); // auto gear shift
+	engine_rpm = clamp(engine_rpm, 1000, engine_rpm_max);
 	engine_power = clamp(engine_power, 0, 1);
 }

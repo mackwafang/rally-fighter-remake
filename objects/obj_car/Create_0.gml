@@ -38,24 +38,30 @@ on_road = false;
 odometer_rpm = 0;
 odometer_speed = 0;
 
+gear_shift_up = function() {
+	//shift up
+	gear = min(gear+1, 6);
+	engine_rpm = gear_shift_rpm[gear-1][0] * 1.01;
+}
+
+gear_shift_down = function() {
+	//shift down
+	gear = max(gear-1, 1);
+	engine_rpm = gear_shift_rpm[gear-1][1] * 0.99;
+}
+
 gear_shift = function() {
-	var cur_gear = gear_ratio[gear-1];
+	var gear_shift_rpm_upper = gear_shift_rpm[gear-1][1]
 	var gear_shift_rpm_lower = gear_shift_rpm[gear-1][0];
-	var gear_shift_rpm_upper = gear_shift_rpm[gear-1][1];
-	
+		
 	if (accelerating) {
 		if (engine_rpm > gear_shift_rpm_upper) {
-			//shift up
-			gear++;
-			engine_rpm = gear_shift_rpm[gear-1][0] * 1.01;
+			gear_shift_up();
 		}
 	}
-	
-	if (!accelerating or braking) {
+	if (!accelerating or braking) 
 		if (engine_rpm < gear_shift_rpm_lower) {
-			//shift down
-			gear--;
-			engine_rpm = gear_shift_rpm[gear-1][1] * 0.99;
+			{gear_shift_down();
 		}
 	}
 }

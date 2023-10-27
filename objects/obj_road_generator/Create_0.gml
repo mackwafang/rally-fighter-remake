@@ -2,9 +2,9 @@ randomize();
 //random_set_seed(0);
 
 primary_count = 100;
-road_segments = 4;
+road_segments = 10;
 control_points = array_create(primary_count);
-control_points_dist = 512;
+control_points_dist = 2048;
 lane_width = 32;
 
 var t = current_time;
@@ -30,7 +30,7 @@ for (var i = 0; i < array_length(road_list)-1; i++) {
 	road.direction = point_direction(road.x, road.y, road_next.x, road_next.y);
 	
 	// road changes lane count
-	if (lane_change_duration < 0) {
+	if (lane_change_duration == 0) {
 		lane_side_affected = choose(ROAD_LANE_CHANGE_AFFECT.LEFT, ROAD_LANE_CHANGE_AFFECT.RIGHT, ROAD_LANE_CHANGE_AFFECT.BOTH);
 		lane_change_duration = 20+irandom(50);
 		lane_change_to = max(1, lane_change_to+irandom_range(-1,1));
