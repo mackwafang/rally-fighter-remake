@@ -1,10 +1,10 @@
 randomize();
 //random_set_seed(0);
 
-primary_count = 50;
-road_segments = 10;
+primary_count = 100;
+road_segments = 4;
 control_points = array_create(primary_count);
-control_points_dist = 2048;
+control_points_dist = 512;
 lane_width = 32;
 
 var t = current_time;

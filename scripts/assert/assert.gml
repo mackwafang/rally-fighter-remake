@@ -3,7 +3,7 @@ function assert(expression, msg=""){
 	/// @description		An assertion guard. Abort the game when expression is true
 	/// @param {boolean}	expression
 	/// @param {str}		msg (optional)
-	if (expression) {
+	if (!expression) {
 		show_error($"Assertion failed. {msg}", true);
 	}
 }
