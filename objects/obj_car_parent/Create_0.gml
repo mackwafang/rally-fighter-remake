@@ -14,6 +14,10 @@ engine_power = 0;		// throttle position
 transfer_eff = 0.7;		//transfer efficiency
 acceleration = 0;		// acceleration value
 
+inertia = mass * (wheel_radius * wheel_radius) / 2;		// constant value for car's inertia
+c_drag = 0.5 * 0.3 * 2.2 * AIR_DENSITY;					// constant value for car's air drag
+c_rr = 20 * c_drag;										// constant value for car's drag
+
 //gear's ratio
 gear_ratio = [4, 2.2, 5/3, 4/3, 9/10, 8/10];
 diff_ratio = 3.5;
@@ -38,6 +42,13 @@ on_road = false;
 odometer_rpm = 0;
 odometer_speed = 0;
 
+// misc
+last_road_index = 0; // last road index was checked for off road
+
+image_speed = 0;
+
+// functions
+
 gear_shift_up = function() {
 	//shift up
 	gear = min(gear+1, 6);
@@ -53,7 +64,6 @@ gear_shift = function() {
 	var gear_shift_rpm_lower = gear_shift_rpm[gear-1][0];
 		
 	if (accelerating) {
-		show_debug_message($"{engine_rpm} {gear_shift_rpm_upper}")
 		if (engine_rpm > gear_shift_rpm_upper) {
 			gear_shift_up();
 		}
@@ -65,4 +75,9 @@ gear_shift = function() {
 	}
 }
 
-image_speed = 0;
+is_on_road = function(index) {
+	var polygon_x = obj_road_generator.road_collision_points[index][0];
+	var polygon_y = obj_road_generator.road_collision_points[index][1];
+	
+	return pnpoly(4, polygon_x, polygon_y, x, y);
+}

@@ -32,21 +32,21 @@ if (keyboard_check_pressed(vk_down)) {gear_shift_down();}
 
 // moving car
 if (can_move) {
-	// surface friction
-	for (var rpi = 0; rpi < array_length(obj_road_generator.road_points); rpi+=4) {
-		//check end of side
-		if (!camera_in_view(obj_road_generator.road_points[rpi][0].x, obj_road_generator.road_points[rpi][0].y, 256)) {continue;}
-		var p_x = [];
-		var p_y = [];
-		var lookup_index = [0,1,3,2]; // this is to line up the polygon correctly
-		for (var i = 0; i < 4; i++) {
-			p_x[array_length(p_x)] = obj_road_generator.road_points[rpi+lookup_index[i]][0].x;
-			p_y[array_length(p_y)] = obj_road_generator.road_points[rpi+lookup_index[i]][0].y;
-		}
+	// surface friction	
+	// first, location of cached index
+	if (!is_on_road(last_road_index)) {
+		// probably not on that segment anymore, recheck
+		for (var p_i = 0; p_i < array_length(obj_road_generator.road_collision_points); p_i++) {
+			var polygon = obj_road_generator.road_collision_points[p_i];
+			if (!camera_in_view(polygon[0][0], polygon[1][0], 256)) {continue;}
 		
-		// on road collision
-		on_road = pnpoly(4, p_x, p_y, x, y);
-		if (on_road) {break;}
+			// on road collision
+			on_road = is_on_road(p_i);
+			if (on_road) {
+				last_road_index = p_i;
+				break;
+			}
+		}
 	}
 	
 	var engine_to_wheel_ratio = gear_ratio[gear-1] * diff_ratio;
@@ -55,13 +55,10 @@ if (can_move) {
 	var engine_torque = engine_torque_max * engine_power;
 	var drive_torque = engine_torque * gear_ratio[gear-1] * diff_ratio * transfer_eff;
 	
-	var inertia = mass * (wheel_radius * wheel_radius) / 2;
-	var c_drag = 0.5 * 0.3 * 2.2 * AIR_DENSITY;
-	var c_rr = 20 * c_drag;
 	var f_drag = -c_drag * velocity;
 	var f_rr = -c_rr * velocity;
 	var f_surface = -mass * 9.8 * ((on_road) ? 0.6 : 2);
-	var f_brake = (braking) ? (drive_torque / wheel_radius) * 100 : 0;
+	var f_brake = (braking) ? -abs(drive_torque / wheel_radius) * 10 : 0;
 	if (velocity <= 0) {
 		f_brake = 0;
 		f_surface = 0;

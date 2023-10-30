@@ -2,7 +2,7 @@ randomize();
 //random_set_seed(0);
 
 primary_count = 100;
-road_segments = 10;
+road_segments = 8;
 control_points = array_create(primary_count);
 control_points_dist = 2048;
 lane_width = 32;
@@ -64,6 +64,7 @@ for (var i = 0; i < array_length(road_list) - 2; i++) {
 		else if (l == road.get_lanes_left()-1) {subimage = 2;}
 		else {subimage = 1}
 		
+		
 		road_points = array_concat(road_points, [
 			[new vec2(road.x+lengthdir_x(lane_width*l, road.direction+90), road.y+lengthdir_y(lane_width*l, road.direction+90)), new vec2(0,0), subimage],
 			[new vec2(road.x+lengthdir_x(lane_width*(l+1), road.direction+90), road.y+lengthdir_y(lane_width*(l+1), road.direction+90)), new vec2(0,1), subimage],
@@ -87,4 +88,31 @@ for (var i = 0; i < array_length(road_list) - 2; i++) {
 	}
 }
 
+road_collision_points = []; // used for collision checking
+for (var i = 0; i < array_length(road_list) - 2; i++) {
+	// for each road piece
+	var road = road_list[@ i];
+	var next_road = road_list[@ i + 1];
+	//compile left lanes
+	var left_lanes = road.get_lanes_left();
+	var right_lanes = road.get_lanes_right();
+	var collision_points = [
+		 [
+			road.x+lengthdir_x(lane_width*left_lanes, road.direction+90),
+			next_road.x+lengthdir_x(lane_width*left_lanes, next_road.direction+90),
+			next_road.x+lengthdir_x(lane_width*right_lanes, next_road.direction-90),
+			road.x+lengthdir_x(lane_width*right_lanes, road.direction-90),
+		],
+		[
+			road.y+lengthdir_y(lane_width*left_lanes, road.direction+90),
+			next_road.y+lengthdir_y(lane_width*left_lanes, next_road.direction+90),
+			next_road.y+lengthdir_y(lane_width*right_lanes, next_road.direction-90),
+			road.y+lengthdir_y(lane_width*right_lanes, road.direction-90),
+		]
+	];
+	
+	road_collision_points[array_length(road_collision_points)] = collision_points;
+}
+
 show_debug_message($"road generation completed in {current_time - t}ms");
+show_debug_message($"Road has {array_length(road_points)} points");

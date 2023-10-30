@@ -5,6 +5,7 @@ if (is_player) {
 	draw_set_valign(fa_top);
 	draw_set_halign(fa_left);
 	draw_text(0, 100, on_road);
+	draw_text(0, 120, last_road_index);
 	
 	// rpm odometer
 	var odometer_x = 48;
