@@ -1,4 +1,5 @@
-draw_self();
+draw_sprite_ext(spr_car, image_index, x, y, image_xscale, image_yscale, image_angle, image_blend, image_alpha);
+draw_sprite_ext(spr_car_detail, image_index, x, y, image_xscale, image_yscale, image_angle, image_blend, image_alpha);
 
 //if (accelerating) {draw_circle_color(x+8, y-10, 4, c_green, c_green, false);}
 //if (boosting) {draw_circle_color(x, y-10, 4, c_yellow, c_yellow, false);}

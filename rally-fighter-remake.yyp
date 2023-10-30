@@ -47,6 +47,7 @@
     {"id":{"name":"obj_car_parent","path":"objects/obj_car_parent/obj_car_parent.yy",},},
     {"id":{"name":"torque_lookup","path":"scripts/torque_lookup/torque_lookup.yy",},},
     {"id":{"name":"obj_player","path":"objects/obj_player/obj_player.yy",},},
+    {"id":{"name":"spr_car_detail","path":"sprites/spr_car_detail/spr_car_detail.yy",},},
     {"id":{"name":"lib_vectors","path":"scripts/lib_vectors/lib_vectors.yy",},},
     {"id":{"name":"assert","path":"scripts/assert/assert.yy",},},
     {"id":{"name":"obj_road_generator","path":"objects/obj_road_generator/obj_road_generator.yy",},},

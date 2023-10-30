@@ -77,7 +77,9 @@ if (can_move) {
 	
 	acceleration = (drive_torque / inertia);
 	velocity += acceleration * (delta_time / 1000000);// * gear_ratio[gear-1];
-	
+	if (velocity <= 0) {
+		velocity = 0;
+	}
 	
 	// move car in direction
 	turn_rate += -turn_rate * 0.1;

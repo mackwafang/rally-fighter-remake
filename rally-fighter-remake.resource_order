@@ -28,6 +28,7 @@
     {"name":"obj_car_parent","order":1,"path":"objects/obj_car_parent/obj_car_parent.yy",},
     {"name":"torque_lookup","order":9,"path":"scripts/torque_lookup/torque_lookup.yy",},
     {"name":"obj_player","order":2,"path":"objects/obj_player/obj_player.yy",},
+    {"name":"spr_car_detail","order":3,"path":"sprites/spr_car_detail/spr_car_detail.yy",},
     {"name":"assert","order":4,"path":"scripts/assert/assert.yy",},
     {"name":"obj_car","order":4,"path":"objects/obj_car/obj_car.yy",},
     {"name":"math","order":1,"path":"scripts/math/math.yy",},
