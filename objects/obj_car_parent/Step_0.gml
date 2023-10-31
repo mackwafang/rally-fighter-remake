@@ -21,16 +21,18 @@ if (accelerating) {
 		var angle_diff = angle_difference(road.direction, direction);
 		var angle_threshold = 0.5;
 		
+		engine_power = road.get_ideal_throttle();
+		
 		if (!on_road) {
 			// off road, trying to get back on it
 			// find the nearest road
-			angle_diff = angle_difference(direction, point_direction(road.x, road.y, x, y));
+			//angle_diff = angle_difference(direction, point_direction(road.x, road.y, x, y)) / 2;
+			var side = cos(degtorad(angle_difference(direction, point_direction(x,y,road.x,road.y))));
+			angle_diff = -sign(side) * 50;
 		}
 		
-		turn_rate += angle_diff / 40;
-
-		engine_power = road.get_ideal_throttle();
-		braking = (road.get_ideal_throttle() < 0.1);
+		turn_rate += angle_diff / 60;
+		braking = (road.get_ideal_throttle() < 0.2);
 	}
 }
 else {

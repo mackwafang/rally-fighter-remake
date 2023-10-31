@@ -1,6 +1,10 @@
 cam_move_speed = 16;
 cam_zoom = 1
 
+for (var i = 0; i < 5; i++) {
+	instance_create_layer(0, 0, "Instances", obj_car);
+}
+
 if (!global.DEBUG_FREE_CAMERA) {
 	main_camera_size = {
 		width: 480,

@@ -2,7 +2,7 @@
 for (var rpi = 0; rpi < array_length(road_points); rpi+=4) {
 	// begin drawing road strip
 	//check end of side
-	if (!camera_in_view(road_points[rpi][0].x, road_points[rpi][0].y, 256)) {continue;}
+	if (!camera_in_view(road_points[rpi][0].x, road_points[rpi][0].y, 512)) {continue;}
 	draw_set_color(c_white);
 	
 	var subimage = road_points[rpi][2];

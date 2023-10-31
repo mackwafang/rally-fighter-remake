@@ -1,3 +1,5 @@
+depth = -10;
+
 is_player = false;		// does car belong to player?
 can_move = true;		// can car be affected by movement or collision?
 
