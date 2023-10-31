@@ -8,6 +8,8 @@ control_points_dist = 2048;
 lane_width = 32;
 
 var t = current_time;
+
+// initialize control points
 var next_dir = 0;
 control_points[0] = new vec2(x,y);
 for (var s = 1; s < primary_count; s++) {
@@ -28,6 +30,9 @@ for (var i = 0; i < array_length(road_list)-1; i++) {
 	var road = road_list[@i];
 	var road_next = road_list[@i+1];
 	road.direction = point_direction(road.x, road.y, road_next.x, road_next.y);
+	road.length = point_distance(road.x, road.y, road_next.x, road_next.y);
+	road.ideal_throttle = road.length / ((control_points_dist / road_segments) * 0.8);
+	road._id = i;
 	
 	// road changes lane count
 	if (lane_change_duration == 0) {
@@ -51,7 +56,7 @@ for (var i = 0; i < array_length(road_list)-1; i++) {
 	}
 }
 
-// precalc road polygons
+// precalculate road polygons
 road_points = []; // used to generate the roads
 for (var i = 0; i < array_length(road_list) - 2; i++) {
 	// for each road piece
@@ -88,7 +93,8 @@ for (var i = 0; i < array_length(road_list) - 2; i++) {
 	}
 }
 
-road_collision_points = []; // used for collision checking
+// calcuate road segments for colision checking
+road_collision_points = [];
 for (var i = 0; i < array_length(road_list) - 2; i++) {
 	// for each road piece
 	var road = road_list[@ i];
@@ -113,6 +119,8 @@ for (var i = 0; i < array_length(road_list) - 2; i++) {
 	
 	road_collision_points[array_length(road_collision_points)] = collision_points;
 }
+
+
 
 show_debug_message($"road generation completed in {current_time - t}ms");
 show_debug_message($"Road has {array_length(road_points)} points");

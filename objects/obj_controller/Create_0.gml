@@ -6,7 +6,7 @@ if (!global.DEBUG_FREE_CAMERA) {
 		width: 480,
 		height: 640,
 	}
-	main_camera_target = 1;
+	main_camera_target = 4;
 }
 else {
 	main_camera_size = {

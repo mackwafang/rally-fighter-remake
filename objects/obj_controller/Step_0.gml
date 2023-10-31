@@ -10,10 +10,10 @@ cam_zoom = clamp(cam_zoom, 0.1, 10);
 if (!global.DEBUG_FREE_CAMERA) {
 	camera_set_view_pos(
 		main_camera,
-		main_camera_target.x - (main_camera_size.width/2) + lengthdir_x(main_camera_size.width/3, -main_camera_target.direction),
-		main_camera_target.y - (main_camera_size.height/2) + lengthdir_y(main_camera_size.width/3, -main_camera_target.direction)
+		main_camera_target.x - (main_camera_size.width/2) + lengthdir_x(main_camera_size.width * 0.25, main_camera_target.image_angle),
+		main_camera_target.y - (main_camera_size.height/2) + lengthdir_y(main_camera_size.width * 0.25, main_camera_target.image_angle)
 	);
-	camera_set_view_angle(main_camera, main_camera_target.direction+90);
+	camera_set_view_angle(main_camera, -main_camera_target.image_angle+90);
 }
 else {
 	camera_set_view_pos(

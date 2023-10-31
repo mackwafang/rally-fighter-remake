@@ -21,6 +21,7 @@
     {"name":"point_in_polygon","order":8,"path":"scripts/point_in_polygon/point_in_polygon.yy",},
     {"name":"spr_car","order":1,"path":"sprites/spr_car/spr_car.yy",},
     {"name":"spr_grass","order":2,"path":"sprites/spr_grass/spr_grass.yy",},
+    {"name":"find_nearest_road","order":10,"path":"scripts/find_nearest_road/find_nearest_road.yy",},
     {"name":"globals","order":5,"path":"scripts/globals/globals.yy",},
     {"name":"obj_controller","order":3,"path":"objects/obj_controller/obj_controller.yy",},
     {"name":"camera_in_view","order":6,"path":"scripts/camera_in_view/camera_in_view.yy",},

@@ -1,17 +1,34 @@
 function RoadNode(_vec2) constructor {
-	x = _vec2.x;
-	y = _vec2.y;
-	direction = 0;
+	x = _vec2.x;			// x position
+	y = _vec2.y;			// y position
+	direction = 0;			// road's direction to the next segment
+	length = 0;				// length of segment
+	ideal_throttle = 0;		// ideal throttle for ai
 	vec = _vec2;
 	lanes = [1, 0, 1]; // lanes [left, median , right]
+	_id = -1;
 	
 	toString = function() {
-		return $"({x}, {y}). Lanes {lanes}\n";
+		return $"({x}, {y}), direction: {direction}, Lanes: {lanes}\n";
 	}
 	
 	set_lanes_left = function(_lanes) {lanes[0] = _lanes;}
 	set_lanes_right = function(_lanes) {lanes[2] = _lanes;}
 	set_lanes_side = function(_lanes) {lanes[0] = _lanes; lanes[2] = _lanes;}
+	
+	get_id = function() {return _id;}
+	
+	get_direction = function() {
+		return direction;
+	}
+	
+	get_length = function() {
+		return length;
+	}
+	
+	get_ideal_throttle = function() {
+		return ideal_throttle;
+	}
 	
 	get_lanes = function() {
 		/// @function			get_lanes()
