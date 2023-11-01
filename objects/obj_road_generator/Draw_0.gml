@@ -92,3 +92,16 @@ if (global.DEBUG_ROAD_DRAW_ROAD_POINTS) {
 	//	draw_text(coordinate.x, coordinate.y, i)
 	//}
 }
+
+array_foreach(road_collision_points, function(road) {
+	for (var i = 0; i <= 4; i++) {
+		
+		draw_line_width(
+			road[0][i % 4],
+			road[1][i % 4],
+			road[0][(i+1) % 4],
+			road[1][(i+1) % 4],
+			2
+		)
+	}
+});

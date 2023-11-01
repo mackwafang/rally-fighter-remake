@@ -6,9 +6,20 @@ if (boosting) {draw_circle_color(x, y-10, 4, c_yellow, c_yellow, false);}
 if (braking) {draw_circle_color(x-8, y-10, 4, c_red, c_red, false);}
 
 draw_arrow(x, y, x+lengthdir_x(engine_power * 32, image_angle), y+lengthdir_y(engine_power * 32, image_angle), 10);
+draw_arrow(x, y, x+lengthdir_x(turn_rate * 32, image_angle+90), y+lengthdir_y(turn_rate * 32, image_angle+90), 10);
 
-if (turning != 0) {
-	draw_set_valign(fa_bottom);
-	draw_set_halign(fa_center);
-	draw_arrow(x, y, x+lengthdir_x(turn_rate * 32, image_angle+90), y+lengthdir_y(turn_rate * 32, image_angle+90), 10);
+if (!on_road) {
+	draw_text_transformed_color(
+		x + lengthdir_x(-16, image_angle+90),
+		y + lengthdir_y(-16, image_angle+90),
+		"!",
+		3,
+		3,
+		image_angle-90,
+		c_red,
+		c_red,
+		c_red,
+		c_red,
+		1
+	)
 }
