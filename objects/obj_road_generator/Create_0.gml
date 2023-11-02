@@ -16,16 +16,16 @@ control_points[0] = new vec2(x,y);
 for (var s = 1; s < primary_count; s++) {
 	next_dir += choose(-1,0,1)*30;
 	control_points[s] = new vec2(
-		control_points[s-1].x + (cos(degtorad(next_dir)) * irandom_range(control_points_dist/4,control_points_dist)),
-		control_points[s-1].y + (sin(degtorad(next_dir)) * irandom_range(control_points_dist/4,control_points_dist))
+		control_points[s-1].x + (cos(degtorad(next_dir)) * irandom_range(control_points_dist/5,control_points_dist)),
+		control_points[s-1].y + (sin(degtorad(next_dir)) * irandom_range(control_points_dist/5,control_points_dist))
 	);
 }
 
 road_list = generate_roads(control_points, road_segments);
 
 // set up road node data
-var lane_change_duration = 50; //how many nodes until change to new lane
-var lane_change_to = 5; // change this side of road to this number of lanes
+var lane_change_duration = 10; //how many nodes until change to new lane
+var lane_change_to = 2; // change this side of road to this number of lanes
 var lane_side_affected = ROAD_LANE_CHANGE_AFFECT.BOTH; // which side of the road changes 
 for (var i = 0; i < array_length(road_list)-1; i++) {
 	var road = road_list[@i];
@@ -38,8 +38,8 @@ for (var i = 0; i < array_length(road_list)-1; i++) {
 	// road changes lane count
 	if (lane_change_duration == 0) {
 		lane_side_affected = choose(ROAD_LANE_CHANGE_AFFECT.LEFT, ROAD_LANE_CHANGE_AFFECT.RIGHT, ROAD_LANE_CHANGE_AFFECT.BOTH);
-		lane_change_duration = 20+irandom(50);
-		lane_change_to = max(1, lane_change_to+irandom_range(-1,1));
+		lane_change_duration = 10;//20+irandom(50);
+		lane_change_to = max(1, lane_change_to+irandom_range(-2,2));
 	}
 	else {
 		switch(lane_side_affected) {
@@ -63,20 +63,39 @@ for (var i = 0; i < array_length(road_list) - 2; i++) {
 	// for each road piece
 	var road = road_list[@ i];
 	var next_road = road_list[@ i + 1];
+	var road_lane = road.get_lanes_left();
+	var next_road_lane = next_road.get_lanes_left();
 	//compile left lanes
-	for (var l = 0; l < road.get_lanes_left(); l++) {
+	for (var l = 0; l < road_lane; l++) {
 		var subimage = 0;
 		if (l == 0) {subimage = 0;}
-		else if (l == road.get_lanes_left()-1) {subimage = 2;}
+		else if (l == road_lane-1) {subimage = 2;}
 		else {subimage = 1}
-		var next_l = next_road.get_lanes_left();
+		var next_l = next_road_lane;
 		
-		road_points = array_concat(road_points, [
+		var p = [
 			[new vec2(road.x+lengthdir_x(lane_width*l, road.direction+90), road.y+lengthdir_y(lane_width*l, road.direction+90)), new vec2(0,0), subimage],
 			[new vec2(road.x+lengthdir_x(lane_width*(l+1), road.direction+90), road.y+lengthdir_y(lane_width*(l+1), road.direction+90)), new vec2(0,1), subimage],
-			[new vec2(next_road.x+lengthdir_x(lane_width*min(l, next_l), next_road.direction+90), next_road.y+lengthdir_y(lane_width*min(l, next_l), next_road.direction+90)), new vec2(1,0), subimage],
-			[new vec2(next_road.x+lengthdir_x(lane_width*min(l+1, next_l), next_road.direction+90), next_road.y+lengthdir_y(lane_width*min(l+1, next_l), next_road.direction+90)), new vec2(1,1), subimage],
-		]);
+			[new vec2(next_road.x+lengthdir_x(lane_width*l, next_road.direction+90), next_road.y+lengthdir_y(lane_width*l, next_road.direction+90)), new vec2(1,0), subimage],
+			[new vec2(next_road.x+lengthdir_x(lane_width*(l+1), next_road.direction+90), next_road.y+lengthdir_y(lane_width*(l+1), next_road.direction+90)), new vec2(1,1), subimage],
+		];
+		
+		if (road_lane != next_road_lane) {
+			if (road_lane > next_road_lane) {
+				if (l > next_road_lane-1) {
+					p[2] = [new vec2(next_road.x+lengthdir_x(lane_width*next_road_lane, next_road.direction+90), next_road.y+lengthdir_y(lane_width*next_road_lane, next_road.direction+90)), new vec2(1,0), subimage]
+					p[3] = [new vec2(next_road.x+lengthdir_x(lane_width*next_road_lane, next_road.direction+90), next_road.y+lengthdir_y(lane_width*next_road_lane, next_road.direction+90)), new vec2(1,1), subimage]
+				}
+			}
+			if (road_lane < next_road_lane) {
+				if (l == road_lane-1) {
+					p[2] = [new vec2(next_road.x+lengthdir_x(lane_width*l, next_road.direction+90), next_road.y+lengthdir_y(lane_width*l, next_road.direction+90)), new vec2(1,0), subimage]
+					p[3] = [new vec2(next_road.x+lengthdir_x(lane_width*next_road_lane, next_road.direction+90), next_road.y+lengthdir_y(lane_width*next_road_lane, next_road.direction+90)), new vec2(1,1), subimage]
+				}
+			}
+		}
+		
+		road_points = array_concat(road_points, p);
 	}
 	//compile right lanes
 	for (var l = 0; l < road.get_lanes_right(); l++) {
@@ -104,17 +123,19 @@ for (var i = 0; i < array_length(road_list) - 2; i++) {
 	//compile left lanes
 	var left_lanes = road.get_lanes_left();
 	var right_lanes = road.get_lanes_right();
+	var next_left_lanes = next_road.get_lanes_left();
+	var next_right_lanes = next_road.get_lanes_right();
 	var collision_points = [
 		 [
 			road.x+lengthdir_x(lane_width*left_lanes, road.direction+90),
-			next_road.x+lengthdir_x(lane_width*left_lanes, next_road.direction+90),
-			next_road.x+lengthdir_x(lane_width*right_lanes, next_road.direction-90),
+			next_road.x+lengthdir_x(lane_width*next_left_lanes, next_road.direction+90),
+			next_road.x+lengthdir_x(lane_width*next_right_lanes, next_road.direction-90),
 			road.x+lengthdir_x(lane_width*right_lanes, road.direction-90),
 		],
 		[
 			road.y+lengthdir_y(lane_width*left_lanes, road.direction+90),
-			next_road.y+lengthdir_y(lane_width*left_lanes, next_road.direction+90),
-			next_road.y+lengthdir_y(lane_width*right_lanes, next_road.direction-90),
+			next_road.y+lengthdir_y(lane_width*next_left_lanes, next_road.direction+90),
+			next_road.y+lengthdir_y(lane_width*next_right_lanes, next_road.direction-90),
 			road.y+lengthdir_y(lane_width*right_lanes, road.direction-90),
 		]
 	];

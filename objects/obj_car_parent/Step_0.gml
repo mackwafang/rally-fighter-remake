@@ -17,7 +17,7 @@ if (accelerating) {
 		engine_power += 0.1;
 	}
 	else {
-		var road = find_nearest_road(x, y);
+		var road = find_nearest_road(x + lengthdir_x(128, image_angle), y  + lengthdir_y(128, image_angle));
 		var angle_diff = angle_difference(road.direction, image_angle);
 		var angle_threshold = 0.5;
 		
@@ -27,7 +27,7 @@ if (accelerating) {
 			// off road, trying to get back on it
 			// find the nearest road
 			var side = sign(angle_difference(point_direction(road.x,road.y, x, y), image_angle));
-			show_debug_message(angle_difference(point_direction(road.x,road.y, x, y), image_angle));
+			
 			angle_diff = -side * 10;
 			engine_power = 1;
 			gear_shift_down();
@@ -36,12 +36,8 @@ if (accelerating) {
 			gear_shift_down();
 		}
 		
-		turn_rate += angle_diff / 60;
-		if (abs(angle_diff) > 45) {
-			show_debug_message($"oya hol up {angle_diff} {turn_rate}");
-		}
-		
-		braking = (road.get_ideal_throttle() < 0.2);
+		turn_rate += (angle_diff / 150);
+		braking = (velocity > (300000 / road.get_length()));
 	}
 }
 else {

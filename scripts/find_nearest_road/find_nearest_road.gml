@@ -15,5 +15,5 @@ function find_nearest_road(_x, _y) {
 			break;
 		}
 	}
-	return obj_road_generator.road_list[index];
+	return obj_road_generator.road_list[min(array_length(obj_road_generator.road_list), max(0, index))];
 }
