@@ -26,6 +26,7 @@
     {"name":"obj_controller","order":3,"path":"objects/obj_controller/obj_controller.yy",},
     {"name":"camera_in_view","order":6,"path":"scripts/camera_in_view/camera_in_view.yy",},
     {"name":"constants","order":1,"path":"scripts/constants/constants.yy",},
+    {"name":"dist_to_line","order":11,"path":"scripts/dist_to_line/dist_to_line.yy",},
     {"name":"obj_car_parent","order":1,"path":"objects/obj_car_parent/obj_car_parent.yy",},
     {"name":"torque_lookup","order":9,"path":"scripts/torque_lookup/torque_lookup.yy",},
     {"name":"obj_player","order":2,"path":"objects/obj_player/obj_player.yy",},

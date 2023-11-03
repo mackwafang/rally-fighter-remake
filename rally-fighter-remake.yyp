@@ -45,6 +45,7 @@
     {"id":{"name":"obj_controller","path":"objects/obj_controller/obj_controller.yy",},},
     {"id":{"name":"camera_in_view","path":"scripts/camera_in_view/camera_in_view.yy",},},
     {"id":{"name":"constants","path":"scripts/constants/constants.yy",},},
+    {"id":{"name":"dist_to_line","path":"scripts/dist_to_line/dist_to_line.yy",},},
     {"id":{"name":"obj_car_parent","path":"objects/obj_car_parent/obj_car_parent.yy",},},
     {"id":{"name":"torque_lookup","path":"scripts/torque_lookup/torque_lookup.yy",},},
     {"id":{"name":"obj_player","path":"objects/obj_player/obj_player.yy",},},

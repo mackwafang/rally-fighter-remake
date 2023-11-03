@@ -19,7 +19,6 @@ if (accelerating) {
 	else {
 		var road = find_nearest_road(x + lengthdir_x(128, image_angle), y  + lengthdir_y(128, image_angle));
 		var angle_diff = angle_difference(road.direction, image_angle);
-		var angle_threshold = 0.5;
 		
 		engine_power = road.get_ideal_throttle();
 		
@@ -28,11 +27,8 @@ if (accelerating) {
 			// find the nearest road
 			var side = sign(angle_difference(point_direction(road.x,road.y, x, y), image_angle));
 			
-			angle_diff = -side * 10;
+			angle_diff = -side * 5;
 			engine_power = 1;
-			gear_shift_down();
-			gear_shift_down();
-			gear_shift_down();
 			gear_shift_down();
 		}
 		

@@ -90,12 +90,10 @@ is_on_road = function(_x, _y, index) {
 }
 
 set_on_road = function() {
-	for (var p_i = 0; p_i < array_length(obj_road_generator.road_collision_points); p_i++) {
+	var p_i = 0;
+	while(p_i++ < array_length(obj_road_generator.road_collision_points)-1) {
 		var polygon = obj_road_generator.road_collision_points[p_i];
-		if (!camera_in_view(polygon[0][0], polygon[1][0], 256)) {continue;}
-		if (!camera_in_view(polygon[0][1], polygon[1][1], 256)) {continue;}
-		if (!camera_in_view(polygon[0][2], polygon[1][2], 256)) {continue;}
-		if (!camera_in_view(polygon[0][3], polygon[1][3], 256)) {continue;}
+		if (point_distance(x,y,polygon[0][0], polygon[1][0]) > 256) {continue;}
 		
 		// on road collision
 		on_road = is_on_road(x, y, p_i);

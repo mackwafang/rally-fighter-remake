@@ -16,8 +16,8 @@ control_points[0] = new vec2(x,y);
 for (var s = 1; s < primary_count; s++) {
 	next_dir += choose(-1,0,1)*30;
 	control_points[s] = new vec2(
-		control_points[s-1].x + (cos(degtorad(next_dir)) * irandom_range(control_points_dist/5,control_points_dist)),
-		control_points[s-1].y + (sin(degtorad(next_dir)) * irandom_range(control_points_dist/5,control_points_dist))
+		control_points[s-1].x + (cos(degtorad(next_dir)) * irandom_range(control_points_dist/2, control_points_dist)),
+		control_points[s-1].y + (sin(degtorad(next_dir)) * irandom_range(control_points_dist/2, control_points_dist))
 	);
 }
 
@@ -38,8 +38,8 @@ for (var i = 0; i < array_length(road_list)-1; i++) {
 	// road changes lane count
 	if (lane_change_duration == 0) {
 		lane_side_affected = choose(ROAD_LANE_CHANGE_AFFECT.LEFT, ROAD_LANE_CHANGE_AFFECT.RIGHT, ROAD_LANE_CHANGE_AFFECT.BOTH);
-		lane_change_duration = 10+irandom(50);
-		lane_change_to = max(1, lane_change_to+irandom_range(-1,1));
+		lane_change_duration = 10+irandom(20);
+		lane_change_to = max(1, 6);
 	}
 	switch(lane_side_affected) {
 		case ROAD_LANE_CHANGE_AFFECT.LEFT:

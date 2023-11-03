@@ -1,7 +1,8 @@
 function find_nearest_road(_x, _y) {
 	var dist = infinity;
 	var index = -1;
-	for (var i = 0; i < array_length(obj_road_generator.road_list); i++) {
+	var i = 0
+	while(i++ < array_length(obj_road_generator.road_list)) {
 		var r = obj_road_generator.road_list[i];
 		var d = point_distance(_x, _y, r.x, r.y);
 		
@@ -15,5 +16,5 @@ function find_nearest_road(_x, _y) {
 			break;
 		}
 	}
-	return obj_road_generator.road_list[min(array_length(obj_road_generator.road_list), max(0, index))];
+	return obj_road_generator.road_list[min(array_length(obj_road_generator.road_list)-1, max(0, index))];
 }
