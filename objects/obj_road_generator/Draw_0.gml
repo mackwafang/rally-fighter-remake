@@ -13,11 +13,17 @@ for (var rpi = 0; rpi < array_length(road_points); rpi+=4) {
 		var coordinate = road_points[k][0];
 		var uv = road_points[k][1];
 		
-		// occulsion culling
 		draw_vertex_texture(coordinate.x, coordinate.y, uv.x, uv.y);
 	}
 	draw_primitive_end();
 	draw_set_color(c_white);
+	
+	//var a = [0,1,3,2];
+	//for (var k = 0; k <= 4; k++) {
+	//	var coordinate = road_points[rpi+(a[k%4])][0];
+	//	var coordinate_next = road_points[rpi+(a[(k+1)%4])][0];
+	//	draw_line_width_color(coordinate.x, coordinate.y, coordinate_next.x, coordinate_next.y, 2, c_red, c_red);
+	//}
 }
 
 if (global.DEBUG_ROAD_DRAW_CONTROL_POINTS) {
