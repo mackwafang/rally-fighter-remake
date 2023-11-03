@@ -38,28 +38,26 @@ for (var i = 0; i < array_length(road_list)-1; i++) {
 	// road changes lane count
 	if (lane_change_duration == 0) {
 		lane_side_affected = choose(ROAD_LANE_CHANGE_AFFECT.LEFT, ROAD_LANE_CHANGE_AFFECT.RIGHT, ROAD_LANE_CHANGE_AFFECT.BOTH);
-		lane_change_duration = 10;//20+irandom(50);
-		lane_change_to = max(1, lane_change_to+irandom_range(-2,2));
+		lane_change_duration = 10+irandom(50);
+		lane_change_to = max(1, lane_change_to+irandom_range(-1,1));
 	}
-	else {
-		switch(lane_side_affected) {
-			case ROAD_LANE_CHANGE_AFFECT.LEFT:
-				road.set_lanes_left(lane_side_affected);
-				break;
-			case ROAD_LANE_CHANGE_AFFECT.RIGHT:
-				road.set_lanes_right(lane_side_affected);
-				break;
-			case ROAD_LANE_CHANGE_AFFECT.BOTH:
-				road.set_lanes_side(lane_side_affected);
-				break;
-		}
-		lane_change_duration--;
+	switch(lane_side_affected) {
+		case ROAD_LANE_CHANGE_AFFECT.LEFT:
+			road.set_lanes_left(lane_side_affected);
+			break;
+		case ROAD_LANE_CHANGE_AFFECT.RIGHT:
+			road.set_lanes_right(lane_side_affected);
+			break;
+		case ROAD_LANE_CHANGE_AFFECT.BOTH:
+			road.set_lanes_side(lane_side_affected);
+			break;
 	}
+	lane_change_duration--;
 }
 
-// precalculate road polygons
-road_points = []; // used to generate the roads
-for (var i = 0; i < array_length(road_list) - 2; i++) {
+road_points = []; // precalculate road polygons
+road_collision_points = []; // calcuate road segments for colision checking
+for (var i = 0; i < array_length(road_list) - 1; i++) {
 	// for each road piece
 	var road = road_list[@ i];
 	var next_road = road_list[@ i + 1];
@@ -80,7 +78,10 @@ for (var i = 0; i < array_length(road_list) - 2; i++) {
 				else {subimage = 1;}
 			}
 			else if (l == road_lane) {subimage = 2;} // used for lane transition
-			else if (l == road_lane-1) {subimage = 4;} // used for edge
+			else if (l == road_lane-1) {
+				if (lane_transitioning) {subimage = 3;}
+				else {subimage = 4;}
+			} // used for edge
 		
 			var next_l = next_road_lane;
 			var render_direction = road.direction + (90 * render_direction_flip);
@@ -112,29 +113,7 @@ for (var i = 0; i < array_length(road_list) - 2; i++) {
 			road_points = array_concat(road_points, p);
 		}
 	}
-	////compile right lanes
-	//for (var l = 0; l < road.get_lanes_right(); l++) {
-	//	var subimage = 0;
-	//	if (l == 0) {subimage = 0;}
-	//	else if (l == road.get_lanes_right()-1) {subimage = 3;}
-	//	else {subimage = 2}
-	//	var next_l = next_road.get_lanes_right();
-		
-	//	road_points = array_concat(road_points, [
-	//		[new vec2(road.x+lengthdir_x(lane_width*l, road.direction-90), road.y+lengthdir_y(lane_width*l, road.direction-90)), new vec2(0,0), subimage],
-	//		[new vec2(road.x+lengthdir_x(lane_width*(l+1), road.direction-90), road.y+lengthdir_y(lane_width*(l+1), road.direction-90)), new vec2(0,1), subimage],
-	//		[new vec2(next_road.x+lengthdir_x(lane_width*min(l, next_l), next_road.direction-90), next_road.y+lengthdir_y(lane_width*min(l, next_l), next_road.direction-90)), new vec2(1,0), subimage],
-	//		[new vec2(next_road.x+lengthdir_x(lane_width*min(l+1, next_l), next_road.direction-90), next_road.y+lengthdir_y(lane_width*min(l+1, next_l), next_road.direction-90)), new vec2(1,1), subimage],
-	//	]);
-	//}
-}
-
-// calcuate road segments for colision checking
-road_collision_points = [];
-for (var i = 0; i < array_length(road_list) - 2; i++) {
-	// for each road piece
-	var road = road_list[@ i];
-	var next_road = road_list[@ i + 1];
+	
 	//compile left lanes
 	var left_lanes = road.get_lanes_left();
 	var right_lanes = road.get_lanes_right();
