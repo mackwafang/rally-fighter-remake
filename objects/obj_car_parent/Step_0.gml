@@ -17,23 +17,50 @@ if (accelerating) {
 		engine_power += 0.1;
 	}
 	else {
-		var road = find_nearest_road(x + lengthdir_x(128, image_angle), y  + lengthdir_y(128, image_angle));
+		var road = find_nearest_road(x, y);
+		var next_road = find_nearest_road(x, y, 1);
 		var angle_diff = angle_difference(road.direction, image_angle);
-		
-		engine_power = road.get_ideal_throttle();
+		assert(road.get_id() != next_road.get_id());
+		engine_power = road.get_ideal_throttle() * 0.9;
 		
 		if (!on_road) {
 			// off road, trying to get back on it
 			// find the nearest road
-			var side = sign(angle_difference(point_direction(road.x,road.y, x, y), image_angle));
-			
-			angle_diff = -side * 5;
+			var d = point_to_line(
+				new vec2(road.x, road.y),
+				new vec2(next_road.x, next_road.y),
+				new vec2(x, y)
+			);
+			var side = -(angle_difference(image_angle, point_direction(x, y, d.x, d.y)));
+			//var side = angle_difference(image_angle, point_direction(x,y,road.x,road.y));
+			turn_rate += side / 600;
 			engine_power = 1;
 			gear_shift_down();
 		}
+		else {
+			var tr = (angle_diff / 50)
+			turn_rate += clamp(tr, -2, 2);
+			braking = abs(tr) > 2;
+		}
 		
-		turn_rate += (angle_diff / 150);
-		braking = (velocity > (300000 / road.get_length()));
+		// checking other cars
+		var look_ahead_threshold = 16;
+		var car_look_ahead = collision_line(x, y, x+lengthdir_x(look_ahead_threshold, image_angle), y+lengthdir_y(look_ahead_threshold, image_angle), obj_car, false, true);
+		var car_look_left = collision_line(x+lengthdir_x(4, image_angle+45), y+lengthdir_x(4, image_angle+45), x+lengthdir_x(look_ahead_threshold, image_angle+45), y+lengthdir_y(look_ahead_threshold, image_angle+45), obj_car, false, true);
+		var car_look_right = collision_line(x+lengthdir_x(4, image_angle-45), y+lengthdir_x(4, image_angle-45), x+lengthdir_x(look_ahead_threshold, image_angle-45), y+lengthdir_y(look_ahead_threshold, image_angle-45), obj_car, false, true);
+		var is_off_road_left = !is_on_road(x+lengthdir_x(look_ahead_threshold, image_angle+90), y+lengthdir_y(look_ahead_threshold, image_angle+90), last_road_index) ? 1 : 0;
+		var is_off_road_right = !is_on_road(x+lengthdir_x(look_ahead_threshold, image_angle-90), y+lengthdir_y(look_ahead_threshold, image_angle-90), last_road_index) ? 1 : 0;
+
+		turn_rate += -(is_off_road_left / 6) + (is_off_road_right / 6);
+		if (!is_player) {
+			if (car_look_ahead) {
+				if (car_look_left) {turn_rate += 0.2;}
+				else if (car_look_right) {turn_rate -= 0.2;}
+				else {
+					engine_power = 0;
+				}
+			}
+		}
 	}
 }
 else {
@@ -57,13 +84,14 @@ if (keyboard_check_pressed(vk_down)) {gear_shift_down();}
 
 // moving car
 if (can_move) {
+	
 	// surface friction	
 	// first, location of cached index
 	if (!is_on_road(x, y, last_road_index)) {
 		// probably not on that segment anymore, recheck
 		set_on_road();
 	}
-	
+	// calculate engine stuff for acceleration
 	var engine_to_wheel_ratio = gear_ratio[gear-1] * diff_ratio;
 	var engine_torque_max = torque_lookup(engine_rpm);//5252 * horsepower / engine_rpm_max;
 	
@@ -78,7 +106,6 @@ if (can_move) {
 		f_brake = 0;
 		f_surface = 0;
 	}
-		
 	
 	var wheel_rotation_rate = velocity * 100 / 3600 / wheel_radius;
 	engine_rpm = (wheel_rotation_rate * engine_to_wheel_ratio * 60 / (2 * pi)) + 1000;
@@ -106,8 +133,18 @@ if (can_move) {
 	engine_rpm = clamp(engine_rpm, 1000, engine_rpm_max);
 	engine_power = clamp(engine_power, 0, 1);
 	
+	var engine_sound_pitch = (engine_rpm / engine_rpm_max)+0.3;
 	if (is_player) {
 		var engine_sound = audio_play_sound(snd_car, 10, false);
-		audio_sound_pitch(engine_sound, (engine_rpm / engine_rpm_max)+0.3);
+		audio_sound_pitch(engine_sound, engine_sound_pitch);
+		
+		audio_listener_position(x, y, 0);
 	}
+	else {
+		audio_emitter_pitch(engine_sound_emitter, engine_sound_pitch);
+		audio_play_sound_on(engine_sound_emitter, snd_car, false, 1);
+		audio_emitter_position(engine_sound_emitter, x, y, 0);
+	}
+	
+	gear_shift_wait = clamp(gear_shift_wait - 1, 0, 60);
 }

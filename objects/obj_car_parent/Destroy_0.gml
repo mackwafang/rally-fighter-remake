@@ -1,0 +1,1 @@
+audio_emitter_free(engine_sound_emitter);

@@ -26,12 +26,13 @@ gear_ratio = [4, 2.2, 5/3, 4/3, 9/10, 8/10];
 diff_ratio = 3.5;
 gear_shift_rpm = [
 	[0, 7000],
-	[3000, 6250],
-	[3500, 6000],
-	[4000, 6000],
+	[3000, 6000],
+	[3500, 5800],
+	[4000, 5000],
 	[3000, 4500],
 	[1100, 3000],
-]
+];
+gear_shift_wait = 0;	//  time wait to change gear again
 
 accelerating = false;	// flag to check if car is accelerating
 braking = false;		// flag to check if car is braking
@@ -50,20 +51,33 @@ ai_behavior = {
 	reversed_direction: false		// negative direction on road look up
 }
 
+// audio emitter for engine
+engine_sound_emitter = audio_emitter_create();
+audio_falloff_set_model(audio_falloff_exponent_distance);
+audio_emitter_falloff(engine_sound_emitter, 128, 258, 1);
+
 // misc
 last_road_index = 0; // last road index was checked for off road
-
 image_speed = 0;
+vehicle_type = 0;
+vehicle_detail_index = 0;
+vehicle_color = 0;
 
 // functions
 gear_shift_up = function() {
 	//shift up
-	gear = min(gear+1, array_length(gear_shift_rpm));
+	if (gear_shift_wait == 0) {
+		gear = min(gear+1, array_length(gear_shift_rpm));
+		gear_shift_wait = 60;
+	}
 }
 
 gear_shift_down = function() {
 	//shift down
-	gear = max(gear-1, 1);
+	if (gear_shift_wait == 0) {
+		gear = max(gear-1, 1);
+		gear_shift_wait = 60;
+	}
 }
 
 gear_shift = function() {
@@ -74,10 +88,13 @@ gear_shift = function() {
 		if (engine_rpm > gear_shift_rpm_upper) {
 			gear_shift_up();
 		}
+		if ((gear > 3) && (acceleration < -1)) {
+			gear_shift_down();
+		}
 	}
-	if (!accelerating or braking) 
-		if (engine_rpm < gear_shift_rpm_lower) {
-			{gear_shift_down();
+	if (!accelerating or braking) {
+		if ((engine_rpm < gear_shift_rpm_lower)) {
+			gear_shift_down();
 		}
 	}
 }
@@ -103,3 +120,5 @@ set_on_road = function() {
 		}
 	}
 }
+
+alarm[0] = 1;

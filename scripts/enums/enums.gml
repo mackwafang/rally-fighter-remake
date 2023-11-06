@@ -4,3 +4,9 @@ enum ROAD_LANE_CHANGE_AFFECT {
 	RIGHT,
 	BOTH
 }
+
+enum VEHICLE_TYPE {
+	CAR,
+	BIKE,
+	TRUCK
+}
