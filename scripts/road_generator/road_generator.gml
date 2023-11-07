@@ -5,7 +5,8 @@ function RoadNode(_vec2) constructor {
 	length = 0;				// length of segment
 	ideal_throttle = 0;		// ideal throttle for ai
 	vec = _vec2;
-	lanes = [1, 0, 1]; // lanes [left, median , right]
+	lanes = [1, 0, 1];		// lanes [left, median , right]
+	lane_width = 0;			// lane width in pixels
 	_id = -1;
 	
 	toString = function() {
@@ -39,6 +40,13 @@ function RoadNode(_vec2) constructor {
 			sum += lanes[i];
 		}
 		return sum;
+	}
+	
+	get_lane_width = function() {
+		/// @function			get_lanes_left()
+		/// @description		Return lane width in pixel
+		/// @return {real}
+		return lane_width
 	}
 	
 	get_lanes_left = function() {

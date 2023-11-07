@@ -5,6 +5,16 @@ draw_sprite_ext(sprite_index, image_index, x, y, image_xscale, image_yscale, ima
 draw_sprite_ext(vehicle_detail_index, image_index, x, y, image_xscale, image_yscale, image_angle, c_white, image_alpha);
 
 
+var next_road = find_nearest_road(x, y, 1);
+var d = point_to_line(
+	new vec2(on_road_index.x, on_road_index.y),
+	new vec2(next_road.x, next_road.y),
+	new vec2(x, y)
+);
+d.x += lengthdir_x(((-ai_behavior.desired_lane + 0.5) * on_road_index.lane_width), on_road_index.direction+90);
+d.y += lengthdir_y(((-ai_behavior.desired_lane + 0.5) * on_road_index.lane_width), on_road_index.direction+90);
+draw_line_width(x,y,d.x,d.y,4);
+
 if (global.DEBUG_CAR) {
 	if (accelerating) {draw_circle_color(x+8, y-10, 4, c_green, c_green, false);}
 	if (boosting) {draw_circle_color(x, y-10, 4, c_yellow, c_yellow, false);}

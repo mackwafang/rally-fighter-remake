@@ -17,28 +17,36 @@ if (accelerating) {
 		engine_power += 0.1;
 	}
 	else {
-		var road = find_nearest_road(x, y);
+		on_road_index = find_nearest_road(x, y);
 		var next_road = find_nearest_road(x, y, 1);
-		var angle_diff = angle_difference(road.direction, image_angle);
-		assert(road.get_id() != next_road.get_id());
-		engine_power = road.get_ideal_throttle() * 0.9;
+		var angle_diff = angle_difference(on_road_index.direction, image_angle);
+		
+		assert(on_road_index.get_id() != next_road.get_id());
+		if (ai_behavior.desired_lane > on_road_index.get_lanes_right()) {
+			// desired lane doesn't exists, pick a new one
+			alarm[1] = 1;
+		}
+		
+		engine_power = on_road_index.get_ideal_throttle() * 0.9;
+		var d = point_to_line(
+			new vec2(on_road_index.x, on_road_index.y),
+			new vec2(next_road.x, next_road.y),
+			new vec2(x, y)
+		);
+		d.x += lengthdir_x(((-ai_behavior.desired_lane + 0.5) * on_road_index.lane_width), on_road_index.direction+90);
+		d.y += lengthdir_y(((-ai_behavior.desired_lane + 0.5) * on_road_index.lane_width), on_road_index.direction+90);
+		var side = -(angle_difference(image_angle, point_direction(x, y, d.x, d.y)));
 		
 		if (!on_road) {
 			// off road, trying to get back on it
 			// find the nearest road
-			var d = point_to_line(
-				new vec2(road.x, road.y),
-				new vec2(next_road.x, next_road.y),
-				new vec2(x, y)
-			);
-			var side = -(angle_difference(image_angle, point_direction(x, y, d.x, d.y)));
 			//var side = angle_difference(image_angle, point_direction(x,y,road.x,road.y));
 			turn_rate += side / 600;
 			engine_power = 1;
 			gear_shift_down();
 		}
 		else {
-			var tr = (angle_diff / 50)
+			var tr = (angle_diff / 50) + (sign(side) / 40);
 			turn_rate += clamp(tr, -2, 2);
 			braking = abs(tr) > 2;
 		}

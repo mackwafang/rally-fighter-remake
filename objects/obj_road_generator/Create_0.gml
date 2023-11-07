@@ -34,6 +34,7 @@ for (var i = 0; i < array_length(road_list)-1; i++) {
 	road.length = point_distance(road.x, road.y, road_next.x, road_next.y);
 	road.ideal_throttle = road.length / ((control_points_dist / road_segments) * 0.8);
 	road._id = i;
+	road.lane_width = lane_width;
 	
 	// road changes lane count
 	if (lane_change_duration == 0) {

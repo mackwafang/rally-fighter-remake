@@ -48,6 +48,7 @@ odometer_speed = 0;
 
 // ai behavior
 ai_behavior = {
+	desired_lane: 1,
 	reversed_direction: false		// negative direction on road look up
 }
 
@@ -57,7 +58,8 @@ audio_falloff_set_model(audio_falloff_exponent_distance);
 audio_emitter_falloff(engine_sound_emitter, 128, 258, 1);
 
 // misc
-last_road_index = 0; // last road index was checked for off road
+last_road_index = 0;							// last road index was checked for off road
+on_road_index = find_nearest_road(x, y);		// keep track of which road segment its on
 image_speed = 0;
 vehicle_type = 0;
 vehicle_detail_index = 0;
@@ -122,3 +124,4 @@ set_on_road = function() {
 }
 
 alarm[0] = 1;
+alarm[1] = 600;
