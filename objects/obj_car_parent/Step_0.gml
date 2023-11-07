@@ -46,20 +46,20 @@ if (accelerating) {
 			gear_shift_down();
 		}
 		else {
-			var tr = (angle_diff / 50) + (sign(side) / 40);
+			var tr = (angle_diff / 50) + (sign(side) / 100);
 			turn_rate += clamp(tr, -2, 2);
 			braking = abs(tr) > 2;
 		}
 		
 		// checking other cars
-		var look_ahead_threshold = 16;
+		var look_ahead_threshold = 32;
 		var car_look_ahead = collision_line(x, y, x+lengthdir_x(look_ahead_threshold, image_angle), y+lengthdir_y(look_ahead_threshold, image_angle), obj_car, false, true);
 		var car_look_left = collision_line(x+lengthdir_x(4, image_angle+45), y+lengthdir_x(4, image_angle+45), x+lengthdir_x(look_ahead_threshold, image_angle+45), y+lengthdir_y(look_ahead_threshold, image_angle+45), obj_car, false, true);
 		var car_look_right = collision_line(x+lengthdir_x(4, image_angle-45), y+lengthdir_x(4, image_angle-45), x+lengthdir_x(look_ahead_threshold, image_angle-45), y+lengthdir_y(look_ahead_threshold, image_angle-45), obj_car, false, true);
 		var is_off_road_left = !is_on_road(x+lengthdir_x(look_ahead_threshold, image_angle+90), y+lengthdir_y(look_ahead_threshold, image_angle+90), last_road_index) ? 1 : 0;
 		var is_off_road_right = !is_on_road(x+lengthdir_x(look_ahead_threshold, image_angle-90), y+lengthdir_y(look_ahead_threshold, image_angle-90), last_road_index) ? 1 : 0;
 
-		turn_rate += -(is_off_road_left / 6) + (is_off_road_right / 6);
+		turn_rate += -(is_off_road_left / 10) + (is_off_road_right / 10);
 		if (!is_player) {
 			if (car_look_ahead) {
 				if (car_look_left) {turn_rate += 0.2;}
