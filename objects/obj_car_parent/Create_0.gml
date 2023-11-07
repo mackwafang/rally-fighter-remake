@@ -13,9 +13,11 @@ horsepower = 900;		// horsepower
 turn_rate = 0;			// car's turning rate
 gear = 1;				// car's gear 
 engine_power = 0;		// throttle position
-transfer_eff = 0.7;		//transfer efficiency
+transfer_eff = 0.7;		// transfer efficiency
 acceleration = 0;		// acceleration value
 braking_power = 30;		// braking magnetude
+
+car_id = -1;			// car id
 
 inertia = mass * (wheel_radius * wheel_radius) / 2;		// constant value for car's inertia
 c_drag = 0.5 * 0.3 * 2.2 * AIR_DENSITY;					// constant value for car's air drag
@@ -109,9 +111,9 @@ is_on_road = function(_x, _y, index) {
 }
 
 set_on_road = function() {
-	var p_i = 0;
+	var p_i = last_road_index;
 	while(p_i++ < array_length(obj_road_generator.road_collision_points)-1) {
-		var polygon = obj_road_generator.road_collision_points[p_i];
+		var polygon = obj_road_generator.road_collision_points[max(0, p_i)];
 		if (point_distance(x,y,polygon[0][0], polygon[1][0]) > 256) {continue;}
 		
 		// on road collision

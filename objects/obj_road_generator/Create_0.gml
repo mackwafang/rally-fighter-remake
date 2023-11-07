@@ -39,14 +39,16 @@ for (var i = 0; i < array_length(road_list)-1; i++) {
 	// road changes lane count
 	if (lane_change_duration == 0) {
 		lane_side_affected = choose(ROAD_LANE_CHANGE_AFFECT.LEFT, ROAD_LANE_CHANGE_AFFECT.RIGHT, ROAD_LANE_CHANGE_AFFECT.BOTH);
-		lane_change_duration = 10+irandom(20);
-		lane_change_to = max(1, 10);
+		lane_change_duration = 30+irandom(40);
+		lane_change_to = 1+irandom(3);
 	}
 	switch(lane_side_affected) {
 		case ROAD_LANE_CHANGE_AFFECT.LEFT:
 			road.set_lanes_left(lane_change_to);
+			road.set_lanes_right(road_list[@i-1].get_lanes_right());
 			break;
 		case ROAD_LANE_CHANGE_AFFECT.RIGHT:
+			road.set_lanes_left(road_list[@i-1].get_lanes_left());
 			road.set_lanes_right(lane_change_to);
 			break;
 		case ROAD_LANE_CHANGE_AFFECT.BOTH:

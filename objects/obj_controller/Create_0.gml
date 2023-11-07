@@ -2,7 +2,15 @@ cam_move_speed = 16;
 cam_zoom = 1
 
 for (var i = 0; i < 12; i++) {
-	instance_create_layer(0, 0, "Instances", obj_car);
+	var car = instance_create_layer(0, 0, "Instances", obj_car);
+	car.car_id = i+1;
+	
+	var starting_road_seg = obj_road_generator.road_list[i];
+	var lane_position = ((car.car_id % starting_road_seg.get_lanes())) * starting_road_seg.lane_width;
+	
+	car.x = starting_road_seg.x + lengthdir_x(lane_position, starting_road_seg.direction - 90);
+	car.y = starting_road_seg.y + lengthdir_y(lane_position, starting_road_seg.direction - 90);
+	car.direction = starting_road_seg.direction;
 }
 
 if (!global.DEBUG_FREE_CAMERA) {

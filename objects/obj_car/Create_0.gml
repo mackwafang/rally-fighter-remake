@@ -1,11 +1,5 @@
 event_inherited();
 
-var starting_road_seg = obj_road_generator.road_list[1 + irandom(2)];
-var lane_position = irandom_range(-starting_road_seg.get_lanes_left(), starting_road_seg.get_lanes_right()) * 32;
-x = starting_road_seg.x + lengthdir_x(lane_position, random(starting_road_seg.direction));
-y = starting_road_seg.y + lengthdir_y(lane_position, random(starting_road_seg.direction));
-direction = -starting_road_seg.direction;
-
 image_index = irandom(sprite_get_number(sprite_index)-1);
 
 horsepower = 200;
@@ -24,5 +18,5 @@ horsepower = 200;
 //	[1100, 3000],
 //]
 
-vehicle_type = VEHICLE_TYPE.BIKE;
+vehicle_type = choose(VEHICLE_TYPE.CAR, VEHICLE_TYPE.BIKE);
 vehicle_color = make_color_rgb(irandom(255), irandom(255), irandom(255));
