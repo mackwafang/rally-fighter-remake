@@ -1,3 +1,4 @@
+// debuging camera
 if (keyboard_check(ord("W"))) {y -= cam_move_speed;}
 if (keyboard_check(ord("S"))) {y += cam_move_speed;}
 if (keyboard_check(ord("A"))) {x -= cam_move_speed;}

@@ -38,5 +38,6 @@
     {"name":"obj_car","order":4,"path":"objects/obj_car/obj_car.yy",},
     {"name":"math","order":1,"path":"scripts/math/math.yy",},
     {"name":"enums","order":7,"path":"scripts/enums/enums.yy",},
+    {"name":"dist_on_line","order":12,"path":"scripts/dist_on_line/dist_on_line.yy",},
   ],
 }

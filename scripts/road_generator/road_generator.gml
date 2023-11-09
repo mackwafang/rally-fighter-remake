@@ -7,6 +7,7 @@ function RoadNode(_vec2) constructor {
 	vec = _vec2;
 	lanes = [1, 0, 1];		// lanes [left, median , right]
 	lane_width = 0;			// lane width in pixels
+	length_to_point = 0;	// distance from the begining to this point
 	_id = -1;
 	
 	toString = function() {

@@ -60,6 +60,7 @@
     {"id":{"name":"obj_car","path":"objects/obj_car/obj_car.yy",},},
     {"id":{"name":"math","path":"scripts/math/math.yy",},},
     {"id":{"name":"enums","path":"scripts/enums/enums.yy",},},
+    {"id":{"name":"dist_on_line","path":"scripts/dist_on_line/dist_on_line.yy",},},
     {"id":{"name":"Room1","path":"rooms/Room1/Room1.yy",},},
   ],
   "RoomOrderNodes": [

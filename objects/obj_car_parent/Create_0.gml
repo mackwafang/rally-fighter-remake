@@ -13,7 +13,7 @@ horsepower = 900;		// horsepower
 turn_rate = 0;			// car's turning rate
 gear = 1;				// car's gear 
 engine_power = 0;		// throttle position
-transfer_eff = 0.7;		// transfer efficiency
+transfer_eff = 1;		// transfer efficiency
 acceleration = 0;		// acceleration value
 braking_power = 30;		// braking magnetude
 
@@ -61,11 +61,12 @@ audio_emitter_falloff(engine_sound_emitter, 128, 258, 1);
 
 // misc
 last_road_index = 0;							// last road index was checked for off road
-on_road_index = find_nearest_road(x, y);		// keep track of which road segment its on
+nav_road_index = find_nearest_road(x, y);		// keep track of which road segment to travel to
 image_speed = 0;
 vehicle_type = 0;
 vehicle_detail_index = 0;
 vehicle_color = 0;
+dist_along_road = 0;							// how far along the road it is
 
 // functions
 gear_shift_up = function() {
@@ -123,7 +124,11 @@ set_on_road = function() {
 			break;
 		}
 	}
+	return obj_road_generator.road_list[last_road_index];
 }
+
+
+on_road_index = set_on_road();					// keep track of which road segment its on 
 
 alarm[0] = 1;
 alarm[1] = 600;

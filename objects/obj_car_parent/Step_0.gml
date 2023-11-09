@@ -1,3 +1,15 @@
+// road fidning
+nav_road_index = find_nearest_road(x, y, , last_road_index);
+var next_road = obj_road_generator.road_list[nav_road_index.get_id()+1];
+var vec_to_road = point_to_line(
+	new vec2(on_road_index.x, on_road_index.y),
+	new vec2(next_road.x, next_road.y),
+	new vec2(x, y)
+);
+dist_along_road = on_road_index.length_to_point + point_distance(on_road_index.x, on_road_index.y, vec_to_road.x, vec_to_road.y);
+vec_to_road.x += lengthdir_x(((-ai_behavior.desired_lane + 0.5) * on_road_index.lane_width), on_road_index.direction+90);
+vec_to_road.y += lengthdir_y(((-ai_behavior.desired_lane + 0.5) * on_road_index.lane_width), on_road_index.direction+90);
+
 
 // player moving
 if (is_player) {
@@ -17,25 +29,16 @@ if (accelerating) {
 		engine_power += 0.1;
 	}
 	else {
-		on_road_index = find_nearest_road(x, y);
-		var next_road = obj_road_generator.road_list[on_road_index.get_id()+1];
-		var angle_diff = angle_difference(on_road_index.direction, image_angle);
+		var angle_diff = angle_difference(nav_road_index.direction, image_angle);
 		
-		assert(on_road_index.get_id() != next_road.get_id());
-		if (ai_behavior.desired_lane > on_road_index.get_lanes_right()) {
+		assert(nav_road_index.get_id() != next_road.get_id());
+		if (ai_behavior.desired_lane > nav_road_index.get_lanes_right()) {
 			// desired lane doesn't exists, pick a new one
 			alarm[1] = 1;
 		}
 		
-		engine_power = on_road_index.get_ideal_throttle() * 0.9;
-		var d = point_to_line(
-			new vec2(on_road_index.x, on_road_index.y),
-			new vec2(next_road.x, next_road.y),
-			new vec2(x, y)
-		);
-		d.x += lengthdir_x(((-ai_behavior.desired_lane + 0.5) * on_road_index.lane_width), on_road_index.direction+90);
-		d.y += lengthdir_y(((-ai_behavior.desired_lane + 0.5) * on_road_index.lane_width), on_road_index.direction+90);
-		var side = -(angle_difference(image_angle, point_direction(x, y, d.x, d.y)));
+		engine_power = nav_road_index.get_ideal_throttle() * 0.9;
+		var side = -(angle_difference(image_angle, point_direction(x, y, vec_to_road.x, vec_to_road.y)));
 		
 		if (!on_road) {
 			// off road, trying to get back on it
@@ -46,7 +49,7 @@ if (accelerating) {
 			gear_shift_down();
 		}
 		else {
-			var tr = (angle_diff / 50) + (sign(side) / 100);
+			var tr = (angle_diff / 50) + (sign(side) / 50);
 			turn_rate += clamp(tr, -2, 2);
 			braking = abs(tr) > 2;
 		}
@@ -56,8 +59,8 @@ if (accelerating) {
 		var car_look_ahead = collision_line(x, y, x+lengthdir_x(look_ahead_threshold, image_angle), y+lengthdir_y(look_ahead_threshold, image_angle), obj_car, false, true);
 		var car_look_left = collision_line(x+lengthdir_x(4, image_angle+45), y+lengthdir_x(4, image_angle+45), x+lengthdir_x(look_ahead_threshold, image_angle+45), y+lengthdir_y(look_ahead_threshold, image_angle+45), obj_car, false, true);
 		var car_look_right = collision_line(x+lengthdir_x(4, image_angle-45), y+lengthdir_x(4, image_angle-45), x+lengthdir_x(look_ahead_threshold, image_angle-45), y+lengthdir_y(look_ahead_threshold, image_angle-45), obj_car, false, true);
-		var is_off_road_left = !is_on_road(x+lengthdir_x(look_ahead_threshold, image_angle+90), y+lengthdir_y(look_ahead_threshold, image_angle+90), last_road_index) ? 1 : 0;
-		var is_off_road_right = !is_on_road(x+lengthdir_x(look_ahead_threshold, image_angle-90), y+lengthdir_y(look_ahead_threshold, image_angle-90), last_road_index) ? 1 : 0;
+		var is_off_road_left = !is_on_road(x+lengthdir_x(look_ahead_threshold/4, image_angle+90), y+lengthdir_y(look_ahead_threshold/4, image_angle+90), last_road_index) ? 1 : 0;
+		var is_off_road_right = !is_on_road(x+lengthdir_x(look_ahead_threshold/4, image_angle-90), y+lengthdir_y(look_ahead_threshold/4, image_angle-90), last_road_index) ? 1 : 0;
 		
 		if (!is_player) {
 			turn_rate += -(is_off_road_left / 10) + (is_off_road_right / 10);
@@ -97,7 +100,7 @@ if (can_move) {
 	// first, location of cached index
 	if (!is_on_road(x, y, last_road_index)) {
 		// probably not on that segment anymore, recheck
-		set_on_road();
+		on_road_index = set_on_road();
 	}
 	// calculate engine stuff for acceleration
 	var engine_to_wheel_ratio = gear_ratio[gear-1] * diff_ratio;

@@ -7,6 +7,7 @@ road_segments = 10;
 control_points = array_create(primary_count);
 control_points_dist = 2048;
 lane_width = 32;
+track_length = 0;
 
 var t = current_time;
 
@@ -25,7 +26,7 @@ road_list = generate_roads(control_points, road_segments);
 
 // set up road node data
 var lane_change_duration = 50; //how many nodes until change to new lane
-var lane_change_to = 2; // change this side of road to this number of lanes
+var lane_change_to = 3; // change this side of road to this number of lanes
 var lane_side_affected = ROAD_LANE_CHANGE_AFFECT.BOTH; // which side of the road changes 
 for (var i = 0; i < array_length(road_list)-1; i++) {
 	var road = road_list[@i];
@@ -35,11 +36,13 @@ for (var i = 0; i < array_length(road_list)-1; i++) {
 	road.ideal_throttle = road.length / ((control_points_dist / road_segments) * 0.8);
 	road._id = i;
 	road.lane_width = lane_width;
+	road_next.length_to_point = road.length_to_point + road.length;
+	track_length += road.length;
 	
 	// road changes lane count
 	if (lane_change_duration == 0) {
 		lane_side_affected = choose(ROAD_LANE_CHANGE_AFFECT.LEFT, ROAD_LANE_CHANGE_AFFECT.RIGHT, ROAD_LANE_CHANGE_AFFECT.BOTH);
-		lane_change_duration = 30+irandom(40);
+		lane_change_duration = 30+irandom(10);
 		lane_change_to = 1+irandom(3);
 	}
 	switch(lane_side_affected) {

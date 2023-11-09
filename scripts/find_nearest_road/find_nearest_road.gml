@@ -1,12 +1,12 @@
-function find_nearest_road(_x, _y, offset=0) {
+function find_nearest_road(_x, _y, offset=0, starting=0) {
 	var dist = infinity;
 	var index = -1;
-	var i = 0
+	var i = starting;
 	while(i++ < array_length(obj_road_generator.road_list)-1) {
 		var r = obj_road_generator.road_list[i];
 		var d = point_distance(_x, _y, r.x, r.y);
 		
-		if (d > r.length* 2) {continue;}
+		if (d > 512) {continue;}
 		
 		if (d < dist) {
 			dist = d;
