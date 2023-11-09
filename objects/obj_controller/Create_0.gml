@@ -7,16 +7,18 @@ for (var i = 0; i < 11; i++) {
 	var car = instance_create_layer(0, 0, "Instances", obj_car);
 	car.car_id = i+1;
 	
-	var starting_road_seg = obj_road_generator.road_list[i+1];
-	var lane_position = (((car.car_id % starting_road_seg.get_lanes_left())) * starting_road_seg.lane_width) + (starting_road_seg.lane_width / 2);
+	var starting_road_seg = obj_road_generator.road_list[0];
+	var lane_position_x = ((car.car_id % starting_road_seg.get_lanes_right()) * starting_road_seg.lane_width) + (starting_road_seg.lane_width / 2);
+	var lane_position_y = (car.car_id * starting_road_seg.lane_width) + (starting_road_seg.lane_width / 2);
 	
-	car.x = starting_road_seg.x + lengthdir_x(lane_position, starting_road_seg.direction - 90);
-	car.y = starting_road_seg.y + lengthdir_y(lane_position, starting_road_seg.direction - 90);
+	car.x = starting_road_seg.x + lengthdir_x(lane_position_x, starting_road_seg.direction);
+	car.y = starting_road_seg.y + lengthdir_y(lane_position_y, starting_road_seg.direction);
 	car.direction = starting_road_seg.direction;
 	
 	participating_vehicles[array_length(participating_vehicles)] = car;
 }
 car_ranking = [];
+array_copy(car_ranking, 0, participating_vehicles, 0, array_length(participating_vehicles));
 
 if (!global.DEBUG_FREE_CAMERA) {
 	main_camera_size = {

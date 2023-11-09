@@ -49,7 +49,8 @@ if (accelerating) {
 			gear_shift_down();
 		}
 		else {
-			var tr = (angle_diff / 50) + (sign(side) / 50);
+			// car turning on curved road and moving to its desired lane
+			var tr = (angle_diff / 75) + (sign(side) / 60);
 			turn_rate += clamp(tr, -2, 2);
 			braking = abs(tr) > 2;
 		}

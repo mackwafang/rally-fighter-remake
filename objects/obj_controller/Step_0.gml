@@ -24,3 +24,9 @@ else {
 	);
 	camera_set_view_size(main_camera, main_camera_size.width / cam_zoom, main_camera_size.height / cam_zoom);
 }
+
+
+// car ranking
+array_sort(car_ranking, function(car1, car2) {
+	return car2.dist_along_road - car1.dist_along_road;
+});
