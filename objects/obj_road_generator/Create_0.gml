@@ -15,7 +15,9 @@ var t = current_time;
 var next_dir = 0;
 control_points[0] = new vec2(x,y);
 for (var s = 1; s < primary_count; s++) {
-	next_dir += irandom_range(-1,1)*30;
+	if (s > 2) {
+		next_dir += irandom_range(-1,1)*30;
+	}
 	control_points[s] = new vec2(
 		control_points[s-1].x + (cos(degtorad(next_dir)) * irandom_range(control_points_dist/4, control_points_dist)),
 		control_points[s-1].y + (sin(degtorad(next_dir)) * irandom_range(control_points_dist/4, control_points_dist))
@@ -25,7 +27,7 @@ for (var s = 1; s < primary_count; s++) {
 road_list = generate_roads(control_points, road_segments);
 
 // set up road node data
-var lane_change_duration = 50; //how many nodes until change to new lane
+var lane_change_duration = 100; //how many nodes until change to new lane
 var lane_change_to = 3; // change this side of road to this number of lanes
 var lane_side_affected = ROAD_LANE_CHANGE_AFFECT.BOTH; // which side of the road changes 
 for (var i = 0; i < array_length(road_list)-1; i++) {

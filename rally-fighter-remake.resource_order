@@ -29,6 +29,7 @@
     {"name":"camera_in_view","order":6,"path":"scripts/camera_in_view/camera_in_view.yy",},
     {"name":"constants","order":1,"path":"scripts/constants/constants.yy",},
     {"name":"spr_bike","order":4,"path":"sprites/spr_bike/spr_bike.yy",},
+    {"name":"spr_starting_number","order":7,"path":"sprites/spr_starting_number/spr_starting_number.yy",},
     {"name":"point_to_line","order":11,"path":"scripts/point_to_line/point_to_line.yy",},
     {"name":"obj_car_parent","order":1,"path":"objects/obj_car_parent/obj_car_parent.yy",},
     {"name":"torque_lookup","order":9,"path":"scripts/torque_lookup/torque_lookup.yy",},

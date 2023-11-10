@@ -52,7 +52,7 @@ if (accelerating) {
 			// car turning on curved road and moving to its desired lane
 			var tr = (angle_diff / 75) + (sign(side) / 60);
 			turn_rate += clamp(tr, -2, 2);
-			braking = abs(tr) > 2;
+			braking = (abs(tr) > 2) | ((nav_road_index.get_ideal_throttle() < 0.25) && (angle_diff > 15));
 		}
 		
 		// checking other cars
