@@ -2,7 +2,7 @@ randomize();
 //random_set_seed(0);
 depth = 1000;
 
-primary_count = 100;
+primary_count = 300;
 road_segments = 10;
 control_points = array_create(primary_count);
 control_points_dist = 2048;
@@ -72,6 +72,7 @@ for (var i = 0; i < array_length(road_list) - 1; i++) {
 	
 	var lane_function = [road.get_lanes_left, road.get_lanes_right];
 	var next_lane_function = [next_road.get_lanes_left, next_road.get_lanes_right];
+	/*
 	for (var f = 0; f < 2; f++) {
 		var road_lane = lane_function[f]();
 		var next_road_lane = next_lane_function[f]();
@@ -121,6 +122,7 @@ for (var i = 0; i < array_length(road_list) - 1; i++) {
 			road_points = array_concat(road_points, p);
 		}
 	}
+	*/
 	
 	//compile left lanes
 	var left_lanes = road.get_lanes_left();
@@ -143,6 +145,12 @@ for (var i = 0; i < array_length(road_list) - 1; i++) {
 	];
 	
 	road_collision_points[array_length(road_collision_points)] = collision_points;
+	road_points = array_concat(road_points, [
+		[new vec2(collision_points[0][0], collision_points[1][0]), new vec2(0,0), 1],
+		[new vec2(collision_points[0][3], collision_points[1][3]), new vec2(0,1), 1],
+		[new vec2(collision_points[0][1], collision_points[1][1]), new vec2(1,0), 1],
+		[new vec2(collision_points[0][2], collision_points[1][2]), new vec2(1,1), 1]
+	]);
 }
 
 obj_controller.x = road_list[0].x;
