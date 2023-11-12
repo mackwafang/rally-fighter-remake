@@ -35,6 +35,7 @@
     "IDEVersion": "2023.8.2.106",
   },
   "resources": [
+    {"id":{"name":"spr_road_no_lane_mark","path":"sprites/spr_road_no_lane_mark/spr_road_no_lane_mark.yy",},},
     {"id":{"name":"point_in_polygon","path":"scripts/point_in_polygon/point_in_polygon.yy",},},
     {"id":{"name":"spr_car","path":"sprites/spr_car/spr_car.yy",},},
     {"id":{"name":"spr_grass","path":"sprites/spr_grass/spr_grass.yy",},},

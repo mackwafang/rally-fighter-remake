@@ -27,7 +27,7 @@ for (var s = 1; s < primary_count; s++) {
 road_list = generate_roads(control_points, road_segments);
 
 // set up road node data
-var lane_change_duration = 100; //how many nodes until change to new lane
+var lane_change_duration = 20; //how many nodes until change to new lane
 var lane_change_to = 3; // change this side of road to this number of lanes
 var lane_side_affected = ROAD_LANE_CHANGE_AFFECT.BOTH; // which side of the road changes 
 for (var i = 0; i < array_length(road_list)-1; i++) {
@@ -45,7 +45,7 @@ for (var i = 0; i < array_length(road_list)-1; i++) {
 	if (lane_change_duration == 0) {
 		lane_side_affected = choose(ROAD_LANE_CHANGE_AFFECT.LEFT, ROAD_LANE_CHANGE_AFFECT.RIGHT, ROAD_LANE_CHANGE_AFFECT.BOTH);
 		lane_change_duration = 30+irandom(10);
-		lane_change_to = 1+irandom(3);
+		lane_change_to = 1+irandom(2);
 	}
 	switch(lane_side_affected) {
 		case ROAD_LANE_CHANGE_AFFECT.LEFT:
@@ -129,6 +129,10 @@ for (var i = 0; i < array_length(road_list) - 1; i++) {
 	var right_lanes = road.get_lanes_right();
 	var next_left_lanes = next_road.get_lanes_left();
 	var next_right_lanes = next_road.get_lanes_right();
+	var left_subimage = max(left_lanes, next_left_lanes);
+	var right_subimage = max(right_lanes, next_right_lanes);
+	var left_lane_sprite = (left_lanes != next_left_lanes) ? spr_road_no_lane_mark : spr_road;
+	var right_lane_sprite = (right_lanes != next_right_lanes) ? spr_road_no_lane_mark : spr_road;
 	var collision_points = [
 		 [
 			road.x+lengthdir_x(lane_width*left_lanes, road.direction+90),
@@ -146,11 +150,30 @@ for (var i = 0; i < array_length(road_list) - 1; i++) {
 	
 	road_collision_points[array_length(road_collision_points)] = collision_points;
 	road_points = array_concat(road_points, [
-		[new vec2(collision_points[0][0], collision_points[1][0]), new vec2(0,0), 1],
-		[new vec2(collision_points[0][3], collision_points[1][3]), new vec2(0,1), 1],
-		[new vec2(collision_points[0][1], collision_points[1][1]), new vec2(1,0), 1],
-		[new vec2(collision_points[0][2], collision_points[1][2]), new vec2(1,1), 1]
+		[new vec2(collision_points[0][0], collision_points[1][0]), new vec2(1,1), left_subimage, left_lane_sprite],
+		[new vec2(road.x, road.y), new vec2(1,0), left_subimage, left_lane_sprite],
+		[new vec2(collision_points[0][1], collision_points[1][1]), new vec2(0,1), left_subimage, left_lane_sprite],
+		[new vec2(next_road.x, next_road.y), new vec2(0,0), left_subimage, left_lane_sprite],
+		
+		
+		[new vec2(road.x, road.y), new vec2(0,0), right_subimage, right_lane_sprite],
+		[new vec2(collision_points[0][3], collision_points[1][3]), new vec2(0,1), right_subimage, right_lane_sprite],
+		[new vec2(next_road.x, next_road.y), new vec2(1,0), right_subimage, right_lane_sprite],
+		[new vec2(collision_points[0][2], collision_points[1][2]), new vec2(1,1), right_subimage, right_lane_sprite],
 	]);
+
+	//road_points = array_concat(road_points, [
+	//	[new vec2(road.x, road.y), new vec2(1,0), next_road.get_lanes_left(), left_lane_sprite],
+	//	[new vec2(next_road.x, next_road.y), new vec2(0,0), next_road.get_lanes_left(), left_lane_sprite],
+	//	[new vec2(collision_points[0][1], collision_points[1][1]), new vec2(0,1), next_road.get_lanes_left(), left_lane_sprite],
+	//	[new vec2(collision_points[0][0], collision_points[1][0]), new vec2(1,1), next_road.get_lanes_left(), left_lane_sprite],
+		
+		
+	//	[new vec2(road.x, road.y), new vec2(0,0), next_road.get_lanes_right(), right_lane_sprite],
+	//	[new vec2(next_road.x, next_road.y), new vec2(1,0), next_road.get_lanes_right(), right_lane_sprite],
+	//	[new vec2(collision_points[0][2], collision_points[1][2]), new vec2(1,1), next_road.get_lanes_right(), right_lane_sprite],
+	//	[new vec2(collision_points[0][3], collision_points[1][3]), new vec2(0,1), next_road.get_lanes_right(), right_lane_sprite],
+	//]);
 }
 
 obj_controller.x = road_list[0].x;

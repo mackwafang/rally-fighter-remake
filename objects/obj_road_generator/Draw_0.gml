@@ -1,4 +1,25 @@
 // draw roads
+
+//for (var rpi = 0; rpi < array_length(road_points); rpi+=4) {
+//	// begin drawing road strip
+//	//check end of side
+//	if (!camera_in_view(road_points[rpi][0].x, road_points[rpi][0].y, 512)) {continue;}
+//	draw_set_color(c_white);
+	
+//	var subimage = road_points[rpi][2];
+//	var sprite = road_points[rpi][3];
+//	draw_sprite_pos(sprite, subimage,
+//		road_points[rpi][0].x, road_points[rpi][0].y,
+//		road_points[rpi+1][0].x, road_points[rpi+1][0].y,
+//		road_points[rpi+2][0].x, road_points[rpi+2][0].y,
+//		road_points[rpi+3][0].x, road_points[rpi+3][0].y,
+//		1
+//	);
+	
+//	draw_set_color(c_white);
+//}
+
+
 for (var rpi = 0; rpi < array_length(road_points); rpi+=4) {
 	// begin drawing road strip
 	//check end of side
@@ -6,7 +27,8 @@ for (var rpi = 0; rpi < array_length(road_points); rpi+=4) {
 	draw_set_color(c_white);
 	
 	var subimage = road_points[rpi][2];
-	var texture = sprite_get_texture(spr_road, subimage);
+	var sprite = road_points[rpi][3];
+	var texture = sprite_get_texture(sprite, subimage);
 	
 	draw_primitive_begin_texture(pr_trianglestrip, texture);
 	for (var k = rpi; k < rpi+4; k++) {
