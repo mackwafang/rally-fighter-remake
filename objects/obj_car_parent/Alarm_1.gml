@@ -1,2 +1,2 @@
-ai_behavior.desired_lane = 1 + irandom(nav_road_index.get_lanes_right()-1);
+ai_behavior.change_lane(nav_road_index);
 alarm[1] = 60 + (irandom_range(3,10) * 60);

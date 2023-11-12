@@ -51,7 +51,10 @@ odometer_speed = 0;
 // ai behavior
 ai_behavior = {
 	desired_lane: 1,
-	reversed_direction: false		// negative direction on road look up
+	reversed_direction: false,		// negative direction on road look up
+	change_lane: function(road_index) {
+		self.desired_lane = 1 + irandom(road_index.get_lanes_right()-1);
+	},
 }
 
 // audio emitter for engine

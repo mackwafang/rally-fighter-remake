@@ -8,7 +8,7 @@ for (var i = 0; i < 11; i++) {
 	car.car_id = i+1;
 	
 	var road = obj_road_generator.road_list[(i div 3) + 1];
-	var lane_position_x = ((i % 3) / 3) * (road.length * 2);
+	var lane_position_x = ((i % 3) / 3) * (road.length * 1);
 	var lane_position_y = ((i % road.get_lanes_right()) * road.lane_width) + (road.lane_width / 2);
 	
 	var dist = point_distance(road.x, road.y, road.x + lane_position_x, road.y + lane_position_y);
