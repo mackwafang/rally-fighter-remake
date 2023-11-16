@@ -30,3 +30,23 @@ else {
 array_sort(car_ranking, function(car1, car2) {
 	return car2.dist_along_road - car1.dist_along_road;
 });
+
+// other car spawning
+/*
+var road_at_view_edge = find_nearest_road(
+	main_camera_target.x - (main_camera_size.width/2) + lengthdir_x(main_camera_size.width * 2, main_camera_target.image_angle),
+	main_camera_target.y - (main_camera_size.height/2) + lengthdir_y(main_camera_size.width * 2, main_camera_target.image_angle)
+)
+if (alarm[0] == -1) {
+	if (irandom(100) == 1) {
+		var spawn_lane = irandom_range(0, road_at_view_edge.get_lanes_right() - 1) + 0.5;
+		var spawn_x = road_at_view_edge.x + lengthdir_x(road_at_view_edge.lane_width * spawn_lane, road_at_view_edge.direction - 90);
+		var spawn_y = road_at_view_edge.y + lengthdir_y(road_at_view_edge.lane_width * spawn_lane, road_at_view_edge.direction - 90);
+		var car = instance_create_layer(spawn_x, spawn_y, "Instances", obj_car, {
+			image_angle: road_at_view_edge.direction,
+		});
+		
+		car.rpm = 4000;
+		car.velocity = 3;
+	}
+}

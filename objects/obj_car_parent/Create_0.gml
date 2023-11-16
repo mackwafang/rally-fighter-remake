@@ -30,16 +30,17 @@ gear_shift_rpm = [
 	[0, 7000],
 	[3000, 6000],
 	[3500, 5800],
-	[4000, 5000],
-	[3000, 4500],
-	[1100, 3000],
+	[4000, 5500],
+	[3000, 4200],
+	[3000, 3000],
 ];
-gear_shift_wait = 0;	//  time wait to change gear again
+gear_shift_wait = 0;		//  time wait to change gear again
 
-accelerating = false;	// flag to check if car is accelerating
-braking = false;		// flag to check if car is braking
-boosting = false;		// flag to check if car is boosting
-turning = 0;			// flag to ceck if car is turning, 1 for left and 2 for right, 0 for neither
+accelerating = false;		// flag to check if car is accelerating
+braking = false;			// flag to check if car is braking
+boosting = false;			// flag to check if car is boosting
+turning = 0;				// flag to ceck if car is turning, 1 for left and 2 for right, 0 for neither
+push_vector = new vec2()	// vector for collision 
 
 // surface check
 on_road = false;
@@ -50,8 +51,9 @@ odometer_speed = 0;
 
 // ai behavior
 ai_behavior = {
-	desired_lane: 1,
+	desired_lane: 1,				// desired lane to move to
 	reversed_direction: false,		// negative direction on road look up
+	part_of_race: false,			// part of the ranking race
 	change_lane: function(road_index) {
 		self.desired_lane = 1 + irandom(road_index.get_lanes_right()-1);
 	},
@@ -76,7 +78,7 @@ gear_shift_up = function() {
 	//shift up
 	if (gear_shift_wait == 0) {
 		gear = min(gear+1, array_length(gear_shift_rpm));
-		gear_shift_wait = 60;
+		gear_shift_wait = 15;
 	}
 }
 
@@ -84,7 +86,7 @@ gear_shift_down = function() {
 	//shift down
 	if (gear_shift_wait == 0) {
 		gear = max(gear-1, 1);
-		gear_shift_wait = 60;
+		gear_shift_wait = 15;
 	}
 }
 
@@ -96,7 +98,7 @@ gear_shift = function() {
 		if (engine_rpm > gear_shift_rpm_upper) {
 			gear_shift_up();
 		}
-		if ((gear > 3) && (acceleration < -1)) {
+		if ((gear > 3) && (acceleration < 0)) {
 			gear_shift_down();
 		}
 	}

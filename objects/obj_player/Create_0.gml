@@ -7,4 +7,6 @@ y = obj_road_generator.road_list[0].y;
 
 horsepower = 200;
 
+ai_behavior.part_of_race = true;
+
 audio_listener_orientation(0,1,0,0,0,1);

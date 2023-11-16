@@ -6,7 +6,11 @@ participating_vehicles = [1];
 for (var i = 0; i < 11; i++) {
 	var car = instance_create_layer(0, 0, "Instances", obj_car);
 	car.car_id = i+1;
-	
+	participating_vehicles[array_length(participating_vehicles)] = car;
+}
+
+for (var i = 0; i < array_length(participating_vehicles); i++) {
+	var car = participating_vehicles[i];
 	var road = obj_road_generator.road_list[(i div 3) + 1];
 	var lane_position_x = ((i % 3) / 3) * (road.length * 1);
 	var lane_position_y = ((i % road.get_lanes_right()) * road.lane_width) + (road.lane_width / 2);
@@ -18,8 +22,7 @@ for (var i = 0; i < 11; i++) {
 	car.y = road.y + lengthdir_y(dist, dir);
 	car.image_angle = road.direction;
 	car.can_move = false;
-	
-	participating_vehicles[array_length(participating_vehicles)] = car;
+	car.ai_behavior.part_of_race = true;	
 }
 car_ranking = [];
 array_copy(car_ranking, 0, participating_vehicles, 0, array_length(participating_vehicles));
