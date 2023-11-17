@@ -43,5 +43,6 @@ if (alarm[0] == -1) {
 		
 		car.rpm = 4000;
 		car.velocity = 3;
+		car.max_gear = 3;
 	}
 }

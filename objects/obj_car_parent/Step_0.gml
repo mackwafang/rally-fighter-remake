@@ -50,7 +50,7 @@ if (can_move) {
 			}
 			else {
 				// car turning on curved road and moving to its desired lane
-				var tr = (angle_diff / 75) + (side / 4000);
+				var tr = (angle_diff / 75) + (side / 10000);
 				turn_rate += clamp(tr, -2, 2);
 				braking = (abs(tr) > 2) | ((nav_road_index.get_ideal_throttle() < 0.25) && (angle_diff > 15));
 			}
@@ -133,9 +133,7 @@ push_vector.y = max(0, push_vector.y * 0.96);
 drive_torque = drive_force * wheel_radius;
 acceleration = (drive_torque / inertia);
 velocity += acceleration * (delta_time / 1000000);// * gear_ratio[gear-1];
-if (velocity <= 0) {
-	velocity = 0;
-}
+velocity = clamp(velocity, 0, velocity_max);
 	
 // move car in direction
 if (!is_respawning) {

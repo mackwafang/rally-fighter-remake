@@ -2,6 +2,8 @@ cam_move_speed = 16;
 cam_zoom = 1
 cam_angle = 0;
 
+depth = 100000000;
+
 participating_vehicles = [];
 
 for (var i = 0; i < 12; i++) {
@@ -10,6 +12,7 @@ for (var i = 0; i < 12; i++) {
 		car.is_player = true;
 	}
 	car.car_id = i+1;
+	car.depth = 10;
 	participating_vehicles[array_length(participating_vehicles)] = car;
 }
 

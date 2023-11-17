@@ -9,16 +9,17 @@ hp = max_hp;			// car health
 engine_rpm_max = 10000;	// max rpm
 engine_rpm = 0			// engine rpm
 velocity = 0;			// car's speed
-velocity_max = 18;		// car's max speed
+velocity_max = 1800;	// car's max speed
 wheel_radius = 0.34;	// wheel radius in m
 mass = 1500;			// vehicle mass, in kg
 horsepower = 900;		// horsepower
 turn_rate = 0;			// car's turning rate
 gear = 1;				// car's gear 
+max_gear = 6;
 engine_power = 0;		// throttle position
 transfer_eff = 1;		// transfer efficiency
 acceleration = 0;		// acceleration value
-braking_power = 30;		// braking magnetude
+braking_power = 50;		// braking magnetude
 is_respawning = false;	// car is respawning
 
 car_id = -1;			// car id
@@ -81,7 +82,7 @@ race_rank = 0;
 // functions
 gear_shift_up = function() {
 	//shift up
-	gear = min(gear+1, array_length(gear_shift_rpm));
+	gear = min(gear+1, min(max_gear, array_length(gear_shift_rpm)));
 }
 
 gear_shift_down = function() {
@@ -132,20 +133,21 @@ set_on_road = function() {
 
 on_respawn = function() {
 	if (is_respawning) {
+		x = on_road_index.x + lengthdir_x((on_road_index.get_lanes_right()-1) * on_road_index.lane_width, on_road_index.direction + 90);
+		y = on_road_index.y + lengthdir_y((on_road_index.get_lanes_right()-1) * on_road_index.lane_width, on_road_index.direction + 90);
+		image_alpha = 1;
+		solid = true;
+		mask_index = sprite_index;
+		
 		hp = max_hp;
 		velocity = 0;
 		gear = 1;
 		rpm = 1000;
-		x = on_road_index.x + ((on_road_index.get_lanes_right()-1) * on_road_index.lane_width);
-		y = on_road_index.y + ((on_road_index.get_lanes_right()-1) * on_road_index.lane_width);
-		image_alpha = 1;
 		can_move = true;
 		engine_power = 0;
 		push_vector.x = 0;
 		push_vector.y = 0;
 		is_respawning = false;
-		solid = true;
-		mask_index = sprite_index;
 	}
 }
 

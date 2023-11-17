@@ -7,7 +7,7 @@ if (other != self) {
 		);
 		 hp -= push_vector.length() / 100000;
 	
-		turn_rate = push_vector.y / (mass * 100000);
+		turn_rate = push_vector.y / (mass * 10000);
 		move_contact_solid(point_direction(other.x,other.y,x,y),1);
 	}
 }
