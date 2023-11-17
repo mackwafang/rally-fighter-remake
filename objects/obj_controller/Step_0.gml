@@ -28,7 +28,6 @@ else {
 	camera_set_view_angle(main_camera, cam_angle);
 }
 // other car spawning
-/*
 var road_at_view_edge = find_nearest_road(
 	main_camera_target.x - (main_camera_size.width/2) + lengthdir_x(main_camera_size.width * 2, main_camera_target.image_angle),
 	main_camera_target.y - (main_camera_size.height/2) + lengthdir_y(main_camera_size.width * 2, main_camera_target.image_angle)

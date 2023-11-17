@@ -18,8 +18,10 @@
     {"name":"Timelines","order":8,"path":"folders/Timelines.yy",},
   ],
   "ResourceOrderSettings": [
+    {"name":"spr_empty","order":12,"path":"sprites/spr_empty/spr_empty.yy",},
     {"name":"spr_road_no_lane_mark","order":8,"path":"sprites/spr_road_no_lane_mark/spr_road_no_lane_mark.yy",},
     {"name":"point_in_polygon","order":8,"path":"scripts/point_in_polygon/point_in_polygon.yy",},
+    {"name":"spr_cross","order":11,"path":"sprites/spr_cross/spr_cross.yy",},
     {"name":"spr_car","order":1,"path":"sprites/spr_car/spr_car.yy",},
     {"name":"spr_grass","order":2,"path":"sprites/spr_grass/spr_grass.yy",},
     {"name":"spr_rank_font_small","order":10,"path":"sprites/spr_rank_font_small/spr_rank_font_small.yy",},

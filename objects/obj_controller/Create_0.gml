@@ -39,7 +39,7 @@ if (!global.DEBUG_FREE_CAMERA) {
 		width: 480,
 		height: 640,
 	}
-	main_camera_target = 1;
+	main_camera_target = participating_vehicles[1];
 }
 else {
 	main_camera_size = {
@@ -57,4 +57,4 @@ window_set_size(main_camera_size.width, main_camera_size.height);
 camera_set_view_size(main_camera, main_camera_size.width, main_camera_size.height);
 surface_resize(application_surface, main_camera_size.width, main_camera_size.height);
 
-// alarm[0] = 6 * 60; // starting timer
+alarm[0] = 5 * 60; // starting timer

@@ -29,7 +29,7 @@
   "physicsShapePoints": [],
   "physicsStartAwake": true,
   "properties": [],
-  "solid": true,
+  "solid": false,
   "spriteId": {
     "name": "spr_car",
     "path": "sprites/spr_car/spr_car.yy",

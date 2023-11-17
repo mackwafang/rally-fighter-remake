@@ -4,7 +4,7 @@ is_player = false;		// does car belong to player?
 can_move = true;		// can car be affected by movement or collision?
 
 max_hp = 100;			// car max health
-hp = 0					// car health
+hp = max_hp;			// car health
 
 engine_rpm_max = 10000;	// max rpm
 engine_rpm = 0			// engine rpm
@@ -19,6 +19,7 @@ engine_power = 0;		// throttle position
 transfer_eff = 1;		// transfer efficiency
 acceleration = 0;		// acceleration value
 braking_power = 30;		// braking magnetude
+is_respawning = false;	// car is respawning
 
 car_id = -1;			// car id
 
@@ -116,10 +117,9 @@ is_on_road = function(_x, _y, index) {
 
 set_on_road = function() {
 	var p_i = last_road_index;
-	var try_reverse = false;
 	while(p_i++ < array_length(obj_road_generator.road_collision_points)-1) {
 		var polygon = obj_road_generator.road_collision_points[max(0, p_i)];
-		if (point_distance(x,y,polygon[0][0], polygon[1][0]) > 256) {try_reverse = true; break;}
+		if (point_distance(x,y,polygon[0][0], polygon[1][0]) > 256) {continue;}
 		// on road collision
 		on_road = is_on_road(x, y, p_i);
 		if (on_road) {
@@ -127,20 +127,42 @@ set_on_road = function() {
 			break;
 		}
 	}
-	
-	if (try_reverse) {
-		while(p_i-- > 0) {
-			var polygon = obj_road_generator.road_collision_points[max(0, p_i)];
-			if (point_distance(x,y,polygon[0][0], polygon[1][0]) > 256) {try_reverse = true; break;}
-			// on road collision
-			on_road = is_on_road(x, y, p_i);
-			if (on_road) {
-				last_road_index = p_i;
-				break;
-			}
+	return obj_road_generator.road_list[last_road_index];
+}
+
+on_respawn = function() {
+	if (is_respawning) {
+		hp = max_hp;
+		velocity = 0;
+		gear = 1;
+		rpm = 1000;
+		x = on_road_index.x + ((on_road_index.get_lanes_right()-1) * on_road_index.lane_width);
+		y = on_road_index.y + ((on_road_index.get_lanes_right()-1) * on_road_index.lane_width);
+		image_alpha = 1;
+		can_move = true;
+		engine_power = 0;
+		push_vector.x = 0;
+		push_vector.y = 0;
+		is_respawning = false;
+		solid = true;
+		mask_index = sprite_index;
+	}
+}
+
+on_death = function() {
+	if (!is_respawning) {
+		if (ai_behavior.part_of_race) {
+			image_alpha = 0;
+			is_respawning = true;
+			can_move = false;
+			alarm[2] = 120;
+			solid = false;
+			mask_index = spr_empty;
+		}
+		else {
+			instance_destroy();
 		}
 	}
-	return obj_road_generator.road_list[last_road_index];
 }
 
 

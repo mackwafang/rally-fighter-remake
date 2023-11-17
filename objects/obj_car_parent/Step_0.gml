@@ -6,7 +6,7 @@ var vec_to_road = point_to_line(
 	new vec2(next_road.x, next_road.y),
 	new vec2(x, y)
 );
-dist_along_road = obj_road_generator.road_list[last_road_index].length_to_point + point_distance(obj_road_generator.road_list[last_road_index].x, obj_road_generator.road_list[last_road_index].y, vec_to_road.x, vec_to_road.y);
+dist_along_road = on_road_index.length_to_point + point_distance(on_road_index.x, on_road_index.y, vec_to_road.x, vec_to_road.y);
 vec_to_road.x += lengthdir_x(((-ai_behavior.desired_lane + 0.5) * on_road_index.lane_width), on_road_index.direction+90);
 vec_to_road.y += lengthdir_y(((-ai_behavior.desired_lane + 0.5) * on_road_index.lane_width), on_road_index.direction+90);
 
@@ -63,6 +63,10 @@ if (can_move) {
 			var is_off_road_left = !is_on_road(x+lengthdir_x(look_ahead_threshold/4, image_angle+90), y+lengthdir_y(look_ahead_threshold/4, image_angle+90), last_road_index) ? 1 : 0;
 			var is_off_road_right = !is_on_road(x+lengthdir_x(look_ahead_threshold/4, image_angle-90), y+lengthdir_y(look_ahead_threshold/4, image_angle-90), last_road_index) ? 1 : 0;
 		
+			if (instance_exists(car_look_ahead)) {car_look_ahead = !car_look_ahead.is_respawning;}
+			if (instance_exists(car_look_left)) {car_look_left = !car_look_left.is_respawning;}
+			if (instance_exists(car_look_right)) {car_look_right = !car_look_right.is_respawning;}
+			
 			if (!is_player) {
 				turn_rate += -(is_off_road_left / 10) + (is_off_road_right / 10);
 				if (car_look_ahead) {
@@ -123,9 +127,8 @@ engine_rpm = (wheel_rotation_rate * engine_to_wheel_ratio * 60 / (2 * pi)) + 100
 	
 var drive_force = (drive_torque / wheel_radius) + f_drag + f_rr + f_brake + f_surface - push_vector.x;
 
-turn_rate += push_vector.y / (mass * 1000);
 push_vector.x = max(0, push_vector.x - abs(drive_force));
-push_vector.y = max(0, push_vector.y - abs(drive_force));
+push_vector.y = max(0, push_vector.y * 0.96);
 
 drive_torque = drive_force * wheel_radius;
 acceleration = (drive_torque / inertia);
@@ -135,13 +138,15 @@ if (velocity <= 0) {
 }
 	
 // move car in direction
-turn_rate += -turn_rate * 0.1;
-turn_rate = clamp(turn_rate, -2, 2);
+if (!is_respawning) {
+	turn_rate += -turn_rate * 0.1;
+	turn_rate = clamp(turn_rate, -2, 2);
 	
-direction += turn_rate;
-x += cos(degtorad(direction)) * velocity / 100;
-y -= sin(degtorad(direction)) * velocity / 100;
-image_angle = direction;
+	direction += turn_rate;
+	x += cos(degtorad(direction)) * velocity / 100;
+	y -= sin(degtorad(direction)) * velocity / 100;
+	image_angle = direction;
+}
 	
 gear_shift(); // auto gear shift
 engine_rpm = clamp(engine_rpm, 1000, engine_rpm_max);
@@ -163,10 +168,21 @@ else {
 gear_shift_wait = clamp(gear_shift_wait - 1, 0, 60);
 
 // remove non-participating cars when too far away
-if (!global.DEBUG_FREE_CAMERA) {
-	if (abs(obj_controller.main_camera_target.dist_along_road - dist_along_road) > 1024) {
+if (abs(obj_controller.main_camera_target.dist_along_road - dist_along_road) > 1024) {
+	if (!global.DEBUG_FREE_CAMERA) {
 		if (!ai_behavior.part_of_race) {
 			instance_destroy()
 		}
 	}
+	// randomly destroy car to simulate crashes
+	if (irandom(1000) == 0) {
+		if (!is_player) {
+			hp = 0;
+		}
+	}
 }
+//check alive
+if (hp <= 0) {
+	on_death();
+}
+	

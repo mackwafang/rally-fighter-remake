@@ -12,26 +12,30 @@ var port_width = view_wport[main_camera];
 var port_height = view_hport[main_camera];
 
 #region Health Bar
-draw_set_valign(fa_top);
-draw_set_halign(fa_left);
-var original_coord = {
-	x1: main_camera_size.width/2,
-	y1: main_camera_size.height/2,
-	x2: x - main_camera_pos.x + lengthdir_x(-sprite_width + 2, image_angle),
-	y2: y - main_camera_pos.y + lengthdir_y(-sprite_width + 2, image_angle),
-}
-var dist = point_distance(original_coord.x1, original_coord.y1, original_coord.x2, original_coord.y2);
-var dir = point_direction(original_coord.x1, original_coord.y1, original_coord.x2, original_coord.y2) + main_camera_angle;
-var draw_x = (main_camera_size.width/2) + lengthdir_x(dist, dir);
-var draw_y = (main_camera_size.height/2) + lengthdir_y(dist, dir);
-draw_sprite_ext(spr_health_bar_small, 0, draw_x, draw_y, 1, 1, 0, c_white, 1);
-draw_sprite_general(spr_health_bar_small, 1, 0, 0, 16, 8, draw_x, draw_y, 1, 1, 0, c_green, c_green,c_green,c_green, 1);
-
 if (ai_behavior.part_of_race) {
-	if (race_rank > 0) {
-		var rank_str = string(race_rank);
-		for (var i = 0; i < string_length(rank_str); i++) {
-			draw_sprite(spr_rank_font_small, ord(string_char_at(rank_str, i+1)) - 48, draw_x - ((string_length(rank_str) - i)*4), draw_y);
+	draw_set_valign(fa_top);
+	draw_set_halign(fa_left);
+	var original_coord = {
+		x1: main_camera_size.width/2,
+		y1: main_camera_size.height/2,
+		x2: x - main_camera_pos.x + lengthdir_x(-sprite_width + 2, image_angle),
+		y2: y - main_camera_pos.y + lengthdir_y(-sprite_width + 2, image_angle),
+	}
+	var dist = point_distance(original_coord.x1, original_coord.y1, original_coord.x2, original_coord.y2);
+	var dir = point_direction(original_coord.x1, original_coord.y1, original_coord.x2, original_coord.y2) + main_camera_angle;
+	var draw_x = (main_camera_size.width/2) + lengthdir_x(dist, dir);
+	var draw_y = (main_camera_size.height/2) + lengthdir_y(dist, dir);
+	draw_sprite_ext(spr_health_bar_small, 0, draw_x, draw_y, 1, 1, 0, c_white, 1);
+	draw_sprite_general(spr_health_bar_small, 1, 0, 0, 16, 8, draw_x, draw_y, 1, 1, 0, c_red, c_red, c_red, c_red, 1);
+	var health_bar = max(0, hp/max_hp) * 13;
+	draw_rectangle_color(draw_x + 1, draw_y+2, draw_x+1 + health_bar, draw_y+5, c_green, c_green, c_green, c_green, false);
+
+	if (ai_behavior.part_of_race) {
+		if (race_rank > 0) {
+			var rank_str = string(race_rank);
+			for (var i = 0; i < string_length(rank_str); i++) {
+				draw_sprite(spr_rank_font_small, ord(string_char_at(rank_str, i+1)) - 48, draw_x - ((string_length(rank_str) - i)*4), draw_y);
+			}
 		}
 	}
 }
