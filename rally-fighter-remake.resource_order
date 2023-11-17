@@ -22,6 +22,7 @@
     {"name":"point_in_polygon","order":8,"path":"scripts/point_in_polygon/point_in_polygon.yy",},
     {"name":"spr_car","order":1,"path":"sprites/spr_car/spr_car.yy",},
     {"name":"spr_grass","order":2,"path":"sprites/spr_grass/spr_grass.yy",},
+    {"name":"spr_rank_font_small","order":10,"path":"sprites/spr_rank_font_small/spr_rank_font_small.yy",},
     {"name":"find_nearest_road","order":10,"path":"scripts/find_nearest_road/find_nearest_road.yy",},
     {"name":"spr_vehicle_shadow","order":6,"path":"sprites/spr_vehicle_shadow/spr_vehicle_shadow.yy",},
     {"name":"globals","order":5,"path":"scripts/globals/globals.yy",},
@@ -33,6 +34,7 @@
     {"name":"spr_starting_number","order":7,"path":"sprites/spr_starting_number/spr_starting_number.yy",},
     {"name":"point_to_line","order":11,"path":"scripts/point_to_line/point_to_line.yy",},
     {"name":"obj_car_parent","order":1,"path":"objects/obj_car_parent/obj_car_parent.yy",},
+    {"name":"spr_health_bar_small","order":9,"path":"sprites/spr_health_bar_small/spr_health_bar_small.yy",},
     {"name":"torque_lookup","order":9,"path":"scripts/torque_lookup/torque_lookup.yy",},
     {"name":"obj_player","order":2,"path":"objects/obj_player/obj_player.yy",},
     {"name":"spr_car_detail","order":3,"path":"sprites/spr_car_detail/spr_car_detail.yy",},
@@ -40,6 +42,7 @@
     {"name":"obj_car","order":4,"path":"objects/obj_car/obj_car.yy",},
     {"name":"math","order":1,"path":"scripts/math/math.yy",},
     {"name":"enums","order":7,"path":"scripts/enums/enums.yy",},
+    {"name":"misc","order":13,"path":"scripts/misc/misc.yy",},
     {"name":"dist_on_line","order":12,"path":"scripts/dist_on_line/dist_on_line.yy",},
   ],
 }

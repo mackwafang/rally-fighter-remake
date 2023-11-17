@@ -3,6 +3,8 @@ if (keyboard_check(ord("W"))) {y -= cam_move_speed;}
 if (keyboard_check(ord("S"))) {y += cam_move_speed;}
 if (keyboard_check(ord("A"))) {x -= cam_move_speed;}
 if (keyboard_check(ord("D"))) {x += cam_move_speed;}
+if (keyboard_check(ord("Q"))) {cam_angle -= 5;}
+if (keyboard_check(ord("E"))) {cam_angle += 5;}
 if (mouse_wheel_up()) {cam_zoom += 0.1;}
 if (mouse_wheel_down()) {cam_zoom -= 0.1;}
 
@@ -23,14 +25,8 @@ else {
 		y
 	);
 	camera_set_view_size(main_camera, main_camera_size.width / cam_zoom, main_camera_size.height / cam_zoom);
+	camera_set_view_angle(main_camera, cam_angle);
 }
-
-
-// car ranking
-array_sort(car_ranking, function(car1, car2) {
-	return car2.dist_along_road - car1.dist_along_road;
-});
-
 // other car spawning
 /*
 var road_at_view_edge = find_nearest_road(

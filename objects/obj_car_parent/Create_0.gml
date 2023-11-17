@@ -3,6 +3,9 @@ depth = -10;
 is_player = false;		// does car belong to player?
 can_move = true;		// can car be affected by movement or collision?
 
+max_hp = 100;			// car max health
+hp = 0					// car health
+
 engine_rpm_max = 10000;	// max rpm
 engine_rpm = 0			// engine rpm
 velocity = 0;			// car's speed
@@ -72,22 +75,17 @@ vehicle_type = 0;
 vehicle_detail_index = 0;
 vehicle_color = 0;
 dist_along_road = 0;							// how far along the road it is
+race_rank = 0;
 
 // functions
 gear_shift_up = function() {
 	//shift up
-	if (gear_shift_wait == 0) {
-		gear = min(gear+1, array_length(gear_shift_rpm));
-		gear_shift_wait = 15;
-	}
+	gear = min(gear+1, array_length(gear_shift_rpm));
 }
 
 gear_shift_down = function() {
 	//shift down
-	if (gear_shift_wait == 0) {
-		gear = max(gear-1, 1);
-		gear_shift_wait = 15;
-	}
+	gear = max(gear-1, 1);
 }
 
 gear_shift = function() {
@@ -118,15 +116,28 @@ is_on_road = function(_x, _y, index) {
 
 set_on_road = function() {
 	var p_i = last_road_index;
+	var try_reverse = false;
 	while(p_i++ < array_length(obj_road_generator.road_collision_points)-1) {
 		var polygon = obj_road_generator.road_collision_points[max(0, p_i)];
-		if (point_distance(x,y,polygon[0][0], polygon[1][0]) > 256) {continue;}
-		
+		if (point_distance(x,y,polygon[0][0], polygon[1][0]) > 256) {try_reverse = true; break;}
 		// on road collision
 		on_road = is_on_road(x, y, p_i);
 		if (on_road) {
 			last_road_index = p_i;
 			break;
+		}
+	}
+	
+	if (try_reverse) {
+		while(p_i-- > 0) {
+			var polygon = obj_road_generator.road_collision_points[max(0, p_i)];
+			if (point_distance(x,y,polygon[0][0], polygon[1][0]) > 256) {try_reverse = true; break;}
+			// on road collision
+			on_road = is_on_road(x, y, p_i);
+			if (on_road) {
+				last_road_index = p_i;
+				break;
+			}
 		}
 	}
 	return obj_road_generator.road_list[last_road_index];

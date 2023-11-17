@@ -6,7 +6,7 @@ var vec_to_road = point_to_line(
 	new vec2(next_road.x, next_road.y),
 	new vec2(x, y)
 );
-dist_along_road = on_road_index.length_to_point + point_distance(on_road_index.x, on_road_index.y, vec_to_road.x, vec_to_road.y);
+dist_along_road = obj_road_generator.road_list[last_road_index].length_to_point + point_distance(obj_road_generator.road_list[last_road_index].x, obj_road_generator.road_list[last_road_index].y, vec_to_road.x, vec_to_road.y);
 vec_to_road.x += lengthdir_x(((-ai_behavior.desired_lane + 0.5) * on_road_index.lane_width), on_road_index.direction+90);
 vec_to_road.y += lengthdir_y(((-ai_behavior.desired_lane + 0.5) * on_road_index.lane_width), on_road_index.direction+90);
 
@@ -123,7 +123,7 @@ engine_rpm = (wheel_rotation_rate * engine_to_wheel_ratio * 60 / (2 * pi)) + 100
 	
 var drive_force = (drive_torque / wheel_radius) + f_drag + f_rr + f_brake + f_surface - push_vector.x;
 
-turn_rate += push_vector.y / (mass * 10000);
+turn_rate += push_vector.y / (mass * 1000);
 push_vector.x = max(0, push_vector.x - abs(drive_force));
 push_vector.y = max(0, push_vector.y - abs(drive_force));
 
@@ -163,8 +163,10 @@ else {
 gear_shift_wait = clamp(gear_shift_wait - 1, 0, 60);
 
 // remove non-participating cars when too far away
-if (abs(obj_controller.main_camera_target.dist_along_road - dist_along_road) > 1024) {
-	if (!ai_behavior.part_of_race) {
-		instance_destroy()
+if (!global.DEBUG_FREE_CAMERA) {
+	if (abs(obj_controller.main_camera_target.dist_along_road - dist_along_road) > 1024) {
+		if (!ai_behavior.part_of_race) {
+			instance_destroy()
+		}
 	}
 }
