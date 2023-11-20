@@ -1,12 +1,13 @@
 cam_move_speed = 16;
-cam_zoom = 1
+cam_zoom = 1;
 cam_angle = 0;
 
-depth = 100000000;
+depth = 100000;
 
 participating_vehicles = [];
+global.total_participating_vehicles = 12;
 
-for (var i = 0; i < 12; i++) {
+for (var i = 0; i < global.total_participating_vehicles; i++) {
 	var car = instance_create_layer(0, 0, "Instances", obj_car);
 	if (i == 0) {
 		car.is_player = true;
@@ -20,7 +21,7 @@ for (var i = 0; i < array_length(participating_vehicles); i++) {
 	var car = participating_vehicles[i];
 	car.race_rank = (array_length(participating_vehicles) - i);
 	var road = obj_road_generator.road_list[(i div 3) + 1];
-	var lane_position_x = ((i % 3) / 3) * (road.length * 1);
+	var lane_position_x = (((i % 3) / 3) * road.length) + (road.length * (i div 3));
 	var lane_position_y = ((i % road.get_lanes_right()) * road.lane_width) + (road.lane_width / 2);
 	
 	var dist = point_distance(road.x, road.y, road.x + lane_position_x, road.y + lane_position_y);
@@ -32,6 +33,7 @@ for (var i = 0; i < array_length(participating_vehicles); i++) {
 	if (!car.is_player) {
 		car.can_move = false;
 	}
+	car.horsepower = 500;
 	car.ai_behavior.part_of_race = true;	
 }
 car_ranking = [];
@@ -51,6 +53,7 @@ else {
 	}
 }
 // set camera size
+participating_camera_index = 0;
 main_camera = view_camera[view_current];
 
 view_set_wport(0, main_camera_size.width);

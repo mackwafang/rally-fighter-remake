@@ -13,14 +13,15 @@ var t = current_time;
 
 // initialize control points
 var next_dir = 0;
+var stay_straight = 5;
 control_points[0] = new vec2(x,y);
 for (var s = 1; s < primary_count; s++) {
-	if (s > 10) {
-		next_dir += irandom_range(-1,1)*30;
+	if (s > stay_straight) {
+		next_dir += irandom_range(-1,1)*10;
 	}
 	control_points[s] = new vec2(
-		control_points[s-1].x + (cos(degtorad(next_dir)) * ((s < 10) ? control_points_dist : irandom_range(control_points_dist/4, control_points_dist))),
-		control_points[s-1].y + (sin(degtorad(next_dir)) * ((s < 10) ? control_points_dist : irandom_range(control_points_dist/4, control_points_dist)))
+		control_points[s-1].x + (cos(degtorad(next_dir)) * ((s < stay_straight) ? control_points_dist : irandom_range(control_points_dist/4, control_points_dist))),
+		control_points[s-1].y + (sin(degtorad(next_dir)) * ((s < stay_straight) ? control_points_dist : irandom_range(control_points_dist/4, control_points_dist)))
 	);
 }
 
@@ -35,7 +36,13 @@ for (var i = 0; i < array_length(road_list)-1; i++) {
 	var road_next = road_list[@i+1];
 	road.direction = point_direction(road.x, road.y, road_next.x, road_next.y);
 	road.length = point_distance(road.x, road.y, road_next.x, road_next.y);
-	road.ideal_throttle = road.length / ((control_points_dist / road_segments) * 0.8);
+	// road.ideal_throttle = road.length / ((control_points_dist / road_segments) * 0.8);
+	if (i > 0) {
+		road.ideal_throttle = cos(degtorad(angle_difference(road_list[@i-1].direction, road.direction)));
+	}
+	else {
+		road.ideal_throttle = 1;
+	}
 	road._id = i;
 	road.lane_width = lane_width;
 	road_next.length_to_point = road.length_to_point + road.length;
@@ -111,19 +118,6 @@ for (var i = 0; i < array_length(road_list) - 1; i++) {
 		[new vec2(next_road.x, next_road.y), new vec2(1,0), right_subimage, right_lane_sprite],
 		[new vec2(collision_points[0][2], collision_points[1][2]), new vec2(1,1), right_subimage, right_lane_sprite],
 	]);
-
-	//road_points = array_concat(road_points, [
-	//	[new vec2(road.x, road.y), new vec2(1,0), next_road.get_lanes_left(), left_lane_sprite],
-	//	[new vec2(next_road.x, next_road.y), new vec2(0,0), next_road.get_lanes_left(), left_lane_sprite],
-	//	[new vec2(collision_points[0][1], collision_points[1][1]), new vec2(0,1), next_road.get_lanes_left(), left_lane_sprite],
-	//	[new vec2(collision_points[0][0], collision_points[1][0]), new vec2(1,1), next_road.get_lanes_left(), left_lane_sprite],
-		
-		
-	//	[new vec2(road.x, road.y), new vec2(0,0), next_road.get_lanes_right(), right_lane_sprite],
-	//	[new vec2(next_road.x, next_road.y), new vec2(1,0), next_road.get_lanes_right(), right_lane_sprite],
-	//	[new vec2(collision_points[0][2], collision_points[1][2]), new vec2(1,1), next_road.get_lanes_right(), right_lane_sprite],
-	//	[new vec2(collision_points[0][3], collision_points[1][3]), new vec2(0,1), next_road.get_lanes_right(), right_lane_sprite],
-	//]);
 }
 
 obj_controller.x = road_list[0].x;

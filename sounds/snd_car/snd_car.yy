@@ -7,7 +7,7 @@
     "path": "audiogroups/audiogroup_default",
   },
   "bitDepth": 1,
-  "bitRate": 8,
+  "bitRate": 512,
   "compression": 3,
   "conversionMode": 0,
   "duration": 0.119048,
@@ -19,5 +19,5 @@
   "sampleRate": 5512,
   "soundFile": "snd_car.WAV",
   "type": 1,
-  "volume": 0.04,
+  "volume": 0.05,
 }

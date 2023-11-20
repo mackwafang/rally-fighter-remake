@@ -1,25 +1,5 @@
 // draw roads
 
-//for (var rpi = 0; rpi < array_length(road_points); rpi+=4) {
-//	// begin drawing road strip
-//	//check end of side
-//	if (!camera_in_view(road_points[rpi][0].x, road_points[rpi][0].y, 512)) {continue;}
-//	draw_set_color(c_white);
-	
-//	var subimage = road_points[rpi][2];
-//	var sprite = road_points[rpi][3];
-//	draw_sprite_pos(sprite, subimage,
-//		road_points[rpi][0].x, road_points[rpi][0].y,
-//		road_points[rpi+1][0].x, road_points[rpi+1][0].y,
-//		road_points[rpi+2][0].x, road_points[rpi+2][0].y,
-//		road_points[rpi+3][0].x, road_points[rpi+3][0].y,
-//		1
-//	);
-	
-//	draw_set_color(c_white);
-//}
-
-
 for (var rpi = 0; rpi < array_length(road_points); rpi+=4) {
 	// begin drawing road strip
 	//check end of side
@@ -69,6 +49,7 @@ if (global.DEBUG_ROAD_DRAW_ROAD_POINTS) {
 		var road = road_list[@ i];
 		var next_road = road_list[@ i + 1];
 		
+		draw_text(road.x, road.y, road.ideal_throttle);
 		if (!camera_in_view(road.x, road.y, 256)) {continue;}
 		
 		var segments = [

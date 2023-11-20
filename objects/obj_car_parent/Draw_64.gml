@@ -41,7 +41,7 @@ if (ai_behavior.part_of_race) {
 }
 #endregion
 
-if (is_player) {
+if (obj_controller.main_camera_target.id == id) {
 	
 	// rpm odometer
 	var odometer_x = 48;
@@ -75,8 +75,8 @@ if (is_player) {
 	)
 	draw_set_valign(fa_bottom);
 	draw_set_halign(fa_center);
-	draw_text(odometer_x, odometer_y - 48, $"{round(acceleration / 10)} MPH");
-	draw_text(odometer_x, odometer_y - 32, $"{round(velocity / 10)} MPH");
+	draw_text(odometer_x, odometer_y - 48, $"{round(acceleration * global.WORLD_TO_REAL_SCALE / 10)} MPH");
+	draw_text(odometer_x, odometer_y - 32, $"{round(velocity * global.WORLD_TO_REAL_SCALE / 10)} MPH");
 	
 	// gear
 	draw_set_valign(fa_top);

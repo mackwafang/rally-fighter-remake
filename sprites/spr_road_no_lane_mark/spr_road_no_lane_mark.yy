@@ -20,8 +20,8 @@
   ],
   "gridX": 0,
   "gridY": 0,
-  "height": 256,
-  "HTile": false,
+  "height": 128,
+  "HTile": true,
   "layers": [
     {"resourceType":"GMImageLayer","resourceVersion":"1.0","name":"5d5739ba-0781-4665-94e0-af8f75979179","blendMode":0,"displayName":"default","isLocked":false,"opacity":100.0,"visible":true,},
   ],
@@ -75,6 +75,6 @@
     "path": "texturegroups/Default",
   },
   "type": 0,
-  "VTile": false,
+  "VTile": true,
   "width": 64,
 }

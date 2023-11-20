@@ -1,16 +1,16 @@
 function torque_lookup(rpm) {
 	var torque_table = [
-		0,
-		400,
-		420,
-		500,
-		510,
-		520,
-		490,
-		450,
-		400,
-		300,
-		250,
+		0,			// 0k rpm
+		400,		// 1k rpm
+		420,		// 2k rpm
+		500,		// 3k rpm
+		510,		// 4k rpm
+		520,		// 5k rpm
+		490,		// 6k rpm
+		450,		// 7k rpm
+		400,		// 8k rpm
+		300,		// 9k rpm
+		250,		// 10k rpm
 	]
 	var index = max(1, min(array_length(torque_table)-2, rpm div 1000));
 	var lerp_value = (rpm - (rpm div 1000)) / 1000;
