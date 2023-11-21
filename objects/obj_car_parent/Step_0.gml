@@ -88,11 +88,11 @@ if (can_move) {
 		// checking turning
 		if (turning & 1 == 0) {
 			// checking left turn
-			turn_rate -= 0.2;
+			turn_rate -= 0.1;
 		}
 		else if (turning & 2 == 0) {
 			// checking right turn
-			turn_rate += 0.2;
+			turn_rate += 0.1;
 		}
 	}
 
@@ -141,8 +141,8 @@ if (!is_respawning) {
 	turn_rate = clamp(turn_rate, -4, 4);
 	
 	direction += turn_rate;
-	x += cos(degtorad(direction)) * velocity / 100;
-	y -= sin(degtorad(direction)) * velocity / 100;
+	x += cos(degtorad(direction)) * velocity / 60;
+	y -= sin(degtorad(direction)) * velocity / 60;
 	image_angle = direction;
 }
 	

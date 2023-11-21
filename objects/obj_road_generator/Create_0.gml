@@ -2,7 +2,7 @@ randomize();
 //random_set_seed(0);
 depth = 1000;
 
-primary_count = 300;
+primary_count = 100 * global.difficulty;
 road_segments = 10;
 control_points = array_create(primary_count);
 control_points_dist = 2048;
@@ -14,12 +14,12 @@ var t = current_time;
 // initialize control points
 var next_dir = 0;
 var stay_straight = 5;
-control_points[0] = new vec2(x,y);
+control_points[0] = new point(x,y);
 for (var s = 1; s < primary_count; s++) {
 	if (s > stay_straight) {
-		next_dir += irandom_range(-1,1)*10;
+		next_dir += irandom_range(-1,1)*5;
 	}
-	control_points[s] = new vec2(
+	control_points[s] = new point(
 		control_points[s-1].x + (cos(degtorad(next_dir)) * ((s < stay_straight) ? control_points_dist : irandom_range(control_points_dist/4, control_points_dist))),
 		control_points[s-1].y + (sin(degtorad(next_dir)) * ((s < stay_straight) ? control_points_dist : irandom_range(control_points_dist/4, control_points_dist)))
 	);
@@ -107,16 +107,16 @@ for (var i = 0; i < array_length(road_list) - 1; i++) {
 	
 	road_collision_points[array_length(road_collision_points)] = collision_points;
 	road_points = array_concat(road_points, [
-		[new vec2(collision_points[0][0], collision_points[1][0]), new vec2(1,1), left_subimage, left_lane_sprite],
-		[new vec2(road.x, road.y), new vec2(1,0), left_subimage, left_lane_sprite],
-		[new vec2(collision_points[0][1], collision_points[1][1]), new vec2(0,1), left_subimage, left_lane_sprite],
-		[new vec2(next_road.x, next_road.y), new vec2(0,0), left_subimage, left_lane_sprite],
+		[new point(collision_points[0][0], collision_points[1][0]), new point(1,1), left_subimage, left_lane_sprite],
+		[new point(road.x, road.y), new point(1,0), left_subimage, left_lane_sprite],
+		[new point(collision_points[0][1], collision_points[1][1]), new point(0,1), left_subimage, left_lane_sprite],
+		[new point(next_road.x, next_road.y), new point(0,0), left_subimage, left_lane_sprite],
 		
 		
-		[new vec2(road.x, road.y), new vec2(0,0), right_subimage, right_lane_sprite],
-		[new vec2(collision_points[0][3], collision_points[1][3]), new vec2(0,1), right_subimage, right_lane_sprite],
-		[new vec2(next_road.x, next_road.y), new vec2(1,0), right_subimage, right_lane_sprite],
-		[new vec2(collision_points[0][2], collision_points[1][2]), new vec2(1,1), right_subimage, right_lane_sprite],
+		[new point(road.x, road.y), new point(0,0), right_subimage, right_lane_sprite],
+		[new point(collision_points[0][3], collision_points[1][3]), new point(0,1), right_subimage, right_lane_sprite],
+		[new point(next_road.x, next_road.y), new point(1,0), right_subimage, right_lane_sprite],
+		[new point(collision_points[0][2], collision_points[1][2]), new point(1,1), right_subimage, right_lane_sprite],
 	]);
 }
 

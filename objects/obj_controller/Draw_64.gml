@@ -2,9 +2,10 @@ draw_set_valign(fa_top);
 draw_set_halign(fa_left);
 draw_text(0, 0, fps);
 
+// draw race length
 draw_set_valign(fa_top);
 draw_set_halign(fa_right);
-draw_text(main_camera_size.width, 0, obj_road_generator.track_length);
+draw_text(main_camera_size.width, 0, $"{obj_road_generator.track_length / global.WORLD_TO_REAL_SCALE / 10000} km");
 
 
 var ranking_verticle_cap = 20;
@@ -12,11 +13,12 @@ for (var rank = 0; rank < array_length(car_ranking); rank++) {
 	var vehicle = car_ranking[rank];
 	
 	var dist = vehicle.dist_along_road;
-	if (rank > 0) {
-		dist = vehicle.dist_along_road - car_ranking[0].dist_along_road;
-	}
+	//if (rank > 0) {
+	//	dist = vehicle.dist_along_road - car_ranking[0].dist_along_road;
+	//}
+	var distance_display = dist / global.WORLD_TO_REAL_SCALE / 10000;
 	draw_text(main_camera_size.width - 32, 16 + (rank * ranking_verticle_cap), vehicle.race_rank);
-	draw_text(main_camera_size.width - 48, 16 + (rank * ranking_verticle_cap), dist);
+	draw_text(main_camera_size.width - 48, 16 + (rank * ranking_verticle_cap), $"{distance_display} km");
 	draw_sprite_ext(vehicle.sprite_index, vehicle.image_index, main_camera_size.width - 16, 24 + (rank * ranking_verticle_cap), 1, 1, 90, vehicle.image_blend, 1);
 	if (vehicle.is_respawning) {
 		draw_sprite_ext(spr_cross, 0, main_camera_size.width - 16, 24 + (rank * ranking_verticle_cap), 1, 1, 90, c_white, 1);

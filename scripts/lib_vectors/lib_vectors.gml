@@ -1,3 +1,8 @@
+function point() constructor {
+	x = argument[0];
+	y = argument[1];
+}
+
 function vec2() constructor
 {
 	#region Initialize Vector

@@ -2,10 +2,13 @@ cam_move_speed = 16;
 cam_zoom = 1;
 cam_angle = 0;
 
-depth = 100000;
+depth = 10000;
 
 participating_vehicles = [];
 global.total_participating_vehicles = 12;
+global.difficulty = 1; 
+
+instance_create_layer(x, y, "Instances", obj_road_generator);
 
 for (var i = 0; i < global.total_participating_vehicles; i++) {
 	var car = instance_create_layer(0, 0, "Instances", obj_car);
@@ -33,7 +36,7 @@ for (var i = 0; i < array_length(participating_vehicles); i++) {
 	if (!car.is_player) {
 		car.can_move = false;
 	}
-	car.horsepower = 500;
+	car.horsepower = 4;
 	car.ai_behavior.part_of_race = true;	
 }
 car_ranking = [];
