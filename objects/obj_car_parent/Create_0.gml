@@ -7,7 +7,7 @@ max_hp = 100;			// car max health
 hp = max_hp;			// car health
 
 engine_rpm_max = 10000;	// max rpm
-engine_rpm = 0			// engine rpm
+engine_rpm = 1000;		// engine rpm
 test_rpm = 0;
 velocity = 0;			// car's speed
 max_velocity = 1800;	// car's max speed
@@ -46,7 +46,7 @@ accelerating = false;		// flag to check if car is accelerating
 braking = false;			// flag to check if car is braking
 boosting = false;			// flag to check if car is boosting
 turning = 0;				// flag to ceck if car is turning, 1 for left and 2 for right, 0 for neither
-push_vector = new vec2()	// vector for collision 
+push_vector = new Vec2()	// vector for collision 
 
 // surface check
 on_road = false;
@@ -83,16 +83,20 @@ race_rank = 0;
 // functions
 gear_shift_up = function() {
 	//shift up
+	if (gear+1 < max_gear) {
+		engine_power = 0;
+		gear_shift_wait = 60;
+	}
 	gear = min(gear+1, min(max_gear, array_length(gear_shift_rpm)));
-	gear_shift_wait = 60;
-	engine_power = 0;
 }
 
 gear_shift_down = function() {
 	//shift down
+	if (gear-1 > 0) {
+		gear_shift_wait = 60;
+		engine_power = 0;
+	}
 	gear = max(gear-1, 1);
-	gear_shift_wait = 60;
-	engine_power = 0;
 }
 
 gear_shift = function() {
@@ -100,7 +104,7 @@ gear_shift = function() {
 	var gear_shift_rpm_lower = gear_shift_rpm[gear-1][0];
 		
 	if (gear_shift_wait == 0) {
-		if (accelerating) {
+		if (accelerating or (engine_rpm > 9000)) {
 			if ((engine_rpm > gear_shift_rpm_upper)) {
 				gear_shift_up();
 			}

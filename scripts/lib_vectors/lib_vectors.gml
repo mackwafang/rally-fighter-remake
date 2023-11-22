@@ -1,9 +1,9 @@
-function point() constructor {
+function Point() constructor {
 	x = argument[0];
 	y = argument[1];
 }
 
-function vec2() constructor
+function Vec2() constructor
 {
 	#region Initialize Vector
 		
@@ -50,32 +50,32 @@ function vec2() constructor
 			static multiply=function(val)
 			{
 				///@func mul(value_or_vec)
-				var v = new vec2(val);
-				return new vec2(x * v.x, y * v.y);
+				var v = new Vec2(val);
+				return new Vec2(x * v.x, y * v.y);
 			}
 			static add=function(val)
 			{
 				///@func add(value_or_vec)
-				var v = new vec2(val);
-				return new vec2(x + v.x, y + v.y);
+				var v = new Vec2(val);
+				return new Vec2(x + v.x, y + v.y);
 			}
 			static subtract=function(val)
 			{
 				///@func sub(value_or_vec)
-				var v = new vec2(val);
-				return new vec2(x - v.x, y - v.y);
+				var v = new Vec2(val);
+				return new Vec2(x - v.x, y - v.y);
 			}
 			static divide=function(val)
 			{
 				///@func divide(value_or_vec)
-				var v = new vec2(val);
-				return new vec2(x / v.x, y / v.y);
+				var v = new Vec2(val);
+				return new Vec2(x / v.x, y / v.y);
 			}
 			static modulo=function(val)
 			{
 				///@func modulo(value_or_vec)
-				var v = new vec2(val);
-				return new vec2(x % v.x, y % v.y);
+				var v = new Vec2(val);
+				return new Vec2(x % v.x, y % v.y);
 			}
 			
 		#endregion
@@ -112,25 +112,25 @@ function vec2() constructor
 			static inverse = function()
 			{
 				///@func inverse()
-				return new vec2(1/x, 1/y);
+				return new Vec2(1/x, 1/y);
 			}		
 			static dot = function(val)
 			{
 				///@func dot(value_or_vec)
-				var v = new vec2(val);
+				var v = new Vec2(val);
 				return dot_product(x,y,v.x,v.y);
 			}
 			static dot_normalized = function(val)
 			{
 				///@func dot_normalized(value_or_vec)
-				var v = new vec2(val);
+				var v = new Vec2(val);
 				return dot_product_normalized(x,y,v.x,v.y);
 			}			
 			static distance_to = function(val)
 			{
 				///@func distance_to(value_or_vec)
-				var v = new vec2(val);
-				var v2 = new vec2(x,y);
+				var v = new Vec2(val);
+				var v2 = new Vec2(x,y);
 				
 				v.subtract(v2);
 				return v.length();
@@ -138,13 +138,13 @@ function vec2() constructor
 			static angle_to = function(val)
 			{
 				///@func angle_to(value_or_vec)
-				var v = new vec2(val);
+				var v = new Vec2(val);
 				return point_direction(x,y,v.x,v.y);
 			}
 			static lerp_to = function(val,amt)
 			{
 				///@func lerp_to(value_or_vec, amount)
-				var v = new vec2(val);
+				var v = new Vec2(val);
 				x=lerp(x,v.x,amt);
 				y=lerp(y,v.y,amt);
 				return self;
@@ -152,12 +152,12 @@ function vec2() constructor
 			static reflect = function(val)
 			{
 				///@func reflect(normal);
-				var v = new vec2(val);
+				var v = new Vec2(val);
 				v.normalize();
 				
 				var d = dot(v);
 				v.multiply(2*d);
-				v.subtract(new vec2(x,y));
+				v.subtract(new Vec2(x,y));
 				return v;
 			}	
 			static clamp_to = function(v1, v2)
@@ -170,23 +170,23 @@ function vec2() constructor
 			
 			static vec_abs = function()
 			{
-				return new vec2(abs(x),abs(y));
+				return new Vec2(abs(x),abs(y));
 			}
 			static vec_floor = function()
 			{
-				return new vec2(floor(x),floor(y));
+				return new Vec2(floor(x),floor(y));
 			}
 			static vec_ceil = function()
 			{
-				return new vec2(ceil(x),ceil(y));	
+				return new Vec2(ceil(x),ceil(y));	
 			}
 			static vec_sign = function()
 			{
-				return new vec2(sign(x),sign(y));	
+				return new Vec2(sign(x),sign(y));	
 			}
 			static vec_round = function()
 			{
-				return new vec2(round(x),round(y));	
+				return new Vec2(round(x),round(y));	
 			}
 			
 		#endregion

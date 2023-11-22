@@ -1,10 +1,10 @@
-function RoadNode(_vec2) constructor {
-	x = _vec2.x;			// x position
-	y = _vec2.y;			// y position
+function RoadNode(_Vec2) constructor {
+	x = _Vec2.x;			// x position
+	y = _Vec2.y;			// y position
 	direction = 0;			// road's direction to the next segment
 	length = 0;				// length of segment
 	ideal_throttle = 0;		// ideal throttle for ai
-	vec = _vec2;
+	vec = _Vec2;
 	lanes = [1, 0, 1];		// lanes [left, median , right]
 	lane_width = 0;			// lane width in pixels
 	length_to_point = 0;	// distance from the begining to this point
@@ -88,7 +88,7 @@ function cutmull_rom(P, t) {
 	py += (-P[0].y + (3*P[1].y) - (3*P[2].y) + P[3].y) * ttt;
 	
 	
-	return new vec2(px / 2, py / 2);
+	return new Vec2(px / 2, py / 2);
 }
 
 function generate_roads(control_points, _steps) {

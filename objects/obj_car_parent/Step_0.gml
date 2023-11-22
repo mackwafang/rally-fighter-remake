@@ -2,9 +2,9 @@
 nav_road_index = find_nearest_road(x + lengthdir_x(32, image_angle), y + lengthdir_y(32, image_angle), , last_road_index);
 var next_road = obj_road_generator.road_list[nav_road_index.get_id()+2];
 var vec_to_road = point_to_line(
-	new vec2(on_road_index.x, on_road_index.y),
-	new vec2(next_road.x, next_road.y),
-	new vec2(x, y)
+	new Vec2(on_road_index.x, on_road_index.y),
+	new Vec2(next_road.x, next_road.y),
+	new Vec2(x, y)
 );
 dist_along_road = on_road_index.length_to_point + point_distance(on_road_index.x, on_road_index.y, vec_to_road.x, vec_to_road.y);
 vec_to_road.x += lengthdir_x(((-ai_behavior.desired_lane + 0.5) * on_road_index.lane_width), on_road_index.direction+90);
@@ -59,7 +59,7 @@ if (can_move) {
 		
 			// checking other cars
 			var look_ahead_threshold = max(32, velocity / 10);
-			var look_ahead_angle = 15 - (velocity / max_velocity * 5);
+			var look_ahead_angle = 15;
 			var car_look_ahead = instance_exists(collision_line(x, y, x+lengthdir_x(look_ahead_threshold, image_angle), y+lengthdir_y(look_ahead_threshold, image_angle), obj_car_parent, false, true));
 			var car_look_left = instance_exists(collision_line(x+lengthdir_x(8, image_angle+look_ahead_angle), y+lengthdir_y(8, image_angle+look_ahead_angle), x+lengthdir_x(look_ahead_threshold, image_angle+look_ahead_angle), y+lengthdir_y(look_ahead_threshold, image_angle+look_ahead_angle), obj_car_parent, false, true));
 			var car_look_right = instance_exists(collision_line(x+lengthdir_x(8, image_angle-look_ahead_angle), y+lengthdir_y(8, image_angle-look_ahead_angle), x+lengthdir_x(look_ahead_threshold, image_angle-look_ahead_angle), y+lengthdir_y(look_ahead_threshold, image_angle-look_ahead_angle), obj_car_parent, false, true));
@@ -108,7 +108,7 @@ if (!is_on_road(x, y, last_road_index)) {
 }
 // calculate engine stuff for acceleration
 var engine_to_wheel_ratio = gear_ratio[gear-1] * diff_ratio;
-var engine_torque_max = torque_lookup(engine_rpm) + horsepower;//5252 * horsepower / engine_rpm_max;
+var engine_torque_max = (horsepower / engine_rpm * 5252) * 20;//torque_lookup(engine_rpm);
 var engine_torque = engine_torque_max * engine_power;
 var drive_torque = engine_torque * gear_ratio[gear-1] * diff_ratio * transfer_eff;
 	

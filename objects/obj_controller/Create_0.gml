@@ -6,7 +6,7 @@ depth = 10000;
 
 participating_vehicles = [];
 global.total_participating_vehicles = 12;
-global.difficulty = 1; 
+global.difficulty = 1;
 
 instance_create_layer(x, y, "Instances", obj_road_generator);
 
@@ -36,7 +36,7 @@ for (var i = 0; i < array_length(participating_vehicles); i++) {
 	if (!car.is_player) {
 		car.can_move = false;
 	}
-	car.horsepower = 4;
+	car.horsepower = 50 * global.difficulty;
 	car.ai_behavior.part_of_race = true;	
 }
 car_ranking = [];
