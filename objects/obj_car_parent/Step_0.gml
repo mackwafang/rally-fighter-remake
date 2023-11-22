@@ -114,16 +114,13 @@ var drive_torque = engine_torque * gear_ratio[gear-1] * diff_ratio * transfer_ef
 	
 var f_drag = -c_drag * velocity;
 var f_rr = -c_rr * velocity;
-var f_surface = -mass * 9.8 * ((on_road) ? 0.6 : 2);
+var f_surface = -mass * 9.8 * ((on_road) ? 0.2 : 2);
 var f_brake = (braking) ? -abs(drive_torque / wheel_radius) * braking_power : 0;
 var f_turn = -abs(turn_rate) * mass;
 if (velocity <= 0) {
 	f_brake = 0;
 	f_surface = 0;
-}
-	
-var wheel_rotation_rate = velocity * 100 / 3600 / wheel_radius;
-engine_rpm = (wheel_rotation_rate * engine_to_wheel_ratio * 60 / (2 * pi)) + 1000;
+}	
 	
 var drive_force = (drive_torque / wheel_radius) + f_drag + f_rr + f_brake + f_surface + f_turn - push_vector.x;
 
@@ -133,6 +130,9 @@ push_vector.y = max(0, push_vector.y * 0.96);
 drive_torque = drive_force * wheel_radius;
 acceleration = (drive_torque / inertia);
 velocity += acceleration * (delta_time / 1000000);// * gear_ratio[gear-1];
+
+var wheel_rotation_rate = velocity * 100 / 3600 / wheel_radius;
+engine_rpm = (wheel_rotation_rate * engine_to_wheel_ratio * 60 / (2 * pi)) + 1000;
 velocity = clamp(velocity, 0, max_velocity);
 	
 // move car in direction
