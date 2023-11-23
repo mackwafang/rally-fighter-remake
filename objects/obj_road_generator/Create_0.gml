@@ -3,7 +3,7 @@ randomize();
 depth = 1000;
 
 primary_count = 100 * global.difficulty;
-road_segments = 10;
+road_segments = 7;
 control_points = array_create(primary_count);
 control_points_dist = 2048;
 lane_width = 32;
@@ -38,7 +38,8 @@ for (var i = 0; i < array_length(road_list)-1; i++) {
 	road.length = point_distance(road.x, road.y, road_next.x, road_next.y);
 	// road.ideal_throttle = road.length / ((control_points_dist / road_segments) * 0.8);
 	if (i > 0) {
-		road.ideal_throttle = cos(degtorad(angle_difference(road_list[@i-1].direction, road.direction)));
+		//road.ideal_throttle = cos(degtorad(angle_difference(road_list[@i-1].direction, road.direction)));
+		road.ideal_throttle = road.length / ((control_points_dist / road_segments) * 0.8);
 	}
 	else {
 		road.ideal_throttle = 1;

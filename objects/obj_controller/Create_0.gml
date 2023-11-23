@@ -6,7 +6,7 @@ depth = 10000;
 
 participating_vehicles = [];
 global.total_participating_vehicles = 12;
-global.difficulty = 1;
+global.difficulty = 3;
 
 instance_create_layer(x, y, "Instances", obj_road_generator);
 

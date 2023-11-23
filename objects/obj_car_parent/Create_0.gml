@@ -34,10 +34,10 @@ gear_ratio = [3, 8/3, 2, 4.5/3, 10/8, 11/10];
 diff_ratio = 3.5;
 gear_shift_rpm = [
 	[0, 7000],
-	[3000, 7000],
-	[3500, 6500],
-	[3500, 6000],
-	[3500, 5500],
+	[4000, 7000],
+	[4500, 6500],
+	[4500, 6000],
+	[4500, 5500],
 	[3500, 5500],
 ];
 gear_shift_wait = 0;		//  time wait to change gear again
@@ -61,7 +61,7 @@ ai_behavior = {
 	reversed_direction: false,		// negative direction on road look up
 	part_of_race: false,			// part of the ranking race
 	change_lane: function(road_index) {
-		self.desired_lane = 1 + irandom(road_index.get_lanes_right()-1);
+		self.desired_lane = 1+irandom(road_index.get_lanes_right()-1);
 	},
 }
 

@@ -1,11 +1,12 @@
 // road fidning
-nav_road_index = find_nearest_road(x + lengthdir_x(32, image_angle), y + lengthdir_y(32, image_angle), , last_road_index);
+nav_road_index = find_nearest_road(x + lengthdir_x(128, image_angle), y + lengthdir_y(128, image_angle), , last_road_index);
 var next_road = obj_road_generator.road_list[nav_road_index.get_id()+2];
 var vec_to_road = point_to_line(
 	new Vec2(on_road_index.x, on_road_index.y),
 	new Vec2(next_road.x, next_road.y),
 	new Vec2(x, y)
 );
+var dist_to_road = point_distance(x,y,vec_to_road.x,vec_to_road.y);
 dist_along_road = on_road_index.length_to_point + point_distance(on_road_index.x, on_road_index.y, vec_to_road.x, vec_to_road.y);
 vec_to_road.x += lengthdir_x(((-ai_behavior.desired_lane + 0.5) * on_road_index.lane_width), on_road_index.direction+90);
 vec_to_road.y += lengthdir_y(((-ai_behavior.desired_lane + 0.5) * on_road_index.lane_width), on_road_index.direction+90);
@@ -32,6 +33,7 @@ if (can_move) {
 			var angle_diff = angle_difference(nav_road_index.direction, image_angle);
 		
 			assert(nav_road_index.get_id() != next_road.get_id());
+			
 			if (ai_behavior.desired_lane > next_road.get_lanes_right()) {
 				// desired lane doesn't exists, pick a new one
 				ai_behavior.change_lane(nav_road_index);
@@ -49,12 +51,17 @@ if (can_move) {
 			}
 			else {
 				// car turning on curved road and moving to its desired lane
-				var tr = (angle_diff / 60);
-				if ((abs(angle_diff) < 1) | (abs(side) > 32)) {
-					tr += (sign(side) / 100);
+				var tr = (angle_diff / 60); // moving along curved road
+				
+				// moving go desired lane
+				if (dist_to_road > 32) {
+					tr += (sign(side) / 50);
+				}
+				else {
+					tr += sign(side) / 300;
 				}
 				turn_rate += clamp(tr, -2, 2);
-				braking = (abs(tr) > 2) | ((nav_road_index.get_ideal_throttle() < 0.25) && (angle_diff > 15));
+				braking = (abs(tr) > 1) | ((nav_road_index.get_ideal_throttle() < 0.25) && (abs(angle_diff) > 15));
 			}
 		
 			// checking other cars
