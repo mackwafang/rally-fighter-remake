@@ -1,9 +1,9 @@
-randomize();
-//random_set_seed(0);
+//randomize();
+random_set_seed(0);
 depth = 1000;
 
 primary_count = 100 * global.difficulty;
-road_segments = 7;
+road_segments = 10;
 control_points = array_create(primary_count);
 control_points_dist = 2048;
 lane_width = 32;
@@ -78,7 +78,6 @@ road_collision_points = []; // calcuate road segments for colision checking
 vertex_format_begin();
 vertex_format_add_position_3d();
 vertex_format_add_color();
-vertex_format_add_normal();
 vertex_format_add_texcoord();
 road_vertex_format = vertex_format_end();
 road_vertex_buffers = vertex_create_buffer();
@@ -123,10 +122,17 @@ for (var i = 0; i < array_length(road_list) - 1; i++) {
 		[new Point(collision_points[0][0], collision_points[1][0]), new Point(left_uv[0], left_uv[3]), left_subimage, left_lane_sprite],
 		[new Point(road.x, road.y), new Point(left_uv[0], left_uv[1]), left_subimage, left_lane_sprite],
 		[new Point(collision_points[0][1], collision_points[1][1]), new Point(left_uv[2], left_uv[3]), left_subimage, left_lane_sprite],
+		
+		[new Point(road.x, road.y), new Point(left_uv[0], left_uv[1]), left_subimage, left_lane_sprite],
+		[new Point(collision_points[0][1], collision_points[1][1]), new Point(left_uv[2], left_uv[3]), left_subimage, left_lane_sprite],
 		[new Point(next_road.x, next_road.y), new Point(left_uv[2], left_uv[1]), left_subimage, left_lane_sprite],
 		
 		
 		[new Point(road.x, road.y), new Point(right_uv[0], right_uv[1]), right_subimage, right_lane_sprite],
+		[new Point(collision_points[0][3], collision_points[1][3]), new Point(right_uv[0], right_uv[3]), right_subimage, right_lane_sprite],
+		[new Point(next_road.x, next_road.y), new Point(right_uv[2], right_uv[1]), right_subimage, right_lane_sprite],
+		
+		
 		[new Point(collision_points[0][3], collision_points[1][3]), new Point(right_uv[0], right_uv[3]), right_subimage, right_lane_sprite],
 		[new Point(next_road.x, next_road.y), new Point(right_uv[2], right_uv[1]), right_subimage, right_lane_sprite],
 		[new Point(collision_points[0][2], collision_points[1][2]), new Point(right_uv[2], right_uv[3]), right_subimage, right_lane_sprite],
@@ -145,7 +151,6 @@ for (var i = 0; i < array_length(road_list) - 1; i++) {
 			
 			vertex_position_3d(road_vertex_buffers, pos.x, pos.y, 12);
 			vertex_color(road_vertex_buffers, c_white, 1);
-			vertex_normal(road_vertex_buffers, 0, 0, 1);
 			vertex_texcoord(road_vertex_buffers, uv.x, uv.y);
 		}
 	}

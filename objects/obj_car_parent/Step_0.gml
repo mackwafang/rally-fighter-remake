@@ -28,8 +28,7 @@ if (can_move) {
 		var angle_diff = angle_difference(nav_road_index.direction, image_angle);
 		if (is_player) {
 			engine_power += 0.1;
-			
-			turn_rate += (angle_diff / 60); // moving along curved road
+			turn_rate += (angle_diff / 120); // moving along curved road
 		}
 		else {
 			#region Non-Player Car Movement
@@ -56,11 +55,8 @@ if (can_move) {
 				var tr = (angle_diff / 60); // moving along curved road
 				
 				// moving go desired lane
-				if (dist_to_road > 32) {
+				if (dist_to_road > 16) {
 					tr += (sign(side) / 50);
-				}
-				else {
-					tr += sign(side) / 300;
 				}
 				turn_rate += clamp(tr, -2, 2);
 				braking = (abs(tr) > 1) | ((nav_road_index.get_ideal_throttle() < 0.25) && (abs(angle_diff) > 15));

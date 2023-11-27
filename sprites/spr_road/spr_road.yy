@@ -21,7 +21,7 @@
   "gridX": 0,
   "gridY": 0,
   "height": 128,
-  "HTile": false,
+  "HTile": true,
   "layers": [
     {"resourceType":"GMImageLayer","resourceVersion":"1.0","name":"5d5739ba-0781-4665-94e0-af8f75979179","blendMode":0,"displayName":"default","isLocked":false,"opacity":100.0,"visible":true,},
   ],
@@ -98,6 +98,6 @@
     "path": "texturegroups/tex_road",
   },
   "type": 0,
-  "VTile": false,
+  "VTile": true,
   "width": 64,
 }

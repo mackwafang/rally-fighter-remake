@@ -1,7 +1,7 @@
 cam_move_speed = 16;
 cam_zoom = 1;
 cam_angle = 0;
-z = 30;
+z = -60;
 
 depth = 10000;
 
@@ -48,8 +48,8 @@ array_copy(car_ranking, 0, participating_vehicles, 0, array_length(participating
 
 if (!global.DEBUG_FREE_CAMERA) {
 	main_camera_size = {
-		width: 480,
-		height: 640,
+		width: 640,
+		height: 480,
 	}
 	main_camera_target = participating_vehicles[1];
 }

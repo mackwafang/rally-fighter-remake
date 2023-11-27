@@ -9,7 +9,7 @@ if (global.CAMERA_MODE_3D) {
 	//	vertex_submit(buffer, pr_trianglestrip, tex);
 	//}
 	var tex = sprite_get_texture(spr_road, 0);
-	vertex_submit(road_vertex_buffers, pr_trianglestrip, tex);
+	vertex_submit(road_vertex_buffers, pr_trianglelist, tex);
 }
 else {
 	for (var rpi = 0; rpi < array_length(road_points); rpi+=4) {
