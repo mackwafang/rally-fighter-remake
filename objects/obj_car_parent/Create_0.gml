@@ -22,6 +22,7 @@ transfer_eff = 0.8;		// transfer efficiency
 acceleration = 0;		// acceleration value
 braking_power = 50;		// braking magnetude
 is_respawning = false;	// car is respawning
+engine_sound_interval = 0;
 
 car_id = -1;			// car id
 

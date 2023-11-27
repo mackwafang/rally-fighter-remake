@@ -3,6 +3,8 @@ if (keyboard_check(ord("W"))) {y -= cam_move_speed;}
 if (keyboard_check(ord("S"))) {y += cam_move_speed;}
 if (keyboard_check(ord("A"))) {x -= cam_move_speed;}
 if (keyboard_check(ord("D"))) {x += cam_move_speed;}
+if (keyboard_check(vk_space)) {z += cam_move_speed;}
+if (keyboard_check(vk_control)) {z -= cam_move_speed;}
 if (keyboard_check(ord("Q"))) {
 	if (global.DEBUG_FREE_CAMERA) {
 		cam_angle -= 5;
@@ -29,14 +31,32 @@ main_camera_target = participating_vehicles[participating_camera_index];
 cam_zoom = clamp(cam_zoom, 0.1, 10);
 
 if (!global.DEBUG_FREE_CAMERA) {
-	camera_set_view_pos(
-		main_camera,
-		main_camera_target.x - (main_camera_size.width/2) + lengthdir_x(main_camera_size.width * 0.45, main_camera_target.image_angle),
-		main_camera_target.y - (main_camera_size.height/2) + lengthdir_y(main_camera_size.width * 0.45, main_camera_target.image_angle)
-	);
-	camera_set_view_angle(main_camera, -main_camera_target.image_angle+90);
+	// normal game camera
+	if (!global.CAMERA_MODE_3D) {
+		camera_set_view_pos(
+			main_camera,
+			main_camera_target.x - (main_camera_size.width/2) + lengthdir_x(main_camera_size.width * 0.45, main_camera_target.image_angle),
+			main_camera_target.y - (main_camera_size.height/2) + lengthdir_y(main_camera_size.width * 0.45, main_camera_target.image_angle)
+		);
+		camera_set_view_angle(main_camera, -main_camera_target.image_angle+90);
+	}
+	else {
+		gpu_set_zwriteenable(false);
+		camera_set_view_mat(main_camera, matrix_build_lookat(
+			main_camera_target.x+lengthdir_x(-50, main_camera_target.image_angle), 
+			main_camera_target.y+lengthdir_y(-50, main_camera_target.image_angle), 
+			z, 
+			main_camera_target.x+lengthdir_x(250, main_camera_target.image_angle),
+			main_camera_target.y+lengthdir_y(250, main_camera_target.image_angle),
+			z+120, 0, 0, -1)
+		);
+		camera_set_proj_mat(main_camera, matrix_build_projection_perspective_fov(-90, 1/2, 1, 3000));
+		camera_apply(main_camera);
+		gpu_set_zwriteenable(true);
+	}
 }
 else {
+	// debug camera
 	camera_set_view_pos(
 		main_camera,
 		x,

@@ -71,8 +71,8 @@
   "swatchColours": null,
   "swfPrecision": 2.525,
   "textureGroupId": {
-    "name": "Default",
-    "path": "texturegroups/Default",
+    "name": "tex_road",
+    "path": "texturegroups/tex_road",
   },
   "type": 0,
   "VTile": true,

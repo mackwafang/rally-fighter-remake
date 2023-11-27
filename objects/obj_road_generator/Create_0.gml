@@ -73,6 +73,17 @@ for (var i = 0; i < array_length(road_list)-1; i++) {
 
 road_points = []; // precalculate road polygons
 road_collision_points = []; // calcuate road segments for colision checking
+
+// 3d road render data
+vertex_format_begin();
+vertex_format_add_position_3d();
+vertex_format_add_color();
+vertex_format_add_normal();
+vertex_format_add_texcoord();
+road_vertex_format = vertex_format_end();
+road_vertex_buffers = vertex_create_buffer();
+
+vertex_begin(road_vertex_buffers, road_vertex_format);
 for (var i = 0; i < array_length(road_list) - 1; i++) {
 	// for each road piece
 	var road = road_list[@ i];
@@ -105,21 +116,41 @@ for (var i = 0; i < array_length(road_list) - 1; i++) {
 			road.y+lengthdir_y(lane_width*right_lanes, road.direction-90),
 		]
 	];
+	var left_uv = sprite_get_uvs(left_lane_sprite, left_subimage);
+	var right_uv = sprite_get_uvs(right_lane_sprite, right_subimage);
+	
+	var road_seg_data = [
+		[new Point(collision_points[0][0], collision_points[1][0]), new Point(left_uv[0], left_uv[3]), left_subimage, left_lane_sprite],
+		[new Point(road.x, road.y), new Point(left_uv[0], left_uv[1]), left_subimage, left_lane_sprite],
+		[new Point(collision_points[0][1], collision_points[1][1]), new Point(left_uv[2], left_uv[3]), left_subimage, left_lane_sprite],
+		[new Point(next_road.x, next_road.y), new Point(left_uv[2], left_uv[1]), left_subimage, left_lane_sprite],
+		
+		
+		[new Point(road.x, road.y), new Point(right_uv[0], right_uv[1]), right_subimage, right_lane_sprite],
+		[new Point(collision_points[0][3], collision_points[1][3]), new Point(right_uv[0], right_uv[3]), right_subimage, right_lane_sprite],
+		[new Point(next_road.x, next_road.y), new Point(right_uv[2], right_uv[1]), right_subimage, right_lane_sprite],
+		[new Point(collision_points[0][2], collision_points[1][2]), new Point(right_uv[2], right_uv[3]), right_subimage, right_lane_sprite],
+	]
 	
 	road_collision_points[array_length(road_collision_points)] = collision_points;
-	road_points = array_concat(road_points, [
-		[new Point(collision_points[0][0], collision_points[1][0]), new Point(1,1), left_subimage, left_lane_sprite],
-		[new Point(road.x, road.y), new Point(1,0), left_subimage, left_lane_sprite],
-		[new Point(collision_points[0][1], collision_points[1][1]), new Point(0,1), left_subimage, left_lane_sprite],
-		[new Point(next_road.x, next_road.y), new Point(0,0), left_subimage, left_lane_sprite],
-		
-		
-		[new Point(road.x, road.y), new Point(0,0), right_subimage, right_lane_sprite],
-		[new Point(collision_points[0][3], collision_points[1][3]), new Point(0,1), right_subimage, right_lane_sprite],
-		[new Point(next_road.x, next_road.y), new Point(1,0), right_subimage, right_lane_sprite],
-		[new Point(collision_points[0][2], collision_points[1][2]), new Point(1,1), right_subimage, right_lane_sprite],
-	]);
+	road_points = array_concat(road_points, road_seg_data);
+	
+	if (global.CAMERA_MODE_3D) {
+		for (var di = 0; di < array_length(road_seg_data); di++) {
+			var data = road_seg_data[di];
+			var pos = data[0];
+			var uv = data[1];
+			var subimage = data[2];
+			var sprite = data[3];
+			
+			vertex_position_3d(road_vertex_buffers, pos.x, pos.y, 12);
+			vertex_color(road_vertex_buffers, c_white, 1);
+			vertex_normal(road_vertex_buffers, 0, 0, 1);
+			vertex_texcoord(road_vertex_buffers, uv.x, uv.y);
+		}
+	}
 }
+vertex_end(road_vertex_buffers);
 
 obj_controller.x = road_list[0].x;
 obj_controller.y = road_list[0].y;

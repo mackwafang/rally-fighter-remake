@@ -7,6 +7,8 @@ global.DEBUG_FREE_CAMERA = false;
 
 global.GAMEPLAY_NO_CARS = false;
 
+global.CAMERA_MODE_3D = true;
+
 global.WORLD_TO_REAL_SCALE = 1.5;
 global.REAL_TO_WORLD_SCALE = 1/global.WORLD_TO_REAL_SCALE;
 

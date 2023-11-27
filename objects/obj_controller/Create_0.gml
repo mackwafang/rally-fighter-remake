@@ -1,12 +1,13 @@
 cam_move_speed = 16;
 cam_zoom = 1;
 cam_angle = 0;
+z = 30;
 
 depth = 10000;
 
 participating_vehicles = [];
 global.total_participating_vehicles = 12;
-global.difficulty = 3;
+global.difficulty = 2;
 
 instance_create_layer(x, y, "Instances", obj_road_generator);
 
@@ -38,6 +39,9 @@ for (var i = 0; i < array_length(participating_vehicles); i++) {
 	}
 	car.horsepower = 50 * global.difficulty;
 	car.ai_behavior.part_of_race = true;	
+	for (var g = 0; g < array_length(car.gear_shift_rpm); g++) {
+		car.gear_shift_rpm[g][1] += (500 * global.difficulty);
+	}
 }
 car_ranking = [];
 array_copy(car_ranking, 0, participating_vehicles, 0, array_length(participating_vehicles));
@@ -65,5 +69,11 @@ view_set_hport(0, main_camera_size.height);
 window_set_size(main_camera_size.width, main_camera_size.height);
 camera_set_view_size(main_camera, main_camera_size.width, main_camera_size.height);
 surface_resize(application_surface, main_camera_size.width, main_camera_size.height);
+
+// cam stuff
+if (global.CAMERA_MODE_3D) {
+	gpu_set_zwriteenable(true);
+	gpu_set_ztestenable(true);
+}
 
 alarm[0] = 5 * 60; // starting timer

@@ -1,32 +1,46 @@
 // draw roads
-
-for (var rpi = 0; rpi < array_length(road_points); rpi+=4) {
-	// begin drawing road strip
-	//check end of side
-	if (!camera_in_view(road_points[rpi][0].x, road_points[rpi][0].y, 512)) {continue;}
-	draw_set_color(c_white);
-	
-	var subimage = road_points[rpi][2];
-	var sprite = road_points[rpi][3];
-	var texture = sprite_get_texture(sprite, subimage);
-	
-	draw_primitive_begin_texture(pr_trianglestrip, texture);
-	for (var k = rpi; k < rpi+4; k++) {
-		var coordinate = road_points[k][0];
-		var uv = road_points[k][1];
+if (global.CAMERA_MODE_3D) {
+	//for (var i = 0; i < array_length(road_vertex_buffers); i++) {
+	//	var buffer = road_vertex_buffers[i][0];
+	//	var subimage = road_vertex_buffers[i][1];
+	//	var sprite = road_vertex_buffers[i][2];
 		
-		draw_vertex_texture(coordinate.x, coordinate.y, uv.x, uv.y);
-	}
-	draw_primitive_end();
-	draw_set_color(c_white);
-	
-	//var a = [0,1,3,2];
-	//for (var k = 0; k <= 4; k++) {
-	//	var coordinate = road_points[rpi+(a[k%4])][0];
-	//	var coordinate_next = road_points[rpi+(a[(k+1)%4])][0];
-	//	draw_line_width_color(coordinate.x, coordinate.y, coordinate_next.x, coordinate_next.y, 2, c_red, c_red);
+	//	var tex = sprite_get_texture(sprite, subimage);
+	//	vertex_submit(buffer, pr_trianglestrip, tex);
 	//}
+	var tex = sprite_get_texture(spr_road, 0);
+	vertex_submit(road_vertex_buffers, pr_trianglestrip, tex);
 }
+else {
+	for (var rpi = 0; rpi < array_length(road_points); rpi+=4) {
+		// begin drawing road strip
+		//check end of side
+		if (!camera_in_view(road_points[rpi][0].x, road_points[rpi][0].y, 512)) {continue;}
+		draw_set_color(c_white);
+	
+		var subimage = road_points[rpi][2];
+		var sprite = road_points[rpi][3];
+		var texture = sprite_get_texture(sprite, subimage);
+	
+		draw_primitive_begin_texture(pr_trianglestrip, texture);
+		for (var k = rpi; k < rpi+4; k++) {
+			var coordinate = road_points[k][0];
+			var uv = road_points[k][1];
+		
+			draw_vertex_texture(coordinate.x, coordinate.y, uv.x, uv.y);
+		}
+		draw_primitive_end();
+		draw_set_color(c_white);
+	
+		//var a = [0,1,3,2];
+		//for (var k = 0; k <= 4; k++) {
+		//	var coordinate = road_points[rpi+(a[k%4])][0];
+		//	var coordinate_next = road_points[rpi+(a[(k+1)%4])][0];
+		//	draw_line_width_color(coordinate.x, coordinate.y, coordinate_next.x, coordinate_next.y, 2, c_red, c_red);
+		//}
+	}
+}
+
 
 if (global.DEBUG_ROAD_DRAW_CONTROL_POINTS) {
 	for (var i = 0; i < array_length(control_points) - 1; i++) {

@@ -25,12 +25,14 @@ if (can_move) {
 	}
 
 	if (accelerating) {
+		var angle_diff = angle_difference(nav_road_index.direction, image_angle);
 		if (is_player) {
 			engine_power += 0.1;
+			
+			turn_rate += (angle_diff / 60); // moving along curved road
 		}
 		else {
 			#region Non-Player Car Movement
-			var angle_diff = angle_difference(nav_road_index.direction, image_angle);
 		
 			assert(nav_road_index.get_id() != next_road.get_id());
 			
@@ -159,12 +161,16 @@ engine_power = clamp(engine_power, 0, 1);
 gear_shift_wait = clamp(gear_shift_wait-1, 0, 60);
 	
 var engine_sound_pitch = (engine_rpm / engine_rpm_max)+0.3;
-if (is_player) {
-	audio_listener_position(x, y, 0);
+if (obj_controller.main_camera_target.id == id) {
+	audio_listener_position(x, y, 30);
 }
 audio_emitter_pitch(engine_sound_emitter, engine_sound_pitch);
-audio_play_sound_on(engine_sound_emitter, snd_car, false, 1, 0.5);
+if (engine_sound_interval == 0) {
+	audio_play_sound_on(engine_sound_emitter, snd_car, false, 1);
+}
 audio_emitter_position(engine_sound_emitter, x, y, 0);
+
+engine_sound_interval = (engine_sound_interval + 1) % 4;
 
 // remove non-participating cars when too far away
 if (abs(obj_controller.main_camera_target.dist_along_road - dist_along_road) > 1024) {
