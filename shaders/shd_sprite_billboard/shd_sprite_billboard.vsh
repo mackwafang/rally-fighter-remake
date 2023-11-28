@@ -20,7 +20,7 @@ void main()
 	
 	world_view[2][0] = 0.0;
 	world_view[2][1] = 0.0;
-	world_view[2][2] = 1.0;
+	world_view[2][2] = 0.0;
 	
     gl_Position = gm_Matrices[MATRIX_PROJECTION] * (world_view * object_space_pos);
     
