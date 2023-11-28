@@ -149,7 +149,7 @@ for (var i = 0; i < array_length(road_list) - 1; i++) {
 			var subimage = data[2];
 			var sprite = data[3];
 			
-			vertex_position_3d(road_vertex_buffers, pos.x, pos.y, 1);
+			vertex_position_3d(road_vertex_buffers, pos.x, pos.y, 3);
 			vertex_color(road_vertex_buffers, c_white, 1);
 			vertex_texcoord(road_vertex_buffers, uv.x, uv.y);
 		}

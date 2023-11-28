@@ -60,7 +60,7 @@
     {"id":{"name":"torque_lookup","path":"scripts/torque_lookup/torque_lookup.yy",},},
     {"id":{"name":"obj_player","path":"objects/obj_player/obj_player.yy",},},
     {"id":{"name":"spr_explosion","path":"sprites/spr_explosion/spr_explosion.yy",},},
-    {"id":{"name":"shd_road","path":"shaders/shd_road/shd_road.yy",},},
+    {"id":{"name":"shd_sprite_billboard","path":"shaders/shd_sprite_billboard/shd_sprite_billboard.yy",},},
     {"id":{"name":"spr_car_detail","path":"sprites/spr_car_detail/spr_car_detail.yy",},},
     {"id":{"name":"lib_vectors","path":"scripts/lib_vectors/lib_vectors.yy",},},
     {"id":{"name":"assert","path":"scripts/assert/assert.yy",},},

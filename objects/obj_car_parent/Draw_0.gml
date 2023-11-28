@@ -1,19 +1,19 @@
 //if (vehicle_type == VEHICLE_TYPE.BIKE) {
 //	draw_sprite_ext(spr_vehicle_shadow, 0, x, y, image_xscale, image_yscale, image_angle, c_white, 0.5);
 //}
-gpu_set_cullmode(cull_counterclockwise);
-matrix_set(matrix_world, matrix_build(x, y, 0, (turn_rate * 5), -70, image_angle, 0.25, 0.25, 0.25));
-draw_sprite_ext(spr_bike_3d, 0, 0, 0, image_xscale, image_yscale, -90, image_blend, image_alpha);
-matrix_set(matrix_world, matrix_build_identity());
-gpu_set_cullmode(cull_noculling);
+shader_set(shd_sprite_billboard)
+matrix_set(matrix_world, matrix_build(x, y, 0, 0, 0, 0, 1, 1, 1));
+draw_sprite_ext(spr_bike_3d, 0, 0, 0, 0.25, 0.25, -180 + (turn_rate * 5), image_blend, image_alpha);
+matrix_set(matrix_world, matrix_build_identity());;
+shader_reset();
 
-gpu_set_cullmode(cull_counterclockwise);
-matrix_set(matrix_world, matrix_build(x, y, 9, 0, 0, 0, 1, 1, -1));
-draw_set_alpha(0.5);
-draw_circle_color(0, 0, 8, 0, 0, false);
-draw_set_alpha(1);
-matrix_set(matrix_world, matrix_build_identity());
-gpu_set_cullmode(cull_noculling);
+//gpu_set_cullmode(cull_counterclockwise);
+//matrix_set(matrix_world, matrix_build(x, y, 9, 0, 0, 0, 1, 1, -1));
+//draw_set_alpha(0.5);
+//draw_circle_color(0, 0, 8, 0, 0, false);
+//draw_set_alpha(1);
+//matrix_set(matrix_world, matrix_build_identity());
+//gpu_set_cullmode(cull_noculling);
 
 //draw_sprite_ext(vehicle_detail_index, image_index, x, y, image_xscale, image_yscale, image_angle, c_white, image_alpha);
 
