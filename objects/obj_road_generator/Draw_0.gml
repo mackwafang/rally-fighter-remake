@@ -103,28 +103,4 @@ if (global.DEBUG_ROAD_DRAW_ROAD_POINTS) {
 			draw_circle_color(road.x, road.y, 2, c_white, c_white, false);
 		}
 	}
-	
-	//draw road segment corners
-	//for (var i = 0; i < array_length(road_points); i++) {
-	//	var coordinate = road_points[i][0];
-		
-	//	if (coordinate == undefined) {continue;}
-	//	if (!camera_in_view(coordinate.x, coordinate.y ,256)) {continue;}
-
-	//	draw_circle_color(coordinate.x, coordinate.y, 4, c_orange, c_orange, false);
-	//	draw_text(coordinate.x, coordinate.y, i)
-	//}
 }
-
-//array_foreach(road_collision_points, function(road) {
-//	for (var i = 0; i <= 4; i++) {
-		
-//		draw_line_width(
-//			road[0][i % 4],
-//			road[1][i % 4],
-//			road[0][(i+1) % 4],
-//			road[1][(i+1) % 4],
-//			2
-//		)
-//	}
-//});

@@ -1,9 +1,9 @@
-//randomize();
-random_set_seed(0);
+randomize();
+//random_set_seed(0);
 depth = 1000;
 
 primary_count = 100 * global.difficulty;
-road_segments = 10;
+road_segments = 20;
 control_points = array_create(primary_count);
 control_points_dist = 2048;
 lane_width = 32;
@@ -17,11 +17,11 @@ var stay_straight = 5;
 control_points[0] = new Point(x,y);
 for (var s = 1; s < primary_count; s++) {
 	if (s > stay_straight) {
-		next_dir += irandom_range(-1,1)*5;
+		next_dir += irandom_range(-1,1)*(global.difficulty * 15);
 	}
 	control_points[s] = new Point(
-		control_points[s-1].x + (cos(degtorad(next_dir)) * ((s < stay_straight) ? control_points_dist : irandom_range(control_points_dist/4, control_points_dist))),
-		control_points[s-1].y + (sin(degtorad(next_dir)) * ((s < stay_straight) ? control_points_dist : irandom_range(control_points_dist/4, control_points_dist)))
+		control_points[s-1].x + (cos(degtorad(next_dir)) * control_points_dist),//((s < stay_straight) ? control_points_dist : irandom_range(control_points_dist/4, control_points_dist))),
+		control_points[s-1].y + (sin(degtorad(next_dir)) * control_points_dist)//((s < stay_straight) ? control_points_dist : irandom_range(control_points_dist/4, control_points_dist)))
 	);
 }
 
@@ -149,13 +149,14 @@ for (var i = 0; i < array_length(road_list) - 1; i++) {
 			var subimage = data[2];
 			var sprite = data[3];
 			
-			vertex_position_3d(road_vertex_buffers, pos.x, pos.y, 12);
+			vertex_position_3d(road_vertex_buffers, pos.x, pos.y, 1);
 			vertex_color(road_vertex_buffers, c_white, 1);
 			vertex_texcoord(road_vertex_buffers, uv.x, uv.y);
 		}
 	}
 }
 vertex_end(road_vertex_buffers);
+vertex_freeze(road_vertex_buffers);
 
 obj_controller.x = road_list[0].x;
 obj_controller.y = road_list[0].y;

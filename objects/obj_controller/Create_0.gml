@@ -9,8 +9,19 @@ participating_vehicles = [];
 global.total_participating_vehicles = 12;
 global.difficulty = 2;
 
+// cam stuff
+if (global.CAMERA_MODE_3D) {
+	gpu_set_zwriteenable(true);
+	gpu_set_ztestenable(true);
+	gpu_set_alphatestenable(true);
+	gpu_set_alphatestref(64);
+}
+
+audio_listener_orientation(0,1,0,0,0,-1);
+
 instance_create_layer(x, y, "Instances", obj_road_generator);
 
+// racing car
 for (var i = 0; i < global.total_participating_vehicles; i++) {
 	var car = instance_create_layer(0, 0, "Instances", obj_car);
 	if (i == 0) {
@@ -37,7 +48,7 @@ for (var i = 0; i < array_length(participating_vehicles); i++) {
 	if (!car.is_player) {
 		car.can_move = false;
 	}
-	car.horsepower = 50 * global.difficulty;
+	car.horsepower = 40 * global.difficulty;
 	car.ai_behavior.part_of_race = true;	
 	for (var g = 0; g < array_length(car.gear_shift_rpm); g++) {
 		car.gear_shift_rpm[g][1] += (500 * global.difficulty);
@@ -69,11 +80,5 @@ view_set_hport(0, main_camera_size.height);
 window_set_size(main_camera_size.width, main_camera_size.height);
 camera_set_view_size(main_camera, main_camera_size.width, main_camera_size.height);
 surface_resize(application_surface, main_camera_size.width, main_camera_size.height);
-
-// cam stuff
-if (global.CAMERA_MODE_3D) {
-	gpu_set_zwriteenable(true);
-	gpu_set_ztestenable(true);
-}
 
 alarm[0] = 5 * 60; // starting timer

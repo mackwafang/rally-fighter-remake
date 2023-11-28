@@ -158,7 +158,7 @@ gear_shift_wait = clamp(gear_shift_wait-1, 0, 60);
 	
 var engine_sound_pitch = (engine_rpm / engine_rpm_max)+0.3;
 if (obj_controller.main_camera_target.id == id) {
-	audio_listener_position(x, y, 30);
+	audio_listener_position(x, y, 40);
 }
 audio_emitter_pitch(engine_sound_emitter, engine_sound_pitch);
 if (engine_sound_interval == 0) {
@@ -166,10 +166,10 @@ if (engine_sound_interval == 0) {
 }
 audio_emitter_position(engine_sound_emitter, x, y, 0);
 
-engine_sound_interval = (engine_sound_interval + 1) % 4;
+engine_sound_interval = (engine_sound_interval + 1) % 1;
 
 // remove non-participating cars when too far away
-if (abs(obj_controller.main_camera_target.dist_along_road - dist_along_road) > 1024) {
+if (abs(obj_controller.main_camera_target.dist_along_road - dist_along_road) > 3000) {
 	if (!global.DEBUG_FREE_CAMERA) {
 		if (!ai_behavior.part_of_race) {
 			instance_destroy()

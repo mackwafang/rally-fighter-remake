@@ -54,6 +54,7 @@
     {"id":{"name":"spr_bike","path":"sprites/spr_bike/spr_bike.yy",},},
     {"id":{"name":"spr_starting_number","path":"sprites/spr_starting_number/spr_starting_number.yy",},},
     {"id":{"name":"point_to_line","path":"scripts/point_to_line/point_to_line.yy",},},
+    {"id":{"name":"spr_bike_3d","path":"sprites/spr_bike_3d/spr_bike_3d.yy",},},
     {"id":{"name":"obj_car_parent","path":"objects/obj_car_parent/obj_car_parent.yy",},},
     {"id":{"name":"spr_health_bar_small","path":"sprites/spr_health_bar_small/spr_health_bar_small.yy",},},
     {"id":{"name":"torque_lookup","path":"scripts/torque_lookup/torque_lookup.yy",},},

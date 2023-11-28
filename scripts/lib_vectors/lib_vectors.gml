@@ -3,6 +3,12 @@ function Point() constructor {
 	y = argument[1];
 }
 
+function Point3D() constructor {
+	x = argument[0];
+	y = argument[1];
+	z = argument[2];
+}
+
 function Vec2() constructor
 {
 	#region Initialize Vector

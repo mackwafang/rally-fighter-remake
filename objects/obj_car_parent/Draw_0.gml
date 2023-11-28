@@ -1,8 +1,21 @@
-if (vehicle_type == VEHICLE_TYPE.BIKE) {
-	draw_sprite_ext(spr_vehicle_shadow, 0, x, y, image_xscale, image_yscale, image_angle, c_white, 0.5);
-}
-draw_sprite_ext(sprite_index, image_index, x, y, image_xscale, image_yscale, image_angle, image_blend, image_alpha);
-draw_sprite_ext(vehicle_detail_index, image_index, x, y, image_xscale, image_yscale, image_angle, c_white, image_alpha);
+//if (vehicle_type == VEHICLE_TYPE.BIKE) {
+//	draw_sprite_ext(spr_vehicle_shadow, 0, x, y, image_xscale, image_yscale, image_angle, c_white, 0.5);
+//}
+gpu_set_cullmode(cull_counterclockwise);
+matrix_set(matrix_world, matrix_build(x, y, 0, (turn_rate * 5), -70, image_angle, 0.25, 0.25, 0.25));
+draw_sprite_ext(spr_bike_3d, 0, 0, 0, image_xscale, image_yscale, -90, image_blend, image_alpha);
+matrix_set(matrix_world, matrix_build_identity());
+gpu_set_cullmode(cull_noculling);
+
+gpu_set_cullmode(cull_counterclockwise);
+matrix_set(matrix_world, matrix_build(x, y, 9, 0, 0, 0, 1, 1, -1));
+draw_set_alpha(0.5);
+draw_circle_color(0, 0, 8, 0, 0, false);
+draw_set_alpha(1);
+matrix_set(matrix_world, matrix_build_identity());
+gpu_set_cullmode(cull_noculling);
+
+//draw_sprite_ext(vehicle_detail_index, image_index, x, y, image_xscale, image_yscale, image_angle, c_white, image_alpha);
 
 if (global.DEBUG_CAR) {
 	if (accelerating) {draw_circle_color(x+8, y-10, 4, c_green, c_green, false);}
@@ -13,7 +26,7 @@ if (global.DEBUG_CAR) {
 	draw_text_transformed_color(x + lengthdir_x(16, image_angle+180),y + lengthdir_y(16, image_angle+180),$"{round(velocity / 10)}/{round(max_velocity/10)}",1,1,image_angle-90,c_white,c_white,c_white,c_white,1)
 	draw_text_transformed_color(x + lengthdir_x(32, image_angle+180),y + lengthdir_y(32, image_angle+180),gear,1,1,image_angle-90,c_white,c_white,c_white,c_white,1)
 	draw_text_transformed_color(x + lengthdir_x(48, image_angle+180),y + lengthdir_y(48, image_angle+180),round(engine_rpm),1,1,image_angle-90,c_white,c_white,c_white,c_white,1)
-
+	
 	draw_arrow(x, y, x+lengthdir_x(engine_power * 32, image_angle), y+lengthdir_y(engine_power * 32, image_angle), 10);
 	draw_arrow(x, y, x+lengthdir_x(turn_rate * 32, image_angle+90), y+lengthdir_y(turn_rate * 32, image_angle+90), 10);
 	draw_text_transformed_color(x+lengthdir_x(turn_rate * 32, image_angle+90), y+lengthdir_y(turn_rate * 32, image_angle+90),turn_rate,1,1,image_angle-90,c_white,c_white,c_white,c_white,1)

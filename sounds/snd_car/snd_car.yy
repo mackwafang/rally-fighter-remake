@@ -19,5 +19,5 @@
   "sampleRate": 5512,
   "soundFile": "snd_car.WAV",
   "type": 1,
-  "volume": 0.0,
+  "volume": 0.05,
 }
