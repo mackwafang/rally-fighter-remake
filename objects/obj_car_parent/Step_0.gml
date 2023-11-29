@@ -1,6 +1,6 @@
 // road fidning
 nav_road_index = find_nearest_road(x + lengthdir_x(128, image_angle), y + lengthdir_y(128, image_angle), , last_road_index);
-var next_road = obj_road_generator.road_list[nav_road_index.get_id()+2];
+var next_road = obj_road_generator.road_list[nav_road_index.get_id()+4];
 var vec_to_road = point_to_line(
 	new Vec2(on_road_index.x, on_road_index.y),
 	new Vec2(next_road.x, next_road.y),
@@ -28,14 +28,16 @@ if (can_move) {
 		var angle_diff = angle_difference(nav_road_index.direction, image_angle);
 		if (is_player) {
 			engine_power += 0.1;
-			turn_rate += (angle_diff / 120); // moving along curved road
+			if (!global.DEBUG_CAR) {
+					turn_rate += (angle_diff / 120); // moving along curved road
+			}
 		}
 		else {
 			#region Non-Player Car Movement
 		
 			assert(nav_road_index.get_id() != next_road.get_id());
 			
-			if (ai_behavior.desired_lane > next_road.get_lanes_right()) {
+			if (ai_behavior.desired_lane > next_road.get_lanes_right()-1) {
 				// desired lane doesn't exists, pick a new one
 				ai_behavior.change_lane(nav_road_index);
 			}
@@ -55,7 +57,7 @@ if (can_move) {
 				var tr = (angle_diff / 60); // moving along curved road
 				
 				// moving go desired lane
-				if (dist_to_road > 16) {
+				if (dist_to_road > 8) {
 					tr += (sign(side) / 50);
 				}
 				turn_rate += clamp(tr, -2, 2);

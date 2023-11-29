@@ -5,8 +5,6 @@ if (global.CAMERA_MODE_3D) {
 	shader_set(shd_sprite_billboard);
 	matrix_set(matrix_world, matrix_build(x, y, 0, 0, 0, 0, 1, 1, 1));
 	draw_sprite_ext(spr_bike_3d, 0, 0, 0, 0.25, 0.25, -180 + (turn_rate * 5), image_blend, image_alpha);
-	matrix_set(matrix_world, matrix_build(x, y, -16, 180, 0, 0, 1, 1, 1));
-	draw_text(0, -16, ai_behavior.desired_lane);
 	matrix_set(matrix_world, matrix_build_identity());
 	shader_reset();
 
@@ -31,8 +29,9 @@ if (global.DEBUG_CAR) {
 	draw_arrow(x, y, x+lengthdir_x(engine_power * 32, image_angle), y+lengthdir_y(engine_power * 32, image_angle), 10);
 	draw_arrow(x, y, x+lengthdir_x(turn_rate * 32, image_angle+90), y+lengthdir_y(turn_rate * 32, image_angle+90), 10);
 	draw_text_transformed_color(x+lengthdir_x(turn_rate * 32, image_angle+90), y+lengthdir_y(turn_rate * 32, image_angle+90),turn_rate,1,1,image_angle-90,c_white,c_white,c_white,c_white,1)
-
-	if (!on_road) {
+	
+	
+	if (!is_on_road(x,y,last_road_index)) {
 		draw_text_transformed_color(
 			x + lengthdir_x(-16, image_angle+90),
 			y + lengthdir_y(-16, image_angle+90),
@@ -45,6 +44,6 @@ if (global.DEBUG_CAR) {
 			c_red,
 			c_red,
 			1
-		)
+		);
 	}
 }

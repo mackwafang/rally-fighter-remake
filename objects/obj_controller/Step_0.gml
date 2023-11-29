@@ -46,8 +46,8 @@ if (!global.DEBUG_FREE_CAMERA) {
 			main_camera_target.x+lengthdir_x(-30, main_camera_target.image_angle), 
 			main_camera_target.y+lengthdir_y(-30, main_camera_target.image_angle), 
 			z, 
-			main_camera_target.x+lengthdir_x(300, main_camera_target.image_angle),
-			main_camera_target.y+lengthdir_y(300, main_camera_target.image_angle),
+			main_camera_target.x+lengthdir_x(500, main_camera_target.image_angle),
+			main_camera_target.y+lengthdir_y(500, main_camera_target.image_angle),
 			z+120, 0, 0, -1)
 		);
 		camera_set_proj_mat(main_camera, matrix_build_projection_perspective_fov(-90, room_width/room_height, 1, 2000));

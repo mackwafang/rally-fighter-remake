@@ -1,46 +1,6 @@
 // draw roads
-if (global.CAMERA_MODE_3D) {
-	//for (var i = 0; i < array_length(road_vertex_buffers); i++) {
-	//	var buffer = road_vertex_buffers[i][0];
-	//	var subimage = road_vertex_buffers[i][1];
-	//	var sprite = road_vertex_buffers[i][2];
-		
-	//	var tex = sprite_get_texture(sprite, subimage);
-	//	vertex_submit(buffer, pr_trianglestrip, tex);
-	//}
-	var tex = sprite_get_texture(spr_road, 0);
-	vertex_submit(road_vertex_buffers, pr_trianglelist, tex);
-}
-else {
-	for (var rpi = 0; rpi < array_length(road_points); rpi+=4) {
-		// begin drawing road strip
-		//check end of side
-		if (!camera_in_view(road_points[rpi][0].x, road_points[rpi][0].y, 512)) {continue;}
-		draw_set_color(c_white);
-	
-		var subimage = road_points[rpi][2];
-		var sprite = road_points[rpi][3];
-		var texture = sprite_get_texture(sprite, subimage);
-	
-		draw_primitive_begin_texture(pr_trianglelist, texture);
-		for (var k = rpi; k < rpi+3; k++) {
-			var coordinate = road_points[k][0];
-			var uv = road_points[k][1];
-		
-			draw_vertex_texture(coordinate.x, coordinate.y, uv.x, uv.y);
-		}
-		draw_primitive_end();
-		draw_set_color(c_white);
-	
-		//var a = [0,1,3,2];
-		//for (var k = 0; k <= 4; k++) {
-		//	var coordinate = road_points[rpi+(a[k%4])][0];
-		//	var coordinate_next = road_points[rpi+(a[(k+1)%4])][0];
-		//	draw_line_width_color(coordinate.x, coordinate.y, coordinate_next.x, coordinate_next.y, 2, c_red, c_red);
-		//}
-	}
-}
-
+var tex = sprite_get_texture(spr_road, 0);
+vertex_submit(road_vertex_buffers, pr_trianglelist, tex);
 
 if (global.DEBUG_ROAD_DRAW_CONTROL_POINTS) {
 	for (var i = 0; i < array_length(control_points) - 1; i++) {
@@ -57,6 +17,23 @@ if (global.DEBUG_ROAD_DRAW_CONTROL_POINTS) {
 	}
 }
 
+if (global.DEBUG_ROAD_DRAW_COLLISION_POINTS) {
+	for (var p = 0; p < array_length(road_list) - 1; p++) {
+		var cx = road_collision_points[p][0];
+		var cy = road_collision_points[p][1];
+		for (var i = 0; i <= 4; i++) {
+			draw_line_color(
+				cx[i % 4],
+				cy[i % 4],
+				cx[(i+1) % 4],
+				cy[(i+1) % 4],
+				c_red,
+				c_red
+			);
+		}
+	}
+}
+
 // debug road information
 if (global.DEBUG_ROAD_DRAW_ROAD_POINTS) {
 	for (var i = 0; i < array_length(road_list) - 1; i++) {
@@ -67,10 +44,10 @@ if (global.DEBUG_ROAD_DRAW_ROAD_POINTS) {
 		if (!camera_in_view(road.x, road.y, 256)) {continue;}
 		
 		var segments = [
-			new Vec2(road.x+lengthdir_x(64*road.get_lanes_left(), road.direction+90), road.y+lengthdir_y(64*road.get_lanes_left(), road.direction+90)),
-			new Vec2(road.x+lengthdir_x(64*road.get_lanes_right(), road.direction-90), road.y+lengthdir_y(64*road.get_lanes_right(), road.direction-90)),
-			new Vec2(next_road.x+lengthdir_x(64*next_road.get_lanes_left(), next_road.direction+90), next_road.y+lengthdir_y(64*next_road.get_lanes_left(), next_road.direction+90)),
-			new Vec2(next_road.x+lengthdir_x(64*next_road.get_lanes_right(), next_road.direction-90), next_road.y+lengthdir_y(64*next_road.get_lanes_right(), next_road.direction-90)),
+			new Vec2(road.x+lengthdir_x(lane_width*road.get_lanes_left(), road.direction+90), road.y+lengthdir_y(lane_width*road.get_lanes_left(), road.direction+90)),
+			new Vec2(road.x+lengthdir_x(lane_width*road.get_lanes_right(), road.direction-90), road.y+lengthdir_y(lane_width*road.get_lanes_right(), road.direction-90)),
+			new Vec2(next_road.x+lengthdir_x(lane_width*next_road.get_lanes_left(), next_road.direction+90), next_road.y+lengthdir_y(lane_width*next_road.get_lanes_left(), next_road.direction+90)),
+			new Vec2(next_road.x+lengthdir_x(lane_width*next_road.get_lanes_right(), next_road.direction-90), next_road.y+lengthdir_y(lane_width*next_road.get_lanes_right(), next_road.direction-90)),
 		];
 		draw_line_color(
 			road.x,
@@ -93,6 +70,31 @@ if (global.DEBUG_ROAD_DRAW_ROAD_POINTS) {
 				segments[1].x,
 				segments[1].y,
 				#00ff00, #00ff00
+			);
+		}
+		
+		for (var l = 0; l <= road.get_lanes_left(); l++) {
+			if (i == 0) {print($"{l * road.lane_width} {l}");}
+			
+			draw_line_color(
+				road.x + lengthdir_x(l * road.lane_width, road.direction+90),
+				road.y + lengthdir_y(l * road.lane_width, road.direction+90),
+				next_road.x + lengthdir_x(l * road.lane_width, road.direction+90),
+				next_road.y + lengthdir_y(l * road.lane_width, road.direction+90),
+				#0000ff,
+				#0000ff
+			);
+		}
+		for (var l = 0; l <= road.get_lanes_right(); l++) {
+			if (i == 0) {print($"{l * road.lane_width} {l}");}
+			
+			draw_line_color(
+				road.x + lengthdir_x(l * road.lane_width, road.direction-90),
+				road.y + lengthdir_y(l * road.lane_width, road.direction-90),
+				next_road.x + lengthdir_x(l * road.lane_width, road.direction-90),
+				next_road.y + lengthdir_y(l * road.lane_width, road.direction-90),
+				#0000ff,
+				#0000ff
 			);
 		}
 	

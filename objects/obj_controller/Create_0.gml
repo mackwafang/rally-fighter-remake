@@ -50,7 +50,7 @@ for (var i = 0; i < array_length(participating_vehicles); i++) {
 	if (!car.is_player) {
 		car.can_move = false;
 	}
-	car.horsepower = 40 * global.difficulty;
+	car.horsepower = 30 * global.difficulty;
 	car.ai_behavior.part_of_race = true;	
 	car.ai_behavior.desired_lane = (i % 3);
 	for (var g = 0; g < array_length(car.gear_shift_rpm); g++) {
@@ -61,11 +61,13 @@ car_ranking = [];
 array_copy(car_ranking, 0, participating_vehicles, 0, array_length(participating_vehicles));
 
 if (!global.DEBUG_FREE_CAMERA) {
-	main_camera_size = {
-		width: 640,
-		height: 480,
+	if (global.CAMERA_MODE_3D) {
+		main_camera_size = {width: 640, height: 480,}
 	}
-	main_camera_target = participating_vehicles[1];
+	else {
+		main_camera_size = {width: 480, height: 640,}
+	}
+	main_camera_target = participating_vehicles[0];
 }
 else {
 	main_camera_size = {

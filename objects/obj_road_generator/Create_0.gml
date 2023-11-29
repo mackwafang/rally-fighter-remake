@@ -76,13 +76,13 @@ road_collision_points = []; // calcuate road segments for colision checking
 
 // 3d road render data
 vertex_format_begin();
-vertex_format_add_position_3d();
+if (global.CAMERA_MODE_3D) {vertex_format_add_position_3d();} else {vertex_format_add_position();}
 vertex_format_add_color();
 vertex_format_add_texcoord();
 road_vertex_format = vertex_format_end();
 road_vertex_buffers = vertex_create_buffer();
-
 vertex_begin(road_vertex_buffers, road_vertex_format);
+
 for (var i = 0; i < array_length(road_list) - 1; i++) {
 	// for each road piece
 	var road = road_list[@ i];
@@ -140,18 +140,15 @@ for (var i = 0; i < array_length(road_list) - 1; i++) {
 	
 	road_collision_points[array_length(road_collision_points)] = collision_points;
 	road_points = array_concat(road_points, road_seg_data);
-	print($"{collision_points[0][2]} {left_lanes} {right_lanes}");
-	if (global.CAMERA_MODE_3D) {
-		for (var di = 0; di < array_length(road_seg_data); di++) {
-			var data = road_seg_data[di];
-			var pos = data[0];
-			var uv = data[1];
-			var subimage = data[2];
-			var sprite = data[3];
-			vertex_position_3d(road_vertex_buffers, pos.x, pos.y, 3);
-			vertex_color(road_vertex_buffers, c_white, 1);
-			vertex_texcoord(road_vertex_buffers, uv.x, uv.y);
-		}
+	for (var di = 0; di < array_length(road_seg_data); di++) {
+		var data = road_seg_data[di];
+		var pos = data[0];
+		var uv = data[1];
+		var subimage = data[2];
+		var sprite = data[3];
+		if (global.CAMERA_MODE_3D) {vertex_position_3d(road_vertex_buffers, pos.x, pos.y, 3);} else {vertex_position(road_vertex_buffers, pos.x, pos.y);}
+		vertex_color(road_vertex_buffers, c_white, 1);
+		vertex_texcoord(road_vertex_buffers, uv.x, uv.y);
 	}
 }
 vertex_end(road_vertex_buffers);

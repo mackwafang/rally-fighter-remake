@@ -10,7 +10,7 @@ engine_rpm_max = 10000;	// max rpm
 engine_rpm = 1000;		// engine rpm
 test_rpm = 0;
 velocity = 0;			// car's speed
-max_velocity = 1800;	// car's max speed
+max_velocity = 2100;	// car's max speed
 wheel_radius = 0.34;	// wheel radius in m
 mass = 1500;			// vehicle mass, in kg
 horsepower = 300;		// horsepower
@@ -21,18 +21,22 @@ engine_power = 0;		// throttle position
 transfer_eff = 0.8;		// transfer efficiency
 acceleration = 0;		// acceleration value
 braking_power = 50;		// braking magnetude
+
+air_drag_coef = 0.3;	// air drag coefficient
+drag_area = 1.2;		// cross sectional area
+
 is_respawning = false;	// car is respawning
 engine_sound_interval = 0;
 
 car_id = -1;			// car id
 
 inertia = mass * (wheel_radius * wheel_radius) / 2;		// constant value for car's inertia
-c_drag = 0.5 * 0.3 * 2.2 * AIR_DENSITY;					// constant value for car's air drag
+c_drag = 0.5 * air_drag_coef * drag_area * AIR_DENSITY;					// constant value for car's air drag
 c_rr = 20 * c_drag;										// constant value for car's drag
 
 //gear's ratio
 gear_ratio = [3, 8/3, 2, 4.5/3, 10/8, 11/10];
-diff_ratio = 6.5;
+diff_ratio = 3.5;
 gear_shift_rpm = [
 	[0, 7000],
 	[4000, 7000],
@@ -62,7 +66,7 @@ ai_behavior = {
 	reversed_direction: false,		// negative direction on road look up
 	part_of_race: false,			// part of the ranking race
 	change_lane: function(road_index) {
-		self.desired_lane = irandom(road_index.get_lanes_right());
+		self.desired_lane = irandom(road_index.get_lanes_right()-1);
 	},
 }
 
@@ -128,8 +132,12 @@ is_on_road = function(_x, _y, index) {
 set_on_road = function() {
 	var p_i = last_road_index;
 	while(p_i++ < array_length(obj_road_generator.road_collision_points)-1) {
-		var polygon = obj_road_generator.road_collision_points[max(0, p_i)];
-		if (point_distance(x,y,polygon[0][0], polygon[1][0]) > 256) {continue;}
+		var polygon = obj_road_generator.road_collision_points[p_i];
+		var midpoint = new Point(
+			lerp(polygon[0][0], polygon[0][3], 0.5),
+			lerp(polygon[1][1], polygon[1][2], 0.5)
+		)
+		if (point_distance(x,y,midpoint.x,midpoint.y) > obj_road_generator.lane_width * 10) {continue;}
 		// on road collision
 		on_road = is_on_road(x, y, p_i);
 		if (on_road) {
@@ -181,3 +189,4 @@ on_death = function() {
 on_road_index = set_on_road();					// keep track of which road segment its on 
 
 alarm[0] = 1;
+alarm[1] = 1200;
