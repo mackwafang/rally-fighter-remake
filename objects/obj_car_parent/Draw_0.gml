@@ -1,18 +1,21 @@
 //if (vehicle_type == VEHICLE_TYPE.BIKE) {
 //	draw_sprite_ext(spr_vehicle_shadow, 0, x, y, image_xscale, image_yscale, image_angle, c_white, 0.5);
 //}
-shader_set(shd_sprite_billboard)
-matrix_set(matrix_world, matrix_build(x, y, 0, 0, 0, 0, 1, 1, 1));
-draw_sprite_ext(spr_bike_3d, 0, 0, 0, 0.25, 0.25, -180 + (turn_rate * 5), image_blend, image_alpha);
-matrix_set(matrix_world, matrix_build_identity());
-shader_reset();
+if (global.CAMERA_MODE_3D) {
+	shader_set(shd_sprite_billboard);
+	matrix_set(matrix_world, matrix_build(x, y, 0, 0, 0, 0, 1, 1, 1));
+	draw_sprite_ext(spr_bike_3d, 0, 0, 0, 0.25, 0.25, -180 + (turn_rate * 5), image_blend, image_alpha);
+	matrix_set(matrix_world, matrix_build(x, y, -16, 180, 0, 0, 1, 1, 1));
+	draw_text(0, -16, ai_behavior.desired_lane);
+	matrix_set(matrix_world, matrix_build_identity());
+	shader_reset();
 
-matrix_set(matrix_world, matrix_build(x, y, 0.5, 0, 0, image_angle+90, 1, 1, 1));
-draw_set_alpha(0.5);
-vertex_submit(global.bike_shadow.buffer, pr_trianglestrip, sprite_get_texture(spr_bike_shadow_simple, 0));
-draw_set_alpha(1);
-matrix_set(matrix_world, matrix_build_identity());
-
+	matrix_set(matrix_world, matrix_build(x, y, 0.5, 0, 0, image_angle+90, 1, 1, 1));
+	draw_set_alpha(0.5);
+	vertex_submit(global.bike_shadow.buffer, pr_trianglestrip, sprite_get_texture(spr_bike_shadow_simple, 0));
+	draw_set_alpha(1);
+	matrix_set(matrix_world, matrix_build_identity());
+}
 //draw_sprite_ext(vehicle_detail_index, image_index, x, y, image_xscale, image_yscale, image_angle, c_white, image_alpha);
 
 if (global.DEBUG_CAR) {

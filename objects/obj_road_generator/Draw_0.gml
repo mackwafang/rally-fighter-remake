@@ -22,8 +22,8 @@ else {
 		var sprite = road_points[rpi][3];
 		var texture = sprite_get_texture(sprite, subimage);
 	
-		draw_primitive_begin_texture(pr_trianglestrip, texture);
-		for (var k = rpi; k < rpi+4; k++) {
+		draw_primitive_begin_texture(pr_trianglelist, texture);
+		for (var k = rpi; k < rpi+3; k++) {
 			var coordinate = road_points[k][0];
 			var uv = road_points[k][1];
 		

@@ -62,7 +62,7 @@ ai_behavior = {
 	reversed_direction: false,		// negative direction on road look up
 	part_of_race: false,			// part of the ranking race
 	change_lane: function(road_index) {
-		self.desired_lane = 1+irandom(road_index.get_lanes_right()-1);
+		self.desired_lane = irandom(road_index.get_lanes_right());
 	},
 }
 
@@ -181,4 +181,3 @@ on_death = function() {
 on_road_index = set_on_road();					// keep track of which road segment its on 
 
 alarm[0] = 1;
-alarm[1] = 600;

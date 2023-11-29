@@ -52,6 +52,7 @@ for (var i = 0; i < array_length(participating_vehicles); i++) {
 	}
 	car.horsepower = 40 * global.difficulty;
 	car.ai_behavior.part_of_race = true;	
+	car.ai_behavior.desired_lane = (i % 3);
 	for (var g = 0; g < array_length(car.gear_shift_rpm); g++) {
 		car.gear_shift_rpm[g][1] += (500 * global.difficulty);
 	}

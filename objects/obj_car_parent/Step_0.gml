@@ -6,10 +6,10 @@ var vec_to_road = point_to_line(
 	new Vec2(next_road.x, next_road.y),
 	new Vec2(x, y)
 );
-var dist_to_road = point_distance(x,y,vec_to_road.x,vec_to_road.y);
 dist_along_road = on_road_index.length_to_point + point_distance(on_road_index.x, on_road_index.y, vec_to_road.x, vec_to_road.y);
-vec_to_road.x += lengthdir_x(((-ai_behavior.desired_lane + 0.5) * on_road_index.lane_width), on_road_index.direction+90);
-vec_to_road.y += lengthdir_y(((-ai_behavior.desired_lane + 0.5) * on_road_index.lane_width), on_road_index.direction+90);
+vec_to_road.x += lengthdir_x(((ai_behavior.desired_lane + 0.5) * on_road_index.lane_width), on_road_index.direction-90);
+vec_to_road.y += lengthdir_y(((ai_behavior.desired_lane + 0.5) * on_road_index.lane_width), on_road_index.direction-90);
+var dist_to_road = point_distance(x,y,vec_to_road.x,vec_to_road.y);
 
 if (can_move) {
 	// player moving
@@ -63,7 +63,7 @@ if (can_move) {
 			}
 		
 			// checking other cars
-			var look_ahead_threshold = max(32, velocity / 10);
+			var look_ahead_threshold = 64; //max(32, velocity / 10);
 			var look_ahead_angle = 15;
 			var car_look_ahead = instance_exists(collision_line(x, y, x+lengthdir_x(look_ahead_threshold, image_angle), y+lengthdir_y(look_ahead_threshold, image_angle), obj_car_parent, false, true));
 			var car_look_left = instance_exists(collision_line(x+lengthdir_x(8, image_angle+look_ahead_angle), y+lengthdir_y(8, image_angle+look_ahead_angle), x+lengthdir_x(look_ahead_threshold, image_angle+look_ahead_angle), y+lengthdir_y(look_ahead_threshold, image_angle+look_ahead_angle), obj_car_parent, false, true));

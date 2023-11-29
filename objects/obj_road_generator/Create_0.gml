@@ -6,7 +6,7 @@ primary_count = 100 * global.difficulty;
 road_segments = 20;
 control_points = array_create(primary_count);
 control_points_dist = 2048;
-lane_width = 32;
+lane_width = 64;
 track_length = 0;
 
 var t = current_time;
@@ -17,7 +17,7 @@ var stay_straight = 5;
 control_points[0] = new Point(x,y);
 for (var s = 1; s < primary_count; s++) {
 	if (s > stay_straight) {
-		next_dir += irandom_range(-1,1)*(global.difficulty * 15);
+		next_dir += random_range(-1,1)*(global.difficulty * 15);
 	}
 	control_points[s] = new Point(
 		control_points[s-1].x + (cos(degtorad(next_dir)) * control_points_dist),//((s < stay_straight) ? control_points_dist : irandom_range(control_points_dist/4, control_points_dist))),
@@ -140,7 +140,7 @@ for (var i = 0; i < array_length(road_list) - 1; i++) {
 	
 	road_collision_points[array_length(road_collision_points)] = collision_points;
 	road_points = array_concat(road_points, road_seg_data);
-	
+	print($"{collision_points[0][2]} {left_lanes} {right_lanes}");
 	if (global.CAMERA_MODE_3D) {
 		for (var di = 0; di < array_length(road_seg_data); di++) {
 			var data = road_seg_data[di];
@@ -148,7 +148,6 @@ for (var i = 0; i < array_length(road_list) - 1; i++) {
 			var uv = data[1];
 			var subimage = data[2];
 			var sprite = data[3];
-			
 			vertex_position_3d(road_vertex_buffers, pos.x, pos.y, 3);
 			vertex_color(road_vertex_buffers, c_white, 1);
 			vertex_texcoord(road_vertex_buffers, uv.x, uv.y);
