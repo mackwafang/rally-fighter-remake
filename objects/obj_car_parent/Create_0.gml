@@ -77,7 +77,7 @@ audio_emitter_falloff(engine_sound_emitter, 128, 258, 1);
 
 // misc
 last_road_index = 0;							// last road index was checked for off road
-nav_road_index = find_nearest_road(x, y);		// keep track of which road segment to travel to
+nav_road_index = find_nearest_road(x, y, 0);	// keep track of which road segment to travel to
 image_speed = 0;
 vehicle_type = 0;
 vehicle_detail_index = 0;
@@ -123,21 +123,23 @@ gear_shift = function() {
 }
 
 is_on_road = function(_x, _y, index) {
-	var polygon_x = obj_road_generator.road_collision_points[index][0];
-	var polygon_y = obj_road_generator.road_collision_points[index][1];
+	var polygon_x = obj_road_generator.road_list[index].get_collision_x();
+	var polygon_y = obj_road_generator.road_list[index].get_collision_y();
 	
 	return pnpoly(4, polygon_x, polygon_y, _x, _y);
 }
 
 set_on_road = function() {
 	var p_i = last_road_index;
-	while(p_i++ < array_length(obj_road_generator.road_collision_points)-1) {
-		var polygon = obj_road_generator.road_collision_points[p_i];
+	while(p_i++ < last_road_index + 10) {
+		var road = obj_road_generator.road_list[p_i];
+		var polygon = road.get_collision_points();
+		if (array_length(polygon) == 0) {continue;}
 		var midpoint = new Point(
 			lerp(polygon[0][0], polygon[0][3], 0.5),
 			lerp(polygon[1][1], polygon[1][2], 0.5)
 		)
-		if (point_distance(x,y,midpoint.x,midpoint.y) > obj_road_generator.lane_width * 10) {continue;}
+		if (point_distance(x,y,midpoint.x,midpoint.y) > road.get_lanes() * road.lane_width) {continue;}
 		// on road collision
 		on_road = is_on_road(x, y, p_i);
 		if (on_road) {

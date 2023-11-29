@@ -4,18 +4,18 @@ function dist_on_line(A, B, pos) {
 	/// @param {Vec2}		a point a
 	/// @param {Vec2}		b point b
 	/// @param {Vec2}		pos	position to check
-	var a = new Vec2(
+	var a = new Point(
 		B.x - A.x,
-		B.y - A.y,
+		B.y - A.y
 	);
-	var b = new Vec2(
+	var b = new Point(
 		pos.x - A.x,
-		pos.y - A.y,
+		pos.y - A.y
 	);
 	var line_dir = point_direction(A.x, A.y, B.x, B.y);
-	var length_a = a.length();
-	var length_b = b.length();
-	var a_hat = new Vec2(
+	var length_a = sqrt((a.x*a.x) + (a.y*a.y));
+	var length_b = sqrt((b.x*b.x) + (b.y*b.y));
+	var a_hat = new Point(
 		a.x / length_a,
 		a.y / length_a
 	);

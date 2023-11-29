@@ -1,15 +1,18 @@
 // road fidning
-nav_road_index = find_nearest_road(x + lengthdir_x(128, image_angle), y + lengthdir_y(128, image_angle), , last_road_index);
+nav_road_index = find_nearest_road(x + lengthdir_x(128, image_angle), y + lengthdir_y(128, image_angle), last_road_index);
 var next_road = obj_road_generator.road_list[nav_road_index.get_id()+4];
 var vec_to_road = point_to_line(
-	new Vec2(on_road_index.x, on_road_index.y),
-	new Vec2(next_road.x, next_road.y),
-	new Vec2(x, y)
+	new Point(on_road_index.x, on_road_index.y),
+	new Point(next_road.x, next_road.y),
+	new Point(x, y)
 );
 dist_along_road = on_road_index.length_to_point + point_distance(on_road_index.x, on_road_index.y, vec_to_road.x, vec_to_road.y);
 vec_to_road.x += lengthdir_x(((ai_behavior.desired_lane + 0.5) * on_road_index.lane_width), on_road_index.direction-90);
 vec_to_road.y += lengthdir_y(((ai_behavior.desired_lane + 0.5) * on_road_index.lane_width), on_road_index.direction-90);
 var dist_to_road = point_distance(x,y,vec_to_road.x,vec_to_road.y);
+if (dist_to_road > 1024) {
+	hp = 0;
+}
 
 if (can_move) {
 	// player moving
@@ -66,24 +69,22 @@ if (can_move) {
 		
 			// checking other cars
 			var look_ahead_threshold = 64; //max(32, velocity / 10);
-			var look_ahead_angle = 15;
+			var look_ahead_angle = 10;
 			var car_look_ahead = instance_exists(collision_line(x, y, x+lengthdir_x(look_ahead_threshold, image_angle), y+lengthdir_y(look_ahead_threshold, image_angle), obj_car_parent, false, true));
 			var car_look_left = instance_exists(collision_line(x+lengthdir_x(8, image_angle+look_ahead_angle), y+lengthdir_y(8, image_angle+look_ahead_angle), x+lengthdir_x(look_ahead_threshold, image_angle+look_ahead_angle), y+lengthdir_y(look_ahead_threshold, image_angle+look_ahead_angle), obj_car_parent, false, true));
 			var car_look_right = instance_exists(collision_line(x+lengthdir_x(8, image_angle-look_ahead_angle), y+lengthdir_y(8, image_angle-look_ahead_angle), x+lengthdir_x(look_ahead_threshold, image_angle-look_ahead_angle), y+lengthdir_y(look_ahead_threshold, image_angle-look_ahead_angle), obj_car_parent, false, true));
-			var is_off_road_left = !is_on_road(x+lengthdir_x(look_ahead_threshold/4, image_angle+90), y+lengthdir_y(look_ahead_threshold/4, image_angle+90), last_road_index) ? 1 : 0;
-			var is_off_road_right = !is_on_road(x+lengthdir_x(look_ahead_threshold/4, image_angle-90), y+lengthdir_y(look_ahead_threshold/4, image_angle-90), last_road_index) ? 1 : 0;
+			//var is_off_road_left = !is_on_road(x+lengthdir_x(look_ahead_threshold/4, image_angle+90), y+lengthdir_y(look_ahead_threshold/4, image_angle+90), last_road_index) ? 1 : 0;
+			//var is_off_road_right = !is_on_road(x+lengthdir_x(look_ahead_threshold/4, image_angle-90), y+lengthdir_y(look_ahead_threshold/4, image_angle-90), last_road_index) ? 1 : 0;
 			
-			if (!is_player) {
-				var evade_turn_rate = 0.1;
-				if (car_look_left) {turn_rate -= evade_turn_rate;}
-				if (car_look_right) {turn_rate += evade_turn_rate;}
-				if (car_look_ahead) {
-					accelerating = false;
-					if (!car_look_left) {turn_rate += evade_turn_rate;}
-					else if (!car_look_right) {turn_rate -= evade_turn_rate;}
-				}
-				// turn_rate += -(is_off_road_left / 10) + (is_off_road_right / 10);
+			var evade_turn_rate = 0.05;
+			if (car_look_left) {turn_rate -= evade_turn_rate;}
+			if (car_look_right) {turn_rate += evade_turn_rate;}
+			if (car_look_ahead) {
+				accelerating = false;
+				if (!car_look_left) {turn_rate += evade_turn_rate;}
+				else if (!car_look_right) {turn_rate -= evade_turn_rate;}
 			}
+			// turn_rate += -(is_off_road_left / 10) + (is_off_road_right / 10);
 			#endregion
 		}
 	}

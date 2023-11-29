@@ -19,8 +19,8 @@ if (global.DEBUG_ROAD_DRAW_CONTROL_POINTS) {
 
 if (global.DEBUG_ROAD_DRAW_COLLISION_POINTS) {
 	for (var p = 0; p < array_length(road_list) - 1; p++) {
-		var cx = road_collision_points[p][0];
-		var cy = road_collision_points[p][1];
+		var cx = road_list[p].get_collision_x();
+		var cy = road_list[p].get_collision_y();
 		for (var i = 0; i <= 4; i++) {
 			draw_line_color(
 				cx[i % 4],

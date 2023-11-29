@@ -8,6 +8,7 @@ function RoadNode(_Vec) constructor {
 	lanes = [1, 0, 1];		// lanes [left, median , right]
 	lane_width = 0;			// lane width in pixels
 	length_to_point = 0;	// distance from the begining to this point
+	collision_points = [];	// list of collisions for this road node
 	_id = -1;
 	
 	toString = function() {
@@ -44,7 +45,7 @@ function RoadNode(_Vec) constructor {
 	}
 	
 	get_lane_width = function() {
-		/// @function			get_lanes_left()
+		/// @function			get_lane_width()
 		/// @description		Return lane width in pixel
 		/// @return {real}
 		return lane_width
@@ -65,12 +66,32 @@ function RoadNode(_Vec) constructor {
 	}
 	
 	get_lanes_middle = function() {
-		/// @function			get_lanes_right()
+		/// @function			get_lanes_middle()
 		/// @description		Return the number of median lanes
 		/// @return {real}
 		return lanes[1];
 	}
 	
+	get_collision_x = function() {
+		/// @function			get_collision_x()
+		/// @description		Return the x coordinates for collision
+		/// @return {real}
+		return collision_points[0];
+	}
+	
+	get_collision_y = function() {
+		/// @function			get_collision_y()
+		/// @description		Return the y coordinates for collision
+		/// @return {real}
+		return collision_points[1];
+	}
+	
+	get_collision_points = function() {
+		/// @function			get_collision_points()
+		/// @description		Return the coordinates for collision
+		/// @return {real}
+		return collision_points;
+	}
 }
 
 function cutmull_rom(P, t) {

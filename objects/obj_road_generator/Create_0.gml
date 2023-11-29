@@ -3,7 +3,7 @@ randomize();
 depth = 1000;
 
 primary_count = 100 * global.difficulty;
-road_segments = 20;
+road_segments = 10;
 control_points = array_create(primary_count);
 control_points_dist = 2048;
 lane_width = 64;
@@ -72,7 +72,6 @@ for (var i = 0; i < array_length(road_list)-1; i++) {
 }
 
 road_points = []; // precalculate road polygons
-road_collision_points = []; // calcuate road segments for colision checking
 
 // 3d road render data
 vertex_format_begin();
@@ -137,8 +136,8 @@ for (var i = 0; i < array_length(road_list) - 1; i++) {
 		[new Point(next_road.x, next_road.y), new Point(right_uv[2], right_uv[1]), right_subimage, right_lane_sprite],
 		[new Point(collision_points[0][2], collision_points[1][2]), new Point(right_uv[2], right_uv[3]), right_subimage, right_lane_sprite],
 	]
+	road.collision_points = collision_points;
 	
-	road_collision_points[array_length(road_collision_points)] = collision_points;
 	road_points = array_concat(road_points, road_seg_data);
 	for (var di = 0; di < array_length(road_seg_data); di++) {
 		var data = road_seg_data[di];
@@ -153,6 +152,8 @@ for (var i = 0; i < array_length(road_list) - 1; i++) {
 }
 vertex_end(road_vertex_buffers);
 vertex_freeze(road_vertex_buffers);
+
+global.road_list_length = array_length(road_list);
 
 obj_controller.x = road_list[0].x;
 obj_controller.y = road_list[0].y;
