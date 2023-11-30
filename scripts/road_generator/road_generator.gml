@@ -8,7 +8,7 @@ function RoadNode(_Vec) constructor {
 	lanes = [1, 0, 1];		// lanes [left, median , right]
 	lane_width = 0;			// lane width in pixels
 	length_to_point = 0;	// distance from the begining to this point
-	collision_points = [];	// list of collisions for this road node
+	collision_points = [[0, 0, 0, 0], [1,1,1,1]];	// list of collisions for this road node
 	_id = -1;
 	
 	toString = function() {
@@ -48,7 +48,7 @@ function RoadNode(_Vec) constructor {
 		/// @function			get_lane_width()
 		/// @description		Return lane width in pixel
 		/// @return {real}
-		return lane_width
+		return lane_width;
 	}
 	
 	get_lanes_left = function() {

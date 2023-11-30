@@ -66,6 +66,7 @@ ai_behavior = {
 	reversed_direction: false,		// negative direction on road look up
 	part_of_race: false,			// part of the ranking race
 	change_lane: function(road_index) {
+		/// @function	change_lane(road);
 		self.desired_lane = irandom(road_index.get_lanes_right()-1);
 	},
 }
@@ -76,12 +77,16 @@ audio_falloff_set_model(audio_falloff_exponent_distance);
 audio_emitter_falloff(engine_sound_emitter, 128, 258, 1);
 
 // misc
-last_road_index = 0;							// last road index was checked for off road
-nav_road_index = find_nearest_road(x, y, 0);	// keep track of which road segment to travel to
+last_road_index = 0;					// last road index was checked for off road
+nav_road = find_nearest_road(x, y, 0);	// keep track of which road segment to travel to
 image_speed = 0;
 vehicle_type = 0;
 vehicle_detail_index = 0;
-vehicle_color = 0;
+vehicle_color = {
+	primary: 0,
+	secondary: 0,
+	tetriary: 0,
+};
 dist_along_road = 0;							// how far along the road it is
 race_rank = 0;
 
@@ -123,6 +128,7 @@ gear_shift = function() {
 }
 
 is_on_road = function(_x, _y, index) {
+	/// @function			is_on_road(x, y, index)
 	var polygon_x = obj_road_generator.road_list[index].get_collision_x();
 	var polygon_y = obj_road_generator.road_list[index].get_collision_y();
 	
@@ -130,16 +136,11 @@ is_on_road = function(_x, _y, index) {
 }
 
 set_on_road = function() {
-	var p_i = last_road_index;
-	while(p_i++ < last_road_index + 10) {
+	var p_i = last_road_index-1;
+	while(p_i++ < global.road_list_length-1) {
 		var road = obj_road_generator.road_list[p_i];
 		var polygon = road.get_collision_points();
-		if (array_length(polygon) == 0) {continue;}
-		var midpoint = new Point(
-			lerp(polygon[0][0], polygon[0][3], 0.5),
-			lerp(polygon[1][1], polygon[1][2], 0.5)
-		)
-		if (point_distance(x,y,midpoint.x,midpoint.y) > road.get_lanes() * road.lane_width) {continue;}
+		if (point_distance(x,y,road.x,road.y) > road.get_lanes() * road.lane_width) {continue;}
 		// on road collision
 		on_road = is_on_road(x, y, p_i);
 		if (on_road) {

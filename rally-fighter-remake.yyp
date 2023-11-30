@@ -58,6 +58,7 @@
     {"id":{"name":"init_bike_shadow_buffer","path":"scripts/init_bike_shadow_buffer/init_bike_shadow_buffer.yy",},},
     {"id":{"name":"obj_car_parent","path":"objects/obj_car_parent/obj_car_parent.yy",},},
     {"id":{"name":"spr_health_bar_small","path":"sprites/spr_health_bar_small/spr_health_bar_small.yy",},},
+    {"id":{"name":"spr_bike_3d_detail","path":"sprites/spr_bike_3d_detail/spr_bike_3d_detail.yy",},},
     {"id":{"name":"torque_lookup","path":"scripts/torque_lookup/torque_lookup.yy",},},
     {"id":{"name":"spr_bike_shadow_simple","path":"sprites/spr_bike_shadow_simple/spr_bike_shadow_simple.yy",},},
     {"id":{"name":"obj_player","path":"objects/obj_player/obj_player.yy",},},

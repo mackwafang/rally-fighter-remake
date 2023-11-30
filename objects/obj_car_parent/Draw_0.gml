@@ -4,7 +4,12 @@
 if (global.CAMERA_MODE_3D) {
 	shader_set(shd_sprite_billboard);
 	matrix_set(matrix_world, matrix_build(x, y, 0, 0, 0, 0, 1, 1, 1));
-	draw_sprite_ext(spr_bike_3d, 0, 0, 0, 0.25, 0.25, -180 + (turn_rate * 5), image_blend, image_alpha);
+	draw_sprite_ext(spr_bike_3d, 0, 0, 0, 0.25, 0.25, -180 + (turn_rate * 5), c_white, image_alpha);
+	draw_sprite_ext(spr_bike_3d_detail, 0, 0, 0, 0.25, 0.25, -180 + (turn_rate * 5), vehicle_color.tetriary, image_alpha);
+	draw_sprite_ext(spr_bike_3d_detail, 1, 0, 0, 0.25, 0.25, -180 + (turn_rate * 5), vehicle_color.primary, image_alpha);
+	draw_sprite_ext(spr_bike_3d_detail, 2, 0, 0, 0.25, 0.25, -180 + (turn_rate * 5), vehicle_color.primary, image_alpha);
+	draw_sprite_ext(spr_bike_3d_detail, 3, 0, 0, 0.25, 0.25, -180 + (turn_rate * 5), vehicle_color.secondary, image_alpha);
+	draw_sprite_ext(spr_bike_3d_detail, 4, 0, 0, 0.25, 0.25, -180 + (turn_rate * 5), c_white, image_alpha);
 	matrix_set(matrix_world, matrix_build_identity());
 	shader_reset();
 
@@ -31,7 +36,7 @@ if (global.DEBUG_CAR) {
 	draw_text_transformed_color(x+lengthdir_x(turn_rate * 32, image_angle+90), y+lengthdir_y(turn_rate * 32, image_angle+90),turn_rate,1,1,image_angle-90,c_white,c_white,c_white,c_white,1)
 	
 	
-	if (!is_on_road(x,y,last_road_index)) {
+	if (!on_road) {
 		draw_text_transformed_color(
 			x + lengthdir_x(-16, image_angle+90),
 			y + lengthdir_y(-16, image_angle+90),
