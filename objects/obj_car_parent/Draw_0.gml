@@ -35,7 +35,6 @@ if (global.DEBUG_CAR) {
 	draw_arrow(x, y, x+lengthdir_x(turn_rate * 32, image_angle+90), y+lengthdir_y(turn_rate * 32, image_angle+90), 10);
 	draw_text_transformed_color(x+lengthdir_x(turn_rate * 32, image_angle+90), y+lengthdir_y(turn_rate * 32, image_angle+90),turn_rate,1,1,image_angle-90,c_white,c_white,c_white,c_white,1)
 	
-	
 	if (!on_road) {
 		draw_text_transformed_color(
 			x + lengthdir_x(-16, image_angle+90),
