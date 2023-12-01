@@ -20,5 +20,8 @@ function dist_on_line(A, B, pos) {
 		a.y / length_a
 	);
 	var ba = dot_product(b.x, b.y, a_hat.x, a_hat.y);
+	if (is_nan(ba)) {
+		print("asdf");
+	}
 	return ba;
 }

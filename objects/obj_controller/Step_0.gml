@@ -68,8 +68,8 @@ else {
 // other car spawning
 if (!global.GAMEPLAY_NO_CARS) {
 	var road_at_view_edge = find_nearest_road(
-		main_camera_target.x - (main_camera_size.width/2) + lengthdir_x(2500 * choose(-1,1), main_camera_target.image_angle),
-		main_camera_target.y - (main_camera_size.height/2) + lengthdir_y(2500 * choose(-1,1), main_camera_target.image_angle),
+		main_camera_target.x + lengthdir_x(2000 * choose(-1,1), main_camera_target.image_angle),
+		main_camera_target.y + lengthdir_y(2000 * choose(-1,1), main_camera_target.image_angle),
 		main_camera_target.last_road_index
 	)
 	if (alarm[0] == -1) {

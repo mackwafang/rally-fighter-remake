@@ -2,7 +2,7 @@
 nav_road = find_nearest_road(x + lengthdir_x(128, image_angle), y + lengthdir_y(128, image_angle), last_road_index);
 var next_road = obj_road_generator.road_list[nav_road.get_id()+4];
 var vec_to_road = point_to_line(
-	new Point(on_road_index.x, on_road_index.y),
+	new Point(nav_road.x, nav_road.y),
 	new Point(next_road.x, next_road.y),
 	new Point(x, y)
 );
@@ -143,6 +143,7 @@ velocity += acceleration * (delta_time / 1000000);// * gear_ratio[gear-1];
 
 var wheel_rotation_rate = velocity * 100 / 3600 / wheel_radius;
 engine_rpm = (wheel_rotation_rate * engine_to_wheel_ratio * 60 / (2 * pi)) + 1000;
+
 velocity = clamp(velocity, 0, max_velocity);
 	
 // move car in direction
@@ -171,7 +172,7 @@ if (engine_sound_interval == 0) {
 }
 audio_emitter_position(engine_sound_emitter, x, y, 0);
 
-engine_sound_interval = (engine_sound_interval + 1) % 1;
+engine_sound_interval = (engine_sound_interval + 1) % 2;
 
 // remove non-participating cars when too far away
 if (abs(obj_controller.main_camera_target.dist_along_road - dist_along_road) > 3000) {
