@@ -8,6 +8,7 @@ depth = 10000;
 participating_vehicles = [];
 global.total_participating_vehicles = 12;
 global.difficulty = 2;
+global.gravity_3d = 9.8;
 
 // cam stuff
 if (global.CAMERA_MODE_3D) {
@@ -31,6 +32,7 @@ for (var i = 0; i < global.total_participating_vehicles; i++) {
 	}
 	car.car_id = i+1;
 	car.depth = 10;
+	car.z = -10;
 	participating_vehicles[array_length(participating_vehicles)] = car;
 }
 
@@ -85,5 +87,53 @@ view_set_hport(0, main_camera_size.height);
 window_set_size(main_camera_size.width, main_camera_size.height);
 camera_set_view_size(main_camera, main_camera_size.width, main_camera_size.height);
 surface_resize(application_surface, main_camera_size.width, main_camera_size.height);
+
+vertex_format_begin();
+vertex_format_add_position_3d();
+vertex_format_add_color();
+vertex_format_add_texcoord();
+skybox_vertex_format = vertex_format_end();
+skybox_vertex_buffer = vertex_create_buffer();
+vertex_begin(skybox_vertex_buffer, skybox_vertex_format);
+
+vertex_position_3d_uv(skybox_vertex_buffer, -1000, -1000, -1000, 0, 0);
+vertex_position_3d_uv(skybox_vertex_buffer, 1000, -1000, -1000, 1, 0);
+vertex_position_3d_uv(skybox_vertex_buffer, 1000, 1000, -1000, 1, 1);
+vertex_position_3d_uv(skybox_vertex_buffer, 1000, 1000, -1000, 1, 1);
+vertex_position_3d_uv(skybox_vertex_buffer, -1000, 1000, -1000, 0, 1);
+vertex_position_3d_uv(skybox_vertex_buffer, -1000, -1000, -1000, 0, 0);
+vertex_position_3d_uv(skybox_vertex_buffer, -1000, -1000, 0, 0, 0);
+vertex_position_3d_uv(skybox_vertex_buffer, -1000, 1000, 0, 0, 1);
+vertex_position_3d_uv(skybox_vertex_buffer, 1000, 1000, 0, 1, 1);
+vertex_position_3d_uv(skybox_vertex_buffer, 1000, 1000, 0, 1, 1);
+vertex_position_3d_uv(skybox_vertex_buffer, 1000, -1000, 0, 1, 0);
+vertex_position_3d_uv(skybox_vertex_buffer, -1000, -1000, 0, 0, 0);
+vertex_position_3d_uv(skybox_vertex_buffer, -1000, 1000, 0, 0, 0);
+vertex_position_3d_uv(skybox_vertex_buffer, -1000, 1000, -1000, 0, 1);
+vertex_position_3d_uv(skybox_vertex_buffer, 1000, 1000, -1000, 1, 1);
+vertex_position_3d_uv(skybox_vertex_buffer, 1000, 1000, -1000, 1, 1);
+vertex_position_3d_uv(skybox_vertex_buffer, 1000, 1000, 0, 1, 0);
+vertex_position_3d_uv(skybox_vertex_buffer, -1000, 1000, 0, 0, 0);
+vertex_position_3d_uv(skybox_vertex_buffer, 1000, -1000, 0, 0, 0);
+vertex_position_3d_uv(skybox_vertex_buffer, 1000, -1000, -1000, 0, 1);
+vertex_position_3d_uv(skybox_vertex_buffer, -1000, -1000, -1000, 1, 1);
+vertex_position_3d_uv(skybox_vertex_buffer, -1000, -1000, -1000, 1, 1);
+vertex_position_3d_uv(skybox_vertex_buffer, -1000, -1000, 0, 1, 0);
+vertex_position_3d_uv(skybox_vertex_buffer, 1000, -1000, 0, 0, 0);
+vertex_position_3d_uv(skybox_vertex_buffer, -1000, -1000, 0, 0, 0);
+vertex_position_3d_uv(skybox_vertex_buffer, -1000, -1000, -1000, 0, 1);
+vertex_position_3d_uv(skybox_vertex_buffer, -1000, 1000, -1000, 1, 1);
+vertex_position_3d_uv(skybox_vertex_buffer, -1000, 1000, -1000, 1, 1);
+vertex_position_3d_uv(skybox_vertex_buffer, -1000, 1000, 0, 1, 0);
+vertex_position_3d_uv(skybox_vertex_buffer, -1000, -1000, 0, 0, 0);
+vertex_position_3d_uv(skybox_vertex_buffer, 1000, 1000, 0, 0, 0);
+vertex_position_3d_uv(skybox_vertex_buffer, 1000, 1000, -1000, 0, 1);
+vertex_position_3d_uv(skybox_vertex_buffer, 1000, -1000, -1000, 1, 1);
+vertex_position_3d_uv(skybox_vertex_buffer, 1000, -1000, -1000, 1, 1);
+vertex_position_3d_uv(skybox_vertex_buffer, 1000, -1000, 0, 1, 0);
+vertex_position_3d_uv(skybox_vertex_buffer, 1000, 1000, 0, 0, 0);
+
+vertex_end(skybox_vertex_buffer);
+vertex_freeze(skybox_vertex_buffer);
 
 alarm[0] = 5 * 60; // starting timer

@@ -42,6 +42,8 @@ if (ai_behavior.part_of_race) {
 #endregion
 
 if (obj_controller.main_camera_target.id == id) {
+	draw_text(16, 16, $"{x}, {y}, {z}");
+	draw_text(16, 32, $"{zspeed}");
 	
 	// rpm odometer
 	var odometer_x = 48;

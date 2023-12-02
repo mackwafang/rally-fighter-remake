@@ -45,12 +45,12 @@ if (!global.DEBUG_FREE_CAMERA) {
 		camera_set_view_mat(main_camera, matrix_build_lookat(
 			main_camera_target.x+lengthdir_x(-30, main_camera_target.image_angle), 
 			main_camera_target.y+lengthdir_y(-30, main_camera_target.image_angle), 
-			z, 
+			main_camera_target.z + z, 
 			main_camera_target.x+lengthdir_x(500, main_camera_target.image_angle),
 			main_camera_target.y+lengthdir_y(500, main_camera_target.image_angle),
-			z+120, 0, 0, -1)
+			main_camera_target.z +z+120, 0, 0, -1)
 		);
-		camera_set_proj_mat(main_camera, matrix_build_projection_perspective_fov(-90, room_width/room_height, 1, 2000));
+		camera_set_proj_mat(main_camera, matrix_build_projection_perspective_fov(-90, room_width/room_height, 1, 4500));
 		camera_apply(main_camera);
 		gpu_set_zwriteenable(true);
 	}
@@ -66,7 +66,7 @@ else {
 	camera_set_view_angle(main_camera, cam_angle);
 }
 // other car spawning
-if (!global.GAMEPLAY_NO_CARS) {
+if (global.GAMEPLAY_CARS) {
 	var road_at_view_edge = find_nearest_road(
 		main_camera_target.x + lengthdir_x(2000 * choose(-1,1), main_camera_target.image_angle),
 		main_camera_target.y + lengthdir_y(2000 * choose(-1,1), main_camera_target.image_angle),

@@ -1,4 +1,5 @@
 depth = -10;
+z = 0;
 
 is_player = false;		// does car belong to player?
 can_move = true;		// can car be affected by movement or collision?
@@ -21,6 +22,7 @@ engine_power = 0;		// throttle position
 transfer_eff = 0.8;		// transfer efficiency
 acceleration = 0;		// acceleration value
 braking_power = 50;		// braking magnetude
+zspeed = 0;				// vertical speed
 
 air_drag_coef = 0.3;	// air drag coefficient
 drag_area = 1.2;		// cross sectional area

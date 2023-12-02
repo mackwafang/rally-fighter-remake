@@ -1,15 +1,20 @@
-function RoadNode(_Vec) constructor {
-	x = _Vec.x;			// x position
-	y = _Vec.y;			// y position
-	z = _Vec.z;			// z position
-	direction = 0;			// road's direction to the next segment
-	length = 0;				// length of segment
-	ideal_throttle = 0;		// ideal throttle for ai
-	lanes = [1, 0, 1];		// lanes [left, median , right]
-	lane_width = 0;			// lane width in pixels
-	length_to_point = 0;	// distance from the begining to this point
+function RoadNode(_Point) constructor {
+	/// @function		RoadNode(_Point)
+	/// @param			_Point a Point3D Object
+	x = _Point.x;				// x position
+	y = _Point.y;				// y position
+	z = _Point.z;				// z position
+	direction = 0;				// road's direction to the next segment
+	length = 0;					// length of segment
+	ideal_throttle = 0;			// ideal throttle for ai
+	lanes = [1, 0, 1];			// lanes [left, median , right]
+	lane_width = 0;				// lane width in pixels
+	length_to_point = 0;		// distance from the begining to this point
 	collision_points = [[0, 0, 0, 0], [1,1,1,1]];	// list of collisions for this road node
+	shoulder = [true, true];	// shoulder for rendering for [left, right]
 	_id = -1;
+	next_road = -1;
+	elevation = 0;				// segment elevation
 	
 	toString = function() {
 		return $"({x}, {y}, {z}), direction: {direction}, Lanes: {lanes}\n";
@@ -108,8 +113,13 @@ function cutmull_rom(P, t) {
 	py += ((2*P[0].y) - (5*P[1].y) + (4*P[2].y) - P[3].y) * tt;
 	py += (-P[0].y + (3*P[1].y) - (3*P[2].y) + P[3].y) * ttt;
 	
+	var pz = P[1].z * 2;
+	pz += (-P[0].z + P[2].z) * t;
+	pz += ((2*P[0].z) - (5*P[1].z) + (4*P[2].z) - P[3].z) * tt;
+	pz += (-P[0].z + (3*P[1].z) - (3*P[2].z) + P[3].z) * ttt;
 	
-	return new Point3D(px / 2, py / 2, 0);
+	
+	return new Point3D(px / 2, py / 2, pz/2);
 }
 
 function generate_roads(control_points, _steps) {

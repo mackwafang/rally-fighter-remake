@@ -31,8 +31,8 @@ if (can_move) {
 		var angle_diff = angle_difference(nav_road.direction, image_angle);
 		if (is_player) {
 			engine_power += 0.1;
-			if (!global.DEBUG_CAR) {
-					turn_rate += (angle_diff / 120); // moving along curved road
+			if (global.GAMEPLAY_TURN_GUIDE) {
+				turn_rate += (angle_diff / 120); // moving along curved road
 			}
 		}
 		else {
@@ -134,6 +134,28 @@ if (velocity <= 0) {
 	
 var drive_force = (drive_torque / wheel_radius) + f_drag + f_rr + f_brake + f_surface + f_turn - push_vector.x;
 
+
+#region Vertical ground contact
+var zlerp = lerp(on_road_index.z, on_road_index.next_road.z, (dist_along_road - on_road_index.length_to_point) / on_road_index.length);
+
+if (z >= zlerp) {
+	if (zspeed > 0) {
+		//z -= zspeed/3;
+		//zspeed = -zspeed/3;
+	}
+	drive_force = drive_force * cos(degtorad(on_road_index.elevation));
+	//zspeed -= sin(degtorad(on_road_index.elevation)) * velocity / 60;
+}
+else {
+	// FREE FALLIN
+	zspeed += global.gravity_3d / 60;
+	z += zspeed;
+}
+
+z = clamp(z, -500, zlerp);
+if (z > on_road_index.z + 50) {hp = 0;}
+#endregion
+
 push_vector.x = max(0, push_vector.x - abs(drive_force));
 push_vector.y = max(0, push_vector.y * 0.96);
 
@@ -188,6 +210,8 @@ if (abs(obj_controller.main_camera_target.dist_along_road - dist_along_road) > 3
 		}
 	}
 }
+
+
 //check alive
 if (hp <= 0) {
 	on_death();
