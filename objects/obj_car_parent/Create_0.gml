@@ -1,5 +1,6 @@
 depth = -10;
 z = 0;
+zlerp = 0;
 
 is_player = false;		// does car belong to player?
 can_move = true;		// can car be affected by movement or collision?
@@ -22,7 +23,7 @@ engine_power = 0;		// throttle position
 transfer_eff = 0.8;		// transfer efficiency
 acceleration = 0;		// acceleration value
 braking_power = 50;		// braking magnetude
-zspeed = 0;				// vertical speed
+zspeed = 0;				// vertical 
 
 air_drag_coef = 0.3;	// air drag coefficient
 drag_area = 1.2;		// cross sectional area
@@ -56,7 +57,9 @@ turning = 0;				// flag to ceck if car is turning, 1 for left and 2 for right, 0
 push_vector = new Vec2()	// vector for collision 
 
 // surface check
-on_road = false;
+on_road = false				// check if on road horizontally
+vertical_on_road = true;	// check if on road vertically
+on_road_index = 0;
 
 // visual
 odometer_rpm = 0;

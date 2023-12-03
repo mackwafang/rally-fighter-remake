@@ -10,6 +10,9 @@ if (global.CAMERA_MODE_3D) {
 	draw_sprite_ext(spr_bike_3d_detail, 2, 0, 0, 0.25, 0.25, -180 + (turn_rate * 5), vehicle_color.secondary, image_alpha);
 	draw_sprite_ext(spr_bike_3d_detail, 3, 0, 0, 0.25, 0.25, -180 + (turn_rate * 5), vehicle_color.tetriary, image_alpha);
 	draw_sprite_ext(spr_bike_3d_detail, 4, 0, 0, 0.25, 0.25, -180 + (turn_rate * 5), c_white, image_alpha);
+	if (zspeed > 0) {
+		draw_text(0, 24, "^");
+	}
 	matrix_set(matrix_world, matrix_build_identity());
 	shader_reset();
 

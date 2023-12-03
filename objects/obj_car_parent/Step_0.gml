@@ -9,7 +9,7 @@ var vec_to_road = point_to_line(
 dist_along_road = on_road_index.length_to_point + point_distance(on_road_index.x, on_road_index.y, vec_to_road.x, vec_to_road.y);
 vec_to_road.x += lengthdir_x(((ai_behavior.desired_lane + 0.5) * on_road_index.lane_width), on_road_index.direction-90);
 vec_to_road.y += lengthdir_y(((ai_behavior.desired_lane + 0.5) * on_road_index.lane_width), on_road_index.direction-90);
-var dist_to_road = point_distance(x,y,vec_to_road.x,vec_to_road.y);
+var dist_to_road = point_distance(x,y,nav_road.x,nav_road.y);
 if (dist_to_road > 1024) {
 	hp = 0;
 }
@@ -134,28 +134,6 @@ if (velocity <= 0) {
 	
 var drive_force = (drive_torque / wheel_radius) + f_drag + f_rr + f_brake + f_surface + f_turn - push_vector.x;
 
-
-#region Vertical ground contact
-var zlerp = lerp(on_road_index.z, on_road_index.next_road.z, (dist_along_road - on_road_index.length_to_point) / on_road_index.length);
-
-if (z >= zlerp) {
-	if (zspeed > 0) {
-		//z -= zspeed/3;
-		//zspeed = -zspeed/3;
-	}
-	drive_force = drive_force * cos(degtorad(on_road_index.elevation));
-	//zspeed -= sin(degtorad(on_road_index.elevation)) * velocity / 60;
-}
-else {
-	// FREE FALLIN
-	zspeed += global.gravity_3d / 60;
-	z += zspeed;
-}
-
-z = clamp(z, -500, zlerp);
-if (z > on_road_index.z + 50) {hp = 0;}
-#endregion
-
 push_vector.x = max(0, push_vector.x - abs(drive_force));
 push_vector.y = max(0, push_vector.y * 0.96);
 
@@ -176,6 +154,7 @@ if (!is_respawning) {
 	direction += turn_rate;
 	x += cos(degtorad(direction)) * velocity / 60;
 	y -= sin(degtorad(direction)) * velocity / 60;
+	// if (vertical_on_road) {z -= tan(degtorad(on_road_index.elevation)) * velocity / 60;}
 	image_angle = direction;
 }
 	

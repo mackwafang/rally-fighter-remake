@@ -80,7 +80,7 @@ if (global.GAMEPLAY_CARS) {
 			var car = instance_create_layer(spawn_x, spawn_y, "Instances", obj_car, {
 				image_angle: road_at_view_edge.direction,
 			});
-		
+			car.z = road_at_view_edge.z;
 			car.rpm = 4000;
 			car.max_velocity = 500;
 			car.last_road_index = road_at_view_edge._id;
