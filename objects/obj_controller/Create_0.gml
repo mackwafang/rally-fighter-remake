@@ -1,7 +1,7 @@
 cam_move_speed = 16;
 cam_zoom = 1;
 cam_angle = 0;
-z = -60;
+z = -40;
 
 depth = 10000;
 

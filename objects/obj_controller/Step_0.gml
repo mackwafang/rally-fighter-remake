@@ -48,9 +48,9 @@ if (!global.DEBUG_FREE_CAMERA) {
 			main_camera_target.z + z, 
 			main_camera_target.x+lengthdir_x(500, main_camera_target.image_angle),
 			main_camera_target.y+lengthdir_y(500, main_camera_target.image_angle),
-			main_camera_target.z +z+120, 0, 0, -1)
+			main_camera_target.z +z+120, 0, 0, 1)
 		);
-		camera_set_proj_mat(main_camera, matrix_build_projection_perspective_fov(-90, room_width/room_height, 1, 4500));
+		camera_set_proj_mat(main_camera, matrix_build_projection_perspective_fov(90, room_width/room_height, 1, 4500));
 		camera_apply(main_camera);
 		gpu_set_zwriteenable(true);
 	}

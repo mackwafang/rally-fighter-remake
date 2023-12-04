@@ -201,6 +201,26 @@ for (var i = 0; i < array_length(road_list) - 1; i++) {
 		vertex_color(road_vertex_buffers, c_white, 1);
 		vertex_texcoord(road_vertex_buffers, uv.x, uv.y);
 	}
+	
+	//create trees
+	for (var tid = 0; tid < irandom(5); tid++) {
+		var side = choose(0, 2);
+		var x_range = [
+			collision_points[0][0 + side],
+			collision_points[0][1 + side],
+		];
+		var y_range = [
+			collision_points[1][3 - side],
+			collision_points[1][2 - side],
+		];
+		var tree_obj = instance_create_layer(
+			random_range(x_range[0], x_range[1]),
+			random_range(y_range[0], y_range[1]),
+			"Instances",
+			obj_tree
+		);
+		tree_obj.z = lerp(road.z, next_road.z, 0);
+	}
 }
 vertex_end(road_vertex_buffers);
 vertex_freeze(road_vertex_buffers);
