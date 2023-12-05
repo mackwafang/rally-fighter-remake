@@ -7,7 +7,7 @@ varying vec4 v_vColour;
 
 void main()
 {
-    vec4 object_space_pos = vec4( in_Position, 1.0);
+    vec4 object_space_pos = vec4( in_Position, 1);
 	mat4 world_view = gm_Matrices[MATRIX_WORLD_VIEW];
 	
 	world_view[0][0] = 1.0;
