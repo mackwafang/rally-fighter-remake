@@ -43,8 +43,8 @@ if (!global.DEBUG_FREE_CAMERA) {
 	else {
 		gpu_set_zwriteenable(false);
 		camera_set_view_mat(main_camera, matrix_build_lookat(
-			main_camera_target.x+lengthdir_x(-30, main_camera_target.image_angle), 
-			main_camera_target.y+lengthdir_y(-30, main_camera_target.image_angle), 
+			main_camera_target.x+lengthdir_x(-60, main_camera_target.image_angle), 
+			main_camera_target.y+lengthdir_y(-60, main_camera_target.image_angle), 
 			main_camera_target.z + z, 
 			main_camera_target.x+lengthdir_x(500, main_camera_target.image_angle),
 			main_camera_target.y+lengthdir_y(500, main_camera_target.image_angle),
@@ -70,7 +70,7 @@ if (global.GAMEPLAY_CARS) {
 	var road_at_view_edge = find_nearest_road(
 		main_camera_target.x + lengthdir_x(2000 * choose(-1,1), main_camera_target.image_angle),
 		main_camera_target.y + lengthdir_y(2000 * choose(-1,1), main_camera_target.image_angle),
-		main_camera_target.last_road_index
+		main_camera_target.on_road_index
 	)
 	if (alarm[0] == -1) {
 		if (irandom(100) == 1) {
@@ -80,17 +80,16 @@ if (global.GAMEPLAY_CARS) {
 			var car = instance_create_layer(spawn_x, spawn_y, "Instances", obj_car, {
 				image_angle: road_at_view_edge.direction,
 			});
-			car.z = road_at_view_edge.z;
+			with (car) {
+				event_perform(ev_create, 0);
+			}
 			car.rpm = 4000;
-			car.max_velocity = 500;
+			car.max_velocity = 1200;
 			car.last_road_index = road_at_view_edge._id;
 			car.nav_road_index = road_at_view_edge;
+			car.on_road_index = road_at_view_edge;
 			car.max_gear = 3;
-			car.gear_shift_rpm = [
-				[0, 8000],
-				[3000, 7000],
-				[3500, 6000],
-			];
+			car.z = main_camera_target.z;
 		}
 	}
 }

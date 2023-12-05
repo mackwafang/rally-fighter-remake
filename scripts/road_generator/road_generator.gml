@@ -14,7 +14,7 @@ function RoadNode(_Point) constructor {
 	shoulder = [true, true];	// shoulder for rendering for [left, right]
 	_id = -1;
 	next_road = -1;
-	elevation = 0;				// segment elevation
+	elevation = 0;				// segment elevation in rad
 	
 	toString = function() {
 		return $"({x}, {y}, {z}), direction: {direction}, Lanes: {lanes}\n";
@@ -96,6 +96,13 @@ function RoadNode(_Point) constructor {
 		/// @description		Return the coordinates for collision
 		/// @return {real}
 		return collision_points;
+	}
+	
+	get_zdiff = function() {
+		/// @function			get_ziff()
+		/// @description		Return the difference in z height between this road and the next;
+		/// @return {real}
+		return next_road.z - z;
 	}
 }
 

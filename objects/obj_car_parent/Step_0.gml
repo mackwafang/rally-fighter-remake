@@ -132,7 +132,7 @@ if (velocity <= 0) {
 	f_surface = 0;
 }	
 	
-var drive_force = (drive_torque / wheel_radius) + f_drag + f_rr + f_brake + f_surface + f_turn - push_vector.x;
+drive_force = (drive_torque / wheel_radius) + f_drag + f_rr + f_brake + f_surface + f_turn - push_vector.x;
 
 push_vector.x = max(0, push_vector.x - abs(drive_force));
 push_vector.y = max(0, push_vector.y * 0.96);
@@ -145,18 +145,8 @@ var wheel_rotation_rate = velocity * 100 / 3600 / wheel_radius;
 engine_rpm = (wheel_rotation_rate * engine_to_wheel_ratio * 60 / (2 * pi)) + 1000;
 
 velocity = clamp(velocity, 0, max_velocity);
-	
-// move car in direction
-if (!is_respawning) {
-	turn_rate += -turn_rate * 0.1;
-	turn_rate = clamp(turn_rate, -4, 4);
-	
-	direction += turn_rate;
-	x += cos(degtorad(direction)) * velocity / 60;
-	y -= sin(degtorad(direction)) * velocity / 60;
-	// if (vertical_on_road) {z -= tan(degtorad(on_road_index.elevation)) * velocity / 60;}
-	image_angle = direction;
-}
+
+
 	
 gear_shift(); // auto gear shift
 engine_rpm = clamp(engine_rpm, 1000, engine_rpm_max);

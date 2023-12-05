@@ -19,8 +19,8 @@ var stay_straight = 5;
 control_points[0] = new Point3D(x, y, 0);
 for (var s = 1; s < primary_count; s++) {
 	if (s > stay_straight) {
-		next_dir += random_range(-1,1)*(global.difficulty * 10);
-		next_elevation = irandom(500) * ((s % 2) * 2 - 1);
+		next_dir += random_range(-1,1)*(global.difficulty * 15);
+		next_elevation = irandom(600) * choose(-1,0,1);
 	}
 	control_points[s] = new Point3D(
 		control_points[s-1].x + (cos(degtorad(next_dir)) * control_points_dist),//((s < stay_straight) ? control_points_dist : irandom_range(control_points_dist/4, control_points_dist))),
@@ -50,9 +50,6 @@ for (var i = 0; i < array_length(road_list)-1; i++) {
 	}
 	road._id = i;
 	road.lane_width = lane_width;
-	if (i < 20) {
-		road.z = -(i * 20);
-	}
 	road_next.length_to_point = road.length_to_point + road.length;
 	track_length += road.length;
 	
@@ -83,7 +80,7 @@ for (var i = 0; i < array_length(road_list)-1; i++) {
 	var road = road_list[@i];
 	var road_next = road_list[@i+1];
 	road.next_road = road_next;
-	road.elevation = radtodeg(arctan((road.z - road_next.z) / road.length));
+	road.elevation = arctan((road.z - road_next.z) / road.length);
 }
 
 road_points = []; // precalculate road polygons
@@ -134,15 +131,16 @@ for (var i = 0; i < array_length(road_list) - 1; i++) {
 	var shoulder_uv = sprite_get_uvs(spr_road_shoulder, 0);
 	var grass_uv = sprite_get_uvs(spr_grass, 0);
 	
+	#region Road Render Polygons
 	var road_seg_data = [
 		//left grass
 		[new Point3D(collision_points[0][0], collision_points[1][0], road.z+1), new Point(grass_uv[0], grass_uv[1])],
-		[new Point3D(road.x+lengthdir_x(beyond_shoulder_range, road.direction+90), road.y+lengthdir_y(beyond_shoulder_range, road.direction+90), 0), new Point(grass_uv[0], grass_uv[3])],
+		[new Point3D(road.x+lengthdir_x(beyond_shoulder_range, road.direction+90), road.y+lengthdir_y(beyond_shoulder_range, road.direction+90), road.z), new Point(grass_uv[0], grass_uv[3])],
 		[new Point3D(collision_points[0][1], collision_points[1][1], next_road.z+1), new Point(grass_uv[2], grass_uv[1])],
 		
 		[new Point3D(collision_points[0][1], collision_points[1][1], next_road.z+1), new Point(grass_uv[2], grass_uv[1])],
-		[new Point3D(road.x+lengthdir_x(beyond_shoulder_range, road.direction+90), road.y+lengthdir_y(beyond_shoulder_range, road.direction+90), 0), new Point(grass_uv[0], grass_uv[3])],
-		[new Point3D(next_road.x+lengthdir_x(beyond_shoulder_range, next_road.direction+90), next_road.y+lengthdir_y(beyond_shoulder_range, next_road.direction+90), 0), new Point(grass_uv[2], grass_uv[3])],
+		[new Point3D(road.x+lengthdir_x(beyond_shoulder_range, road.direction+90), road.y+lengthdir_y(beyond_shoulder_range, road.direction+90), road.z), new Point(grass_uv[0], grass_uv[3])],
+		[new Point3D(next_road.x+lengthdir_x(beyond_shoulder_range, next_road.direction+90), next_road.y+lengthdir_y(beyond_shoulder_range, next_road.direction+90), next_road.z), new Point(grass_uv[2], grass_uv[3])],
 	
 		//left shoulder 
 		[new Point3D(collision_points[0][0], collision_points[1][0], road.z), new Point(shoulder_uv[0], shoulder_uv[1])],
@@ -183,13 +181,15 @@ for (var i = 0; i < array_length(road_list) - 1; i++) {
 		
 		// right grass
 		[new Point3D(collision_points[0][2], collision_points[1][2], next_road.z+1), new Point(grass_uv[0], grass_uv[1])],
-		[new Point3D(road.x+lengthdir_x(beyond_shoulder_range, road.direction-90), road.y+lengthdir_y(beyond_shoulder_range, road.direction-90), 0), new Point(grass_uv[0], grass_uv[3])],
+		[new Point3D(road.x+lengthdir_x(beyond_shoulder_range, road.direction-90), road.y+lengthdir_y(beyond_shoulder_range, road.direction-90), road.z), new Point(grass_uv[0], grass_uv[3])],
 		[new Point3D(collision_points[0][3], collision_points[1][3], road.z+1), new Point(grass_uv[2], grass_uv[1])],
 		
 		[new Point3D(collision_points[0][2], collision_points[1][2], next_road.z+1), new Point(grass_uv[2], grass_uv[1])],
-		[new Point3D(next_road.x+lengthdir_x(beyond_shoulder_range, next_road.direction-90), next_road.y+lengthdir_y(beyond_shoulder_range, next_road.direction-90), 0), new Point(grass_uv[2], grass_uv[3])],
-		[new Point3D(road.x+lengthdir_x(beyond_shoulder_range, road.direction-90), road.y+lengthdir_y(beyond_shoulder_range, road.direction-90), 0), new Point(grass_uv[0], grass_uv[3])],
+		[new Point3D(next_road.x+lengthdir_x(beyond_shoulder_range, next_road.direction-90), next_road.y+lengthdir_y(beyond_shoulder_range, next_road.direction-90), next_road.z), new Point(grass_uv[2], grass_uv[3])],
+		[new Point3D(road.x+lengthdir_x(beyond_shoulder_range, road.direction-90), road.y+lengthdir_y(beyond_shoulder_range, road.direction-90), road.z), new Point(grass_uv[0], grass_uv[3])],
 	]
+	#endregion
+	
 	road.collision_points = collision_points;
 	
 	road_points = array_concat(road_points, road_seg_data);
@@ -204,22 +204,17 @@ for (var i = 0; i < array_length(road_list) - 1; i++) {
 	
 	//create trees
 	for (var tid = 0; tid < irandom(5); tid++) {
-		var side = choose(0, 2);
-		var x_range = [
-			collision_points[0][0 + side],
-			collision_points[0][1 + side],
-		];
-		var y_range = [
-			collision_points[1][3 - side],
-			collision_points[1][2 - side],
-		];
+		var begin_length = choose(
+			lane_width*(left_lanes+1) + irandom(beyond_shoulder_range),
+			-lane_width*(right_lanes+1) - irandom(beyond_shoulder_range),
+		);
 		var tree_obj = instance_create_layer(
-			random_range(x_range[0], x_range[1]),
-			random_range(y_range[0], y_range[1]),
+			road.x + lengthdir_x(begin_length, road.direction + 90),
+			road.y + lengthdir_y(begin_length, road.direction + 90),
 			"Instances",
 			obj_tree
 		);
-		tree_obj.z = lerp(road.z, next_road.z, 0);
+		tree_obj.z = road.z;
 	}
 }
 vertex_end(road_vertex_buffers);
