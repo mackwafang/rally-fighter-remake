@@ -8,7 +8,7 @@ control_points = array_create(primary_count);
 control_points_dist = 2048;
 lane_width = 64;
 track_length = 0;
-beyond_shoulder_range = 1000;
+beyond_shoulder_range = 1500;
 
 var t = current_time;
 
@@ -43,7 +43,7 @@ for (var i = 0; i < array_length(road_list)-1; i++) {
 	// road.ideal_throttle = road.length / ((control_points_dist / road_segments) * 0.8);
 	if (i > 0) {
 		//road.ideal_throttle = cos(degtorad(angle_difference(road_list[@i-1].direction, road.direction)));
-		road.ideal_throttle = road.length / ((control_points_dist / road_segments) * 0.8);
+		road.ideal_throttle = road.length / ((control_points_dist / road_segments) * 0.7);
 	}
 	else {
 		road.ideal_throttle = 1;

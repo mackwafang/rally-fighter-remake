@@ -9,5 +9,5 @@ switch(vehicle_type) {
 		vehicle_detail_index = spr_bike_detail;
 		break;
 }
-
+z = on_road_index.z;
 image_blend = vehicle_color;

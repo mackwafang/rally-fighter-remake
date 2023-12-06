@@ -84,4 +84,8 @@ if (obj_controller.main_camera_target.id == id) {
 	draw_set_valign(fa_top);
 	draw_set_halign(fa_center);
 	draw_text(64,port_height - 32,$"{gear} gear");
+	
+	draw_set_valign(fa_top);
+	draw_set_halign(fa_center);
+	draw_text(128,port_height - 32,$"{ai_behavior.race_rank}");
 }

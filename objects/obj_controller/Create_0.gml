@@ -52,12 +52,12 @@ for (var i = 0; i < array_length(participating_vehicles); i++) {
 	if (!car.is_player) {
 		car.can_move = false;
 	}
-	car.horsepower = 50 * global.difficulty;
+	car.horsepower = 30 * global.difficulty;
 	car.ai_behavior.part_of_race = true;	
 	car.ai_behavior.desired_lane = (i % 3);
-	for (var g = 0; g < array_length(car.gear_shift_rpm); g++) {
-		car.gear_shift_rpm[g][1] += (500 * global.difficulty);
-	}
+	//for (var g = 0; g < array_length(car.gear_shift_rpm); g++) {
+	//	car.gear_shift_rpm[g][1] += (500 * global.difficulty);
+	//}
 }
 car_ranking = [];
 array_copy(car_ranking, 0, participating_vehicles, 0, array_length(participating_vehicles));

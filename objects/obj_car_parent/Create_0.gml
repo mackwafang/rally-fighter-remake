@@ -14,7 +14,7 @@ test_rpm = 0;
 velocity = 0;			// car's speed
 max_velocity = 2100;	// car's max speed
 wheel_radius = 0.34;	// wheel radius in m
-mass = 1500;			// vehicle mass, in kg
+mass = 300;				// vehicle mass, in kg
 horsepower = 300;		// horsepower
 turn_rate = 0;			// car's turning rate
 gear = 1;				// car's gear 
@@ -38,12 +38,12 @@ c_drag = 0.5 * air_drag_coef * drag_area * AIR_DENSITY;					// constant value fo
 c_rr = 20 * c_drag;										// constant value for car's drag
 
 //gear's ratio
-gear_ratio = [3, 8/3, 2, 4.5/3, 10/8, 11/10];
+gear_ratio = [3, 2.5, 2, 4.5/3, 10/8, 11/10];
 diff_ratio = 3.5;
 gear_shift_rpm = [
-	[0, 7000],
-	[4000, 7000],
-	[4500, 7000],
+	[0, 6000],
+	[4000, 6500],
+	[4500, 6500],
 	[4500, 6500],
 	[4500, 6000],
 	[3500, 5500],
@@ -75,6 +75,7 @@ ai_behavior = {
 		/// @function	change_lane(road);
 		self.desired_lane = irandom(road_index.get_lanes_right()-1);
 	},
+	race_rank: 1,
 }
 
 // audio emitter for engine
@@ -162,7 +163,7 @@ on_respawn = function() {
 		x = on_road_index.x + lengthdir_x((on_road_index.get_lanes_right()) * on_road_index.lane_width, on_road_index.direction - 90);
 		y = on_road_index.y + lengthdir_y((on_road_index.get_lanes_right()) * on_road_index.lane_width, on_road_index.direction - 90);
 		image_alpha = 1;
-		solid = true;
+		//solid = true;
 		mask_index = sprite_index;
 		
 		hp = max_hp;
@@ -186,7 +187,7 @@ on_death = function() {
 			is_respawning = true;
 			can_move = false;
 			alarm[2] = 120;
-			solid = false;
+			//solid = false;
 			mask_index = spr_empty;
 		}
 		else {

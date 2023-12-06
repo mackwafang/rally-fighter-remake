@@ -115,7 +115,7 @@ if (!is_on_road(x, y, last_road_index)) {
 }
 // calculate engine stuff for acceleration
 var engine_to_wheel_ratio = gear_ratio[gear-1] * diff_ratio;
-var engine_torque_max = (horsepower / engine_rpm * 5252) * 20;//torque_lookup(engine_rpm);
+var engine_torque_max = (horsepower / engine_rpm * 5252) * 15;//torque_lookup(engine_rpm);
 var engine_torque = engine_torque_max * engine_power;
 var drive_torque = engine_torque * gear_ratio[gear-1] * diff_ratio * transfer_eff;
 	
