@@ -32,7 +32,7 @@ if (can_move) {
 		if (is_player) {
 			engine_power += 0.1;
 			if (global.GAMEPLAY_TURN_GUIDE) {
-				turn_rate += (angle_diff / 120); // moving along curved road
+				turn_rate += (angle_diff / 60); // moving along curved road
 			}
 		}
 		else {
@@ -115,13 +115,13 @@ if (!is_on_road(x, y, last_road_index)) {
 }
 // calculate engine stuff for acceleration
 var engine_to_wheel_ratio = gear_ratio[gear-1] * diff_ratio;
-var engine_torque_max = (horsepower / engine_rpm * 5252) * 15;//torque_lookup(engine_rpm);
+var engine_torque_max = torque_lookup(engine_rpm) * 2;//(horsepower / engine_rpm * 5252) * 15;
 var engine_torque = engine_torque_max * engine_power;
 var drive_torque = engine_torque * gear_ratio[gear-1] * diff_ratio * transfer_eff;
 	
 var f_drag = -c_drag * velocity;
 var f_rr = -c_rr * velocity;
-var f_surface = -mass * 9.8 * ((on_road) ? 0.2 : 2);
+var f_surface = -mass * ((on_road) ? 0.2 : 2);
 var f_brake = (braking) ? -abs(drive_torque / wheel_radius) * braking_power : 0;
 var f_turn = -abs(turn_rate) * mass;
 if (velocity <= 0) {
@@ -132,11 +132,10 @@ if (velocity <= 0) {
 drive_force = (drive_torque / wheel_radius) + f_drag + f_rr + f_brake + f_surface + f_turn - push_vector.x;
 
 push_vector.x = max(0, push_vector.x - abs(drive_force));
-push_vector.y = max(0, push_vector.y * 0.96);
+push_vector.y = max(0, push_vector.y * 0.95);
 
 drive_torque = drive_force * wheel_radius;
 acceleration = (drive_torque / inertia);
-velocity += acceleration * (delta_time / 1000000);// * gear_ratio[gear-1];
 
 var wheel_rotation_rate = velocity * 100 / 3600 / wheel_radius;
 engine_rpm = (wheel_rotation_rate * engine_to_wheel_ratio * 60 / (2 * pi)) + 1000;

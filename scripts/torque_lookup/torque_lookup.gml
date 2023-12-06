@@ -14,5 +14,5 @@ function torque_lookup(rpm) {
 	]
 	var index = max(1, min(array_length(torque_table)-2, rpm div 1000));
 	var lerp_value = (rpm - (rpm div 1000)) / 1000;
-	return lerp(torque_table[index-1], torque_table[index], lerp_value) * 4;
+	return lerp(torque_table[index-1], torque_table[index], lerp_value);
 }
