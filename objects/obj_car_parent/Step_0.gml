@@ -9,7 +9,7 @@ var vec_to_road = point_to_line(
 dist_along_road = on_road_index.length_to_point + point_distance(on_road_index.x, on_road_index.y, vec_to_road.x, vec_to_road.y);
 vec_to_road.x += lengthdir_x(((ai_behavior.desired_lane + 0.5) * on_road_index.lane_width), on_road_index.direction-90);
 vec_to_road.y += lengthdir_y(((ai_behavior.desired_lane + 0.5) * on_road_index.lane_width), on_road_index.direction-90);
-var dist_to_road = point_distance(x,y,nav_road.x,nav_road.y);
+var dist_to_road = point_distance(x,y,vec_to_road.x,vec_to_road.y);
 if (dist_to_road > 1024) {
 	hp = 0;
 }
@@ -28,7 +28,7 @@ if (can_move) {
 	}
 
 	if (accelerating) {
-		var angle_diff = angle_difference(nav_road.direction, image_angle);
+		var angle_diff = angle_difference(on_road_index.direction, image_angle);
 		if (is_player) {
 			engine_power += 0.1;
 			if (global.GAMEPLAY_TURN_GUIDE) {
@@ -37,9 +37,6 @@ if (can_move) {
 		}
 		else {
 			#region Non-Player Car Movement
-		
-			assert(nav_road.get_id() != next_road.get_id());
-			
 			if (ai_behavior.desired_lane > next_road.get_lanes_right()-1) {
 				// desired lane doesn't exists, pick a new one
 				ai_behavior.change_lane(nav_road);
@@ -57,7 +54,7 @@ if (can_move) {
 			var is_off_road_left = !is_on_road(x+lengthdir_x(look_ahead_threshold/4, image_angle+90), y+lengthdir_y(look_ahead_threshold/4, image_angle+90), last_road_index) ? 1 : 0;
 			var is_off_road_right = !is_on_road(x+lengthdir_x(look_ahead_threshold/4, image_angle-90), y+lengthdir_y(look_ahead_threshold/4, image_angle-90), last_road_index) ? 1 : 0;
 			
-			var evade_turn_rate = 0.05;
+			var evade_turn_rate = 0.1;
 			if (car_look_left) {turn_rate -= evade_turn_rate;}
 			if (car_look_right) {turn_rate += evade_turn_rate;}
 			if (car_look_ahead) {
@@ -81,8 +78,8 @@ if (can_move) {
 				var tr = (angle_diff / 60); // moving along curved road
 				
 				// moving go desired lane
-				if (dist_to_road > 8) {
-					tr += (sign(side) / 50);
+				if (dist_to_road > 16) {
+					tr += (sign(side) / 20);
 				}
 				turn_rate += clamp(tr, -2, 2);
 				braking = (abs(tr) > 1) | ((nav_road.get_ideal_throttle() < 0.25) && (abs(angle_diff) > 15));

@@ -2,13 +2,13 @@ randomize();
 //random_set_seed(0);
 depth = 1000;
 
-primary_count = 100 * global.difficulty;
+primary_count = 80 * global.difficulty;
 road_segments = 10;
 control_points = array_create(primary_count);
 control_points_dist = 2048;
 lane_width = 64;
 track_length = 0;
-beyond_shoulder_range = 2048;
+beyond_shoulder_range = 1000;
 
 var t = current_time;
 
@@ -19,8 +19,8 @@ var stay_straight = 5;
 control_points[0] = new Point3D(x, y, 0);
 for (var s = 1; s < primary_count; s++) {
 	if (s > stay_straight) {
-		next_dir += random_range(-1,1)*(global.difficulty * 15);
-		next_elevation = irandom(600) * choose(-1,0,1);
+		next_dir += random_range(-1,1)*(global.difficulty * 20);
+		next_elevation = irandom(400) * choose(-1,0,1);
 	}
 	control_points[s] = new Point3D(
 		control_points[s-1].x + (cos(degtorad(next_dir)) * control_points_dist),//((s < stay_straight) ? control_points_dist : irandom_range(control_points_dist/4, control_points_dist))),
@@ -203,18 +203,20 @@ for (var i = 0; i < array_length(road_list) - 1; i++) {
 	}
 	
 	//create trees
-	for (var tid = 0; tid < irandom(5); tid++) {
-		var begin_length = choose(
-			lane_width*(left_lanes+1) + irandom(beyond_shoulder_range),
-			-lane_width*(right_lanes+1) - irandom(beyond_shoulder_range),
-		);
-		var tree_obj = instance_create_layer(
-			road.x + lengthdir_x(begin_length, road.direction + 90),
-			road.y + lengthdir_y(begin_length, road.direction + 90),
-			"Instances",
-			obj_tree
-		);
-		tree_obj.z = road.z;
+	if (global.GAMEPLAY_TREES) {
+		for (var tid = 0; tid < irandom(3); tid++) {
+			var begin_length = choose(
+				lane_width*(left_lanes+1) + irandom(beyond_shoulder_range),
+				-lane_width*(right_lanes+1) - irandom(beyond_shoulder_range),
+			);
+			var tree_obj = instance_create_layer(
+				road.x + lengthdir_x(begin_length, road.direction + 90),
+				road.y + lengthdir_y(begin_length, road.direction + 90),
+				"Instances",
+				obj_tree
+			);
+			tree_obj.z = road.z;
+		}
 	}
 }
 vertex_end(road_vertex_buffers);

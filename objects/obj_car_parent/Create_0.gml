@@ -143,7 +143,7 @@ is_on_road = function(_x, _y, index) {
 
 set_on_road = function() {
 	var p_i = last_road_index-1;
-	while(p_i++ < global.road_list_length-1) {
+	while(p_i++ < last_road_index + 100) {//global.road_list_length-1) {
 		var road = obj_road_generator.road_list[p_i];
 		var polygon = road.get_collision_points();
 		if (point_distance(x,y,road.x,road.y) > road.get_lanes() * road.lane_width) {continue;}
@@ -166,20 +166,21 @@ on_respawn = function() {
 		mask_index = sprite_index;
 		
 		hp = max_hp;
-		velocity = 0;
-		gear = 1;
-		rpm = 1000;
 		can_move = true;
-		engine_power = 0;
 		push_vector.x = 0;
 		push_vector.y = 0;
 		is_respawning = false;
+		z = on_road_index.z;
 	}
 }
 
 on_death = function() {
 	if (!is_respawning) {
 		instance_create_layer(x, y, "Instances", obj_explosion);
+		velocity = 0;
+		gear = 1;
+		rpm = 1000;
+		engine_power = 0;
 		if (ai_behavior.part_of_race) {
 			image_alpha = 0;
 			is_respawning = true;

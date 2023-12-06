@@ -8,6 +8,7 @@ global.DEBUG_FREE_CAMERA = false;
 
 global.GAMEPLAY_TURN_GUIDE = true;
 global.GAMEPLAY_CARS = true;
+global.GAMEPLAY_TREES = true;
 
 global.CAMERA_MODE_3D = true;
 
