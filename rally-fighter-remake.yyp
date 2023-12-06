@@ -36,6 +36,7 @@
   },
   "resources": [
     {"id":{"name":"spr_empty","path":"sprites/spr_empty/spr_empty.yy",},},
+    {"id":{"name":"create_tree_vertex","path":"scripts/create_tree_vertex/create_tree_vertex.yy",},},
     {"id":{"name":"spr_road_no_lane_mark","path":"sprites/spr_road_no_lane_mark/spr_road_no_lane_mark.yy",},},
     {"id":{"name":"point_in_polygon","path":"scripts/point_in_polygon/point_in_polygon.yy",},},
     {"id":{"name":"spr_cross","path":"sprites/spr_cross/spr_cross.yy",},},
