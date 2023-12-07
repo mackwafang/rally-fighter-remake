@@ -12,7 +12,7 @@ engine_rpm_max = 10000;	// max rpm
 engine_rpm = 1000;		// engine rpm
 test_rpm = 0;
 velocity = 0;			// car's speed
-max_velocity = 2100;	// car's max speed
+max_velocity = 3000;	// car's max speed
 wheel_radius = 0.34;	// wheel radius in m
 mass = 300;				// vehicle mass, in kg
 horsepower = 300;		// horsepower
@@ -41,11 +41,11 @@ c_rr = 20 * c_drag;										// constant value for car's drag
 gear_ratio = [3, 2.5, 2, 4.5/3, 10/8, 11/10];
 diff_ratio = 3.5;
 gear_shift_rpm = [
-	[0, 7500],
-	[4000, 7500],
+	[0, 9000],
+	[4000, 9000],
+	[4500, 8500],
+	[4500, 8000],
 	[4500, 7500],
-	[4500, 7500],
-	[4500, 6000],
 	[3500, 5500],
 ];
 gear_shift_wait = 0;		//  time wait to change gear again
