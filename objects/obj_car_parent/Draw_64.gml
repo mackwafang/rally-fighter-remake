@@ -43,7 +43,13 @@ if (ai_behavior.part_of_race) {
 
 if (obj_controller.main_camera_target.id == id) {
 	draw_text(16, 16, $"{x}, {y}, {z}");
-	draw_text(16, 32, $"{zspeed}");
+	draw_text(16, 32, $"hp {horsepower}");
+	for (var i = 0; i < max_gear; i++) {
+		draw_text(16, 48 + (i * 16), $"gear {i} {gear_shift_rpm[i]}");
+	}
+	draw_text(16, 144, $"mass: {mass}");
+	draw_text(16, 160, $"transfer eff.: {transfer_eff}");
+	draw_text(16, 176, $"engine power: {engine_power}");
 	
 	// rpm odometer
 	var odometer_x = 48;

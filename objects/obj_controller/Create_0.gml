@@ -22,7 +22,7 @@ if (global.CAMERA_MODE_3D) {
 
 audio_listener_orientation(0,1,0,0,0,-1);
 
-instance_create_layer(x, y, "Instances", obj_road_generator);
+instance_create_layer(0, 0, "Instances", obj_road_generator);
 
 // racing car
 for (var i = 0; i < global.total_participating_vehicles; i++) {

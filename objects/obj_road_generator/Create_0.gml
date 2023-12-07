@@ -16,7 +16,7 @@ var t = current_time;
 var next_dir = 0;
 var next_elevation = 0
 var stay_straight = 5;
-control_points[0] = new Point3D(x, y, 0);
+control_points[0] = new Point3D(0, 0, 0);
 for (var s = 1; s < primary_count; s++) {
 	if (s > stay_straight) {
 		next_dir += random_range(-1,1)*(global.difficulty * 20);
@@ -40,14 +40,8 @@ for (var i = 0; i < array_length(road_list)-1; i++) {
 	var road_next = road_list[@i+1];
 	road.direction = point_direction(road.x, road.y, road_next.x, road_next.y);
 	road.length = point_distance(road.x, road.y, road_next.x, road_next.y);
-	// road.ideal_throttle = road.length / ((control_points_dist / road_segments) * 0.8);
-	if (i > 0) {
-		//road.ideal_throttle = cos(degtorad(angle_difference(road_list[@i-1].direction, road.direction)));
-		road.ideal_throttle = road.length / ((control_points_dist / road_segments) * 0.7);
-	}
-	else {
-		road.ideal_throttle = 1;
-	}
+	
+	road.ideal_throttle = (road.length / (control_points_dist / road_segments));
 	road._id = i;
 	road.lane_width = lane_width;
 	road_next.length_to_point = road.length_to_point + road.length;

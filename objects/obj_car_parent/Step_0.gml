@@ -42,7 +42,7 @@ if (can_move) {
 				ai_behavior.change_lane(nav_road);
 			}
 		
-			engine_power = nav_road.get_ideal_throttle() * 0.9;
+			engine_power = nav_road.get_ideal_throttle();
 			var side = -(angle_difference(image_angle, point_direction(x, y, vec_to_road.x, vec_to_road.y)));
 		
 			// checking other cars
@@ -71,7 +71,6 @@ if (can_move) {
 				// find the nearest road
 				//var side = angle_difference(image_angle, point_direction(x,y,road.x,road.y));
 				turn_rate += side / 800;
-				engine_power = 1;
 			}
 			else {
 				// car turning on curved road and moving to its desired lane
