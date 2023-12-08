@@ -46,6 +46,9 @@ for (var i = 0; i < array_length(road_list)-1; i++) {
 	road.lane_width = lane_width;
 	road_next.length_to_point = road.length_to_point + road.length;
 	track_length += road.length;
+	if (i < 30) {
+		road.z = -i * 20;
+	}
 	
 	// road changes lane count
 	if (lane_change_duration == 0) {
