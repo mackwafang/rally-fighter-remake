@@ -111,6 +111,25 @@ for (var i = 0; i < array_length(road_list) - 1; i++) {
 	var right_lane_sprite = (right_lanes != next_right_lanes) ? spr_road_no_lane_mark : spr_road;
 	var collision_points = [
 		 [
+			road.x+lengthdir_x(lane_width*(left_lanes + (road.shoulder[0] ? 1 : 0)), road.direction+90),
+			next_road.x+lengthdir_x(lane_width*(next_left_lanes + (next_road.shoulder[0] ? 1 : 0)), next_road.direction+90),
+			next_road.x+lengthdir_x(lane_width*(next_right_lanes + (next_road.shoulder[1] ? 1 : 0)), next_road.direction-90),
+			road.x+lengthdir_x(lane_width*(right_lanes + (road.shoulder[1] ? 1 : 0)), road.direction-90),
+		],
+		[
+			road.y+lengthdir_y(lane_width*(left_lanes + (road.shoulder[0] ? 1 : 0)), road.direction+90),
+			next_road.y+lengthdir_y(lane_width*(next_left_lanes + (next_road.shoulder[0] ? 1 : 0)), next_road.direction+90),
+			next_road.y+lengthdir_y(lane_width*(next_right_lanes+ (next_road.shoulder[1] ? 1 : 0)), next_road.direction-90),
+			road.y+lengthdir_y(lane_width*(right_lanes + (road.shoulder[1] ? 1 : 0)), road.direction-90),
+		]
+	];
+	var left_uv = sprite_get_uvs(left_lane_sprite, left_subimage);
+	var right_uv = sprite_get_uvs(right_lane_sprite, right_subimage);
+	var shoulder_uv = sprite_get_uvs(spr_road_shoulder, 0);
+	var grass_uv = sprite_get_uvs(spr_grass, 0);
+	
+	var road_render_points = [
+		 [
 			road.x+lengthdir_x(lane_width*left_lanes, road.direction+90),
 			next_road.x+lengthdir_x(lane_width*next_left_lanes, next_road.direction+90),
 			next_road.x+lengthdir_x(lane_width*next_right_lanes, next_road.direction-90),
@@ -123,65 +142,61 @@ for (var i = 0; i < array_length(road_list) - 1; i++) {
 			road.y+lengthdir_y(lane_width*right_lanes, road.direction-90),
 		]
 	];
-	var left_uv = sprite_get_uvs(left_lane_sprite, left_subimage);
-	var right_uv = sprite_get_uvs(right_lane_sprite, right_subimage);
-	var shoulder_uv = sprite_get_uvs(spr_road_shoulder, 0);
-	var grass_uv = sprite_get_uvs(spr_grass, 0);
 	
 	#region Road Render Polygons
 	var road_seg_data = [
 		//left grass
-		[new Point3D(collision_points[0][0], collision_points[1][0], road.z+1), new Point(grass_uv[0], grass_uv[1])],
+		[new Point3D(road_render_points[0][0], road_render_points[1][0], road.z+1), new Point(grass_uv[0], grass_uv[1])],
 		[new Point3D(road.x+lengthdir_x(beyond_shoulder_range, road.direction+90), road.y+lengthdir_y(beyond_shoulder_range, road.direction+90), road.z), new Point(grass_uv[0], grass_uv[3])],
-		[new Point3D(collision_points[0][1], collision_points[1][1], next_road.z+1), new Point(grass_uv[2], grass_uv[1])],
+		[new Point3D(road_render_points[0][1], road_render_points[1][1], next_road.z+1), new Point(grass_uv[2], grass_uv[1])],
 		
-		[new Point3D(collision_points[0][1], collision_points[1][1], next_road.z+1), new Point(grass_uv[2], grass_uv[1])],
+		[new Point3D(road_render_points[0][1], road_render_points[1][1], next_road.z+1), new Point(grass_uv[2], grass_uv[1])],
 		[new Point3D(road.x+lengthdir_x(beyond_shoulder_range, road.direction+90), road.y+lengthdir_y(beyond_shoulder_range, road.direction+90), road.z), new Point(grass_uv[0], grass_uv[3])],
 		[new Point3D(next_road.x+lengthdir_x(beyond_shoulder_range, next_road.direction+90), next_road.y+lengthdir_y(beyond_shoulder_range, next_road.direction+90), next_road.z), new Point(grass_uv[2], grass_uv[3])],
 	
 		//left shoulder 
-		[new Point3D(collision_points[0][0], collision_points[1][0], road.z), new Point(shoulder_uv[0], shoulder_uv[1])],
+		[new Point3D(road_render_points[0][0], road_render_points[1][0], road.z), new Point(shoulder_uv[0], shoulder_uv[1])],
 		[new Point3D(road.x+lengthdir_x(lane_width*(left_lanes+1), road.direction+90), road.y+lengthdir_y(lane_width*(left_lanes+1), road.direction+90), road.z), new Point(shoulder_uv[0], shoulder_uv[3])],
-		[new Point3D(collision_points[0][1], collision_points[1][1], next_road.z), new Point(shoulder_uv[2], shoulder_uv[1])],
+		[new Point3D(road_render_points[0][1], road_render_points[1][1], next_road.z), new Point(shoulder_uv[2], shoulder_uv[1])],
 		
-		[new Point3D(collision_points[0][1], collision_points[1][1], next_road.z), new Point(shoulder_uv[2], shoulder_uv[1])],
+		[new Point3D(road_render_points[0][1], road_render_points[1][1], next_road.z), new Point(shoulder_uv[2], shoulder_uv[1])],
 		[new Point3D(road.x+lengthdir_x(lane_width*(left_lanes+1), road.direction+90), road.y+lengthdir_y(lane_width*(left_lanes+1), road.direction+90), road.z), new Point(shoulder_uv[0], shoulder_uv[3])],
 		[new Point3D(next_road.x+lengthdir_x(lane_width*(next_left_lanes+1), next_road.direction+90), next_road.y+lengthdir_y(lane_width*(next_left_lanes+1), next_road.direction+90), next_road.z), new Point(shoulder_uv[2], shoulder_uv[3])],
 		
 		//left road
-		[new Point3D(collision_points[0][0], collision_points[1][0], road.z), new Point(left_uv[0], left_uv[3])],
+		[new Point3D(road_render_points[0][0], road_render_points[1][0], road.z), new Point(left_uv[0], left_uv[3])],
 		[new Point3D(road.x, road.y, road.z), new Point(left_uv[0], left_uv[1])],
-		[new Point3D(collision_points[0][1], collision_points[1][1], next_road.z), new Point(left_uv[2], left_uv[3])],
+		[new Point3D(road_render_points[0][1], road_render_points[1][1], next_road.z), new Point(left_uv[2], left_uv[3])],
 		
 		[new Point3D(road.x, road.y, road.z), new Point(left_uv[0], left_uv[1])],
-		[new Point3D(collision_points[0][1], collision_points[1][1], next_road.z), new Point(left_uv[2], left_uv[3])],
+		[new Point3D(road_render_points[0][1], road_render_points[1][1], next_road.z), new Point(left_uv[2], left_uv[3])],
 		[new Point3D(next_road.x, next_road.y, next_road.z), new Point(left_uv[2], left_uv[1])],
 		
 		//righ road
 		[new Point3D(road.x, road.y, road.z), new Point(right_uv[0], right_uv[1])],
-		[new Point3D(collision_points[0][3], collision_points[1][3], road.z), new Point(right_uv[0], right_uv[3])],
+		[new Point3D(road_render_points[0][3], road_render_points[1][3], road.z), new Point(right_uv[0], right_uv[3])],
 		[new Point3D(next_road.x, next_road.y, next_road.z), new Point(right_uv[2], right_uv[1])],
 		
 		
-		[new Point3D(collision_points[0][3], collision_points[1][3], road.z), new Point(right_uv[0], right_uv[3])],
+		[new Point3D(road_render_points[0][3], road_render_points[1][3], road.z), new Point(right_uv[0], right_uv[3])],
 		[new Point3D(next_road.x, next_road.y, next_road.z), new Point(right_uv[2], right_uv[1])],
-		[new Point3D(collision_points[0][2], collision_points[1][2], next_road.z), new Point(right_uv[2], right_uv[3])],
+		[new Point3D(road_render_points[0][2], road_render_points[1][2], next_road.z), new Point(right_uv[2], right_uv[3])],
 		
 		//right shoulder 
-		[new Point3D(collision_points[0][2], collision_points[1][2], next_road.z), new Point(shoulder_uv[0], shoulder_uv[1])],
+		[new Point3D(road_render_points[0][2], road_render_points[1][2], next_road.z), new Point(shoulder_uv[0], shoulder_uv[1])],
 		[new Point3D(road.x+lengthdir_x(lane_width*(right_lanes+1), road.direction-90), road.y+lengthdir_y(lane_width*(next_right_lanes+1), road.direction-90), road.z), new Point(shoulder_uv[0], shoulder_uv[3])],
-		[new Point3D(collision_points[0][3], collision_points[1][3], road.z), new Point(shoulder_uv[2], shoulder_uv[1])],
+		[new Point3D(road_render_points[0][3], road_render_points[1][3], road.z), new Point(shoulder_uv[2], shoulder_uv[1])],
 		
-		[new Point3D(collision_points[0][2], collision_points[1][2], next_road.z), new Point(shoulder_uv[2], shoulder_uv[1])],
+		[new Point3D(road_render_points[0][2], road_render_points[1][2], next_road.z), new Point(shoulder_uv[2], shoulder_uv[1])],
 		[new Point3D(next_road.x+lengthdir_x(lane_width*(next_right_lanes+1), next_road.direction-90), next_road.y+lengthdir_y(lane_width*(next_right_lanes+1), next_road.direction-90), next_road.z), new Point(shoulder_uv[2], shoulder_uv[3])],
 		[new Point3D(road.x+lengthdir_x(lane_width*(right_lanes+1), road.direction-90), road.y+lengthdir_y(lane_width*(next_right_lanes+1), road.direction-90), road.z), new Point(shoulder_uv[0], shoulder_uv[3])],
 		
 		// right grass
-		[new Point3D(collision_points[0][2], collision_points[1][2], next_road.z+1), new Point(grass_uv[0], grass_uv[1])],
+		[new Point3D(road_render_points[0][2], road_render_points[1][2], next_road.z+1), new Point(grass_uv[0], grass_uv[1])],
 		[new Point3D(road.x+lengthdir_x(beyond_shoulder_range, road.direction-90), road.y+lengthdir_y(beyond_shoulder_range, road.direction-90), road.z), new Point(grass_uv[0], grass_uv[3])],
-		[new Point3D(collision_points[0][3], collision_points[1][3], road.z+1), new Point(grass_uv[2], grass_uv[1])],
+		[new Point3D(road_render_points[0][3], road_render_points[1][3], road.z+1), new Point(grass_uv[2], grass_uv[1])],
 		
-		[new Point3D(collision_points[0][2], collision_points[1][2], next_road.z+1), new Point(grass_uv[2], grass_uv[1])],
+		[new Point3D(road_render_points[0][2], road_render_points[1][2], next_road.z+1), new Point(grass_uv[2], grass_uv[1])],
 		[new Point3D(next_road.x+lengthdir_x(beyond_shoulder_range, next_road.direction-90), next_road.y+lengthdir_y(beyond_shoulder_range, next_road.direction-90), next_road.z), new Point(grass_uv[2], grass_uv[3])],
 		[new Point3D(road.x+lengthdir_x(beyond_shoulder_range, road.direction-90), road.y+lengthdir_y(beyond_shoulder_range, road.direction-90), road.z), new Point(grass_uv[0], grass_uv[3])],
 	]
