@@ -51,6 +51,15 @@ if (obj_controller.main_camera_target.id == id) {
 	draw_text(16, 160, $"transfer eff.: {transfer_eff}");
 	draw_text(16, 176, $"engine power: {engine_power}");
 	
+	// boost bar 
+	var bar_border = 2;
+	var bar_x = 48;
+	var bar_y = port_height - 32;
+	var bar_height = 8;
+	var bar_width = 80;
+	draw_rectangle_color(bar_x, bar_y, bar_x + bar_width, bar_y - bar_height, 0, 0, 0, 0, false);
+	draw_rectangle_color(bar_x + bar_border, bar_y - bar_border, bar_x + (boost_juice/100*(bar_width - bar_border)), bar_y - bar_height + bar_border, c_yellow, c_yellow, c_yellow, c_yellow, false);
+	
 	// rpm odometer
 	var odometer_x = 48;
 	var odometer_y = port_height - 48;

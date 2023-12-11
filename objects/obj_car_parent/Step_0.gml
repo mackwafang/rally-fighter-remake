@@ -114,7 +114,7 @@ if (!is_on_road(x, y, last_road_index)) {
 }
 // calculate engine stuff for acceleration
 var engine_to_wheel_ratio = gear_ratio[gear-1] * diff_ratio;
-var engine_torque_max = (horsepower / engine_rpm * 5252) * (boosting ? 40 : 20);//torque_lookup(engine_rpm) * 2;
+var engine_torque_max = (horsepower / engine_rpm * 5252) * (boost_active ? 40 : 20);//torque_lookup(engine_rpm) * 2;
 var engine_torque = engine_torque_max * engine_power;
 var drive_torque = engine_torque * engine_to_wheel_ratio * transfer_eff;
 	
@@ -175,6 +175,24 @@ if (abs(obj_controller.main_camera_target.dist_along_road - dist_along_road) > 3
 	}
 }
 
+if (!boost_active) {
+	if (boosting) {
+		boost_active = true;
+	}
+	
+	if (boost_juice < 100) {
+		boost_juice += 0.1 * (1 - (boost_juice_penalty / 100));
+	}
+}
+else {
+	if (boost_juice > 0) {
+		boost_juice -= 0.5;
+	}
+	else {
+		boost_active = false;
+		boost_juice_penalty = clamp(boost_juice_penalty + 10, 0, 100);
+	}
+}
 
 //check alive
 if (hp <= 0) {

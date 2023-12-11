@@ -6,7 +6,7 @@ z = -60;
 depth = 10000;
 
 participating_vehicles = [];
-global.total_participating_vehicles = 1;
+global.total_participating_vehicles = 12;
 global.difficulty = 2;
 global.gravity_3d = 9.8;
 

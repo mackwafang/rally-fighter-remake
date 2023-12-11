@@ -20,7 +20,7 @@ control_points[0] = new Point3D(0, 0, 0);
 for (var s = 1; s < primary_count; s++) {
 	if (s > stay_straight) {
 		next_dir += random_range(-1,1)*(global.difficulty * 20);
-		next_elevation = irandom(400) * choose(-1,0,1);
+		next_elevation = irandom(600) * choose(-1,0,1);
 	}
 	control_points[s] = new Point3D(
 		control_points[s-1].x + (cos(degtorad(next_dir)) * control_points_dist),//((s < stay_straight) ? control_points_dist : irandom_range(control_points_dist/4, control_points_dist))),
@@ -44,7 +44,7 @@ for (var i = 0; i < array_length(road_list)-1; i++) {
 	road.direction = point_direction(road.x, road.y, next_road.x, next_road.y);
 	road.length = sqrt(sqr(road.x - next_road.x) + sqr(road.y - next_road.y) + sqr(road.z - next_road.z));// point_distance(road.x, road.y, next_road.x, next_road.y);
 	
-	road.ideal_throttle = (road.length / (control_points_dist / road_segments));
+	road.ideal_throttle = (road.length / (control_points_dist / road_segments)) * (global.difficulty / 2);
 	road._id = i;
 	road.lane_width = lane_width;
 	next_road.length_to_point = road.length_to_point + road.length;
@@ -260,6 +260,31 @@ for (var i = 0; i < array_length(road_list) - 1; i++) {
 		);
 		prop_obj.image_index = 0;
 		prop_obj.z = road.z;
+	}
+	
+	// create building
+	if (i < 100) {
+		if ((i%2) == 0) {
+			for (var j = -1; j <= 1; j += 2) {
+				var func = undefined;
+				switch(j) {
+					case -1:
+						func = road.get_lanes_right;
+						break;
+					case 1:
+						func = road.get_lanes_right;
+						break;
+				}
+				var prop_obj = instance_create_layer(
+					road.x + lengthdir_x(func() * lane_width + 192, road.direction-(90 * j)),
+					road.y + lengthdir_y(func() * lane_width + 192, road.direction-(90 * j)),
+					"Instances",
+					obj_building
+				);
+				prop_obj.z = road.z;
+				prop_obj.direction = road.direction;
+			}
+		}
 	}
 }
 vertex_end(road_vertex_buffers);

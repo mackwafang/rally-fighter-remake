@@ -73,7 +73,7 @@ if (global.GAMEPLAY_CARS) {
 		main_camera_target.on_road_index
 	)
 	if (alarm[0] == -1) {
-		if (irandom(100) == 1) {
+		if (irandom(50) == 1) {
 			var spawn_lane = irandom_range(0, road_at_view_edge.get_lanes_right() - 1) + 0.5;
 			var spawn_x = road_at_view_edge.x + lengthdir_x(road_at_view_edge.lane_width * spawn_lane, road_at_view_edge.direction - 90);
 			var spawn_y = road_at_view_edge.y + lengthdir_y(road_at_view_edge.lane_width * spawn_lane, road_at_view_edge.direction - 90);

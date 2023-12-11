@@ -24,6 +24,10 @@ transfer_eff = 0.8;		// transfer efficiency
 acceleration = 0;		// acceleration value
 braking_power = 50;		// braking magnetude
 zspeed = 0;				// vertical 
+boost_juice = 0;		// boosting meter
+boost_usable = false;	// is boost usable
+boost_active = false;	// if boost is using
+boost_juice_penalty = 0;// penalty for using boost
 
 air_drag_coef = 0.3;	// air drag coefficient
 drag_area = 1.2;		// cross sectional area
