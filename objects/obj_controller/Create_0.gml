@@ -20,7 +20,7 @@ if (global.CAMERA_MODE_3D) {
 	init_bike_shadow_buffer();
 }
 
-audio_listener_orientation(0,1,0,0,0,-1);
+audio_listener_orientation(0,0,1,0,0,-1);
 
 instance_create_layer(0, 0, "Instances", obj_road_generator);
 

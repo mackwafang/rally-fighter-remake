@@ -34,54 +34,74 @@ road_list = generate_roads(control_points, road_segments);
 // set up road node data
 var lane_change_duration = 100; //how many nodes until change to new lane
 var lane_change_to = 3; // change this side of road to this number of lanes
+var cur_lane_change_to = 3; // current lane change for transition
+var prev_lane_lane_to = 3; // previous lane change
 var lane_side_affected = ROAD_LANE_CHANGE_AFFECT.BOTH; // which side of the road changes 
 for (var i = 0; i < array_length(road_list)-1; i++) {
 	var road = road_list[@i];
-	var road_next = road_list[@i+1];
-	road.direction = point_direction(road.x, road.y, road_next.x, road_next.y);
-	road.length = point_distance(road.x, road.y, road_next.x, road_next.y);
+	var next_road = road_list[@i+1];
+	road.next_road = next_road;
+	road.direction = point_direction(road.x, road.y, next_road.x, next_road.y);
+	road.length = sqrt(sqr(road.x - next_road.x) + sqr(road.y - next_road.y) + sqr(road.z - next_road.z));// point_distance(road.x, road.y, next_road.x, next_road.y);
 	
 	road.ideal_throttle = (road.length / (control_points_dist / road_segments));
 	road._id = i;
 	road.lane_width = lane_width;
-	road_next.length_to_point = road.length_to_point + road.length;
+	next_road.length_to_point = road.length_to_point + road.length;
 	track_length += road.length;
-	if (i < 30) {
-		road.z = -i * 20;
+	
+	if (lane_change_to != cur_lane_change_to) {
+		cur_lane_change_to += sign(lane_change_to - prev_lane_lane_to) * 0.25;
 	}
 	
 	// road changes lane count
 	if (lane_change_duration == 0) {
+		prev_lane_lane_to = lane_change_to;
 		lane_side_affected = choose(ROAD_LANE_CHANGE_AFFECT.LEFT, ROAD_LANE_CHANGE_AFFECT.RIGHT, ROAD_LANE_CHANGE_AFFECT.BOTH);
 		lane_change_duration = 30+irandom(10);
 		lane_change_to = 1+irandom(2);
 	}
 	switch(lane_side_affected) {
 		case ROAD_LANE_CHANGE_AFFECT.LEFT:
-			road.set_lanes_left(lane_change_to);
+			road.set_lanes_left(cur_lane_change_to);
 			road.set_lanes_right(road_list[@i-1].get_lanes_right());
 			break;
 		case ROAD_LANE_CHANGE_AFFECT.RIGHT:
 			road.set_lanes_left(road_list[@i-1].get_lanes_left());
-			road.set_lanes_right(lane_change_to);
+			road.set_lanes_right(cur_lane_change_to);
 			break;
 		case ROAD_LANE_CHANGE_AFFECT.BOTH:
-			road.set_lanes_side(lane_change_to);
+			road.set_lanes_side(cur_lane_change_to);
 			break;
 	}
 	lane_change_duration--;
 }
 
-// calcualte elevation
+// post road generation adjustments
 for (var i = 0; i < array_length(road_list)-1; i++) {
 	var road = road_list[@i];
-	var road_next = road_list[@i+1];
-	road.next_road = road_next;
-	road.elevation = arctan((road.z - road_next.z) / road.length);
+	var next_road = road_list[@i+1];
+	var lane_change_dist = 1000;
+	
+	// extend road if lane changes
+	//if (road.get_lanes() != next_road.get_lanes()) {
+	//	track_length += lane_change_dist;
+	//	road.length += lane_change_dist;
+	//	road.length_to_point += lane_change_dist;
+	//	for (var j = i+1; j < array_length(road_list)-1; j++) {
+	//		var r = road_list[@j];
+	//		road_list[@j].x += lengthdir_x(lane_change_dist, road.direction);
+	//		road_list[@j].y += lengthdir_y(lane_change_dist, road.direction);
+	//		//road_list[@j].z += lengthdir_y(lane_change_dist, radtodeg(arcsin(road.elevation/road.length)));
+	//	}
+	//}
+	
+	// set road elevation
+	road.elevation = arctan((road.z - next_road.z) / road.length);
 }
 
-road_points = []; // precalculate road polygons
 
+road_points = []; // precalculate road polygons
 // 3d road render data
 vertex_format_begin();
 if (global.CAMERA_MODE_3D) {vertex_format_add_position_3d();} else {vertex_format_add_position();}
@@ -229,6 +249,17 @@ for (var i = 0; i < array_length(road_list) - 1; i++) {
 			);
 			tree_obj.z = road.z;
 		}
+	}
+	// create speed limit sign
+	if ((i % 100) == 0) {
+		var prop_obj = instance_create_layer(
+			collision_points[0][2],
+			collision_points[1][2],
+			"Instances",
+			obj_traffic_prop
+		);
+		prop_obj.image_index = 0;
+		prop_obj.z = road.z;
 	}
 }
 vertex_end(road_vertex_buffers);

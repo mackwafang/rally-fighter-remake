@@ -39,8 +39,7 @@ if (global.DEBUG_ROAD_DRAW_ROAD_POINTS) {
 	for (var i = 0; i < array_length(road_list) - 1; i++) {
 		var road = road_list[@ i];
 		var next_road = road_list[@ i + 1];
-		
-		draw_text(road.x, road.y, road.ideal_throttle);
+		draw_text_transformed(road.x, road.y, road.z, 1, 1, road.direction-90);
 		if (!camera_in_view(road.x, road.y, 256)) {continue;}
 		
 		var segments = [
