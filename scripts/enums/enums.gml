@@ -10,3 +10,10 @@ enum VEHICLE_TYPE {
 	BIKE,
 	TRUCK
 }
+
+enum ZONE {
+	CITY,
+	SUBURBAN,
+	DESERT,
+	BEACH,
+}

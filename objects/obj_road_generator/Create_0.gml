@@ -37,6 +37,7 @@ var lane_change_to = 3; // change this side of road to this number of lanes
 var cur_lane_change_to = 3; // current lane change for transition
 var prev_lane_lane_to = 3; // previous lane change
 var lane_side_affected = ROAD_LANE_CHANGE_AFFECT.BOTH; // which side of the road changes 
+var cur_zone = ZONE.SUBURBAN;
 for (var i = 0; i < array_length(road_list)-1; i++) {
 	var road = road_list[@i];
 	var next_road = road_list[@i+1];
@@ -47,6 +48,7 @@ for (var i = 0; i < array_length(road_list)-1; i++) {
 	road.ideal_throttle = (road.length / (control_points_dist / road_segments)) * (global.difficulty / 2);
 	road._id = i;
 	road.lane_width = lane_width;
+	road.zone = cur_zone;
 	next_road.length_to_point = road.length_to_point + road.length;
 	track_length += road.length;
 	
@@ -60,6 +62,7 @@ for (var i = 0; i < array_length(road_list)-1; i++) {
 		lane_side_affected = choose(ROAD_LANE_CHANGE_AFFECT.LEFT, ROAD_LANE_CHANGE_AFFECT.RIGHT, ROAD_LANE_CHANGE_AFFECT.BOTH);
 		lane_change_duration = 30+irandom(10);
 		lane_change_to = 1+irandom(2);
+		cur_zone = choose(ZONE.SUBURBAN, ZONE.CITY);
 	}
 	switch(lane_side_affected) {
 		case ROAD_LANE_CHANGE_AFFECT.LEFT:
@@ -146,6 +149,11 @@ for (var i = 0; i < array_length(road_list) - 1; i++) {
 	var left_uv = sprite_get_uvs(left_lane_sprite, left_subimage);
 	var right_uv = sprite_get_uvs(right_lane_sprite, right_subimage);
 	var shoulder_uv = sprite_get_uvs(spr_road_shoulder, 0);
+	switch(road.zone) {
+		case ZONE.CITY:
+			shoulder_uv = sprite_get_uvs(spr_road_shoulder, 1);
+			break;
+	}
 	var grass_uv = sprite_get_uvs(spr_grass, 0);
 	
 	var road_render_points = [
@@ -234,23 +242,8 @@ for (var i = 0; i < array_length(road_list) - 1; i++) {
 		vertex_texcoord(road_vertex_buffers, uv.x, uv.y);
 	}
 	
-	//create trees
-	if (global.GAMEPLAY_TREES) {
-		for (var tid = 0; tid < irandom(3); tid++) {
-			var begin_length = choose(
-				lane_width*(left_lanes+1) + irandom(beyond_shoulder_range),
-				-lane_width*(right_lanes+1) - irandom(beyond_shoulder_range),
-			);
-			var tree_obj = instance_create_layer(
-				road.x + lengthdir_x(begin_length, road.direction + 90),
-				road.y + lengthdir_y(begin_length, road.direction + 90),
-				"Instances",
-				obj_tree
-			);
-			tree_obj.z = road.z;
-		}
-	}
 	// create speed limit sign
+		
 	if ((i % 100) == 0) {
 		var prop_obj = instance_create_layer(
 			collision_points[0][2],
@@ -262,29 +255,49 @@ for (var i = 0; i < array_length(road_list) - 1; i++) {
 		prop_obj.z = road.z;
 	}
 	
-	// create building
-	if (i < 100) {
-		if ((i%2) == 0) {
-			for (var j = -1; j <= 1; j += 2) {
-				var func = undefined;
-				switch(j) {
-					case -1:
-						func = road.get_lanes_right;
-						break;
-					case 1:
-						func = road.get_lanes_right;
-						break;
+	switch(road.zone) {
+		// create building
+		case ZONE.CITY:
+			if ((i%3) == 0) {
+				for (var j = -1; j <= 1; j += 2) {
+					var func = undefined;
+					switch(j) {
+						case -1:
+							func = road.get_lanes_right;
+							break;
+						case 1:
+							func = road.get_lanes_right;
+							break;
+					}
+					var prop_obj = instance_create_layer(
+						road.x + lengthdir_x(func() * lane_width + 256, road.direction-(90 * j)),
+						road.y + lengthdir_y(func() * lane_width + 256, road.direction-(90 * j)),
+						"Instances",
+						obj_building
+					);
+					prop_obj.z = road.z;
+					prop_obj.direction = road.direction;
 				}
-				var prop_obj = instance_create_layer(
-					road.x + lengthdir_x(func() * lane_width + 192, road.direction-(90 * j)),
-					road.y + lengthdir_y(func() * lane_width + 192, road.direction-(90 * j)),
-					"Instances",
-					obj_building
-				);
-				prop_obj.z = road.z;
-				prop_obj.direction = road.direction;
 			}
-		}
+			break;
+		default:
+			//create trees
+			if (global.GAMEPLAY_TREES) {
+				for (var tid = 0; tid < irandom(3); tid++) {
+					var begin_length = choose(
+						lane_width*(left_lanes+1) + irandom(beyond_shoulder_range),
+						-lane_width*(right_lanes+1) - irandom(beyond_shoulder_range),
+					);
+					var tree_obj = instance_create_layer(
+						road.x + lengthdir_x(begin_length, road.direction + 90),
+						road.y + lengthdir_y(begin_length, road.direction + 90),
+						"Instances",
+						obj_tree
+					);
+					tree_obj.z = road.z;
+				}
+			}
+			break;
 	}
 }
 vertex_end(road_vertex_buffers);

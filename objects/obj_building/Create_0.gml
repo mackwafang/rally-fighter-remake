@@ -52,3 +52,4 @@ vertex_position_3d_uv(building_vertex_buffer, 128, 128, -building_height, uv[0],
 	
 vertex_end(building_vertex_buffer);
 vertex_freeze(building_vertex_buffer);
+alarm[0] = 1;

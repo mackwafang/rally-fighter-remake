@@ -8,3 +8,6 @@ render_scale = {
 	y: 1,
 	z: 1
 }
+
+matrix = matrix_build(0,0,0,0,0,0,0,0,0);
+alarm[0] = 1;
