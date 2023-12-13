@@ -80,7 +80,7 @@ if (obj_controller.main_camera_target.id == id) {
 	// speed odometer
 	odometer_x = 128;
 	odometer_y = port_height - 48;
-	odometer_speed += ((velocity / 100 / 18) - odometer_speed) * 0.2;
+	odometer_speed += ((velocity / 3000) - odometer_speed) * 0.2;
 	draw_line_width_color(
 		odometer_x,
 		odometer_y,

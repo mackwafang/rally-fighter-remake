@@ -32,7 +32,7 @@ if (can_move) {
 		if (is_player) {
 			engine_power += 0.1;
 			if (global.GAMEPLAY_TURN_GUIDE) {
-				turn_rate += (angle_diff / 60); // moving along curved road
+				turn_rate += (angle_diff / 90); // moving along curved road
 			}
 		}
 		else {
@@ -137,7 +137,7 @@ drive_torque = drive_force * wheel_radius;
 acceleration = (drive_torque / inertia);
 
 var wheel_rotation_rate = velocity * 100 / 3600 / wheel_radius;
-engine_rpm = (wheel_rotation_rate * engine_to_wheel_ratio * 60 / (2 * pi)) + 1000;
+engine_rpm = (wheel_rotation_rate * engine_to_wheel_ratio * 60 / (2 * pi));
 
 velocity = clamp(velocity, 0, max_velocity);
 

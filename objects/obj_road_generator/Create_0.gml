@@ -149,12 +149,13 @@ for (var i = 0; i < array_length(road_list) - 1; i++) {
 	var left_uv = sprite_get_uvs(left_lane_sprite, left_subimage);
 	var right_uv = sprite_get_uvs(right_lane_sprite, right_subimage);
 	var shoulder_uv = sprite_get_uvs(spr_road_shoulder, 0);
+	var grass_uv = sprite_get_uvs(spr_grass, 0);
 	switch(road.zone) {
 		case ZONE.CITY:
 			shoulder_uv = sprite_get_uvs(spr_road_shoulder, 1);
+			grass_uv = sprite_get_uvs(spr_grass, 1);
 			break;
 	}
-	var grass_uv = sprite_get_uvs(spr_grass, 0);
 	
 	var road_render_points = [
 		 [
