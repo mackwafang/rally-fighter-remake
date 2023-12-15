@@ -3,7 +3,7 @@
 //}
 if (global.CAMERA_MODE_3D) {
 	shader_set(shd_sprite_billboard);
-	matrix_set(matrix_world, matrix_build(x, y, z, 0, 0, 0, 1, 1, 1));
+	matrix_set(matrix_world, matrix_build(x, y, z, 0, 0, 0, 0.5, 0.5, 0.5));
 	draw_sprite_ext(spr_bike_3d, 0, 0, 0, 0.25, 0.25, (turn_rate * 5), c_white, image_alpha);
 	draw_sprite_ext(spr_bike_3d_detail, 0, 0, 0, 0.25, 0.25, (turn_rate * 5), vehicle_color.tetriary, image_alpha);
 	draw_sprite_ext(spr_bike_3d_detail, 1, 0, 0, 0.25, 0.25, (turn_rate * 5), vehicle_color.primary, image_alpha);

@@ -124,7 +124,7 @@ gear_shift = function() {
 	var gear_shift_rpm_upper = gear_shift_rpm[gear-1][1]
 	var gear_shift_rpm_lower = gear_shift_rpm[gear-1][0];
 		
-	if (gear_shift_wait == 0) {
+	//if (gear_shift_wait == 0) {
 		if (accelerating or (engine_rpm > 9000)) {
 			if ((engine_rpm > gear_shift_rpm_upper)) {
 				gear_shift_up();
@@ -135,7 +135,7 @@ gear_shift = function() {
 				gear_shift_down();
 			}
 		}
-	}
+	//}
 }
 
 is_on_road = function(_x, _y, index) {

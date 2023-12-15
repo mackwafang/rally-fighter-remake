@@ -24,6 +24,7 @@
     {"name":"obj_building","order":9,"path":"objects/obj_building/obj_building.yy",},
     {"name":"point_in_polygon","order":8,"path":"scripts/point_in_polygon/point_in_polygon.yy",},
     {"name":"spr_cross","order":11,"path":"sprites/spr_cross/spr_cross.yy",},
+    {"name":"spr_building_front","order":22,"path":"sprites/spr_building_front/spr_building_front.yy",},
     {"name":"obj_traffic_prop","order":6,"path":"objects/obj_traffic_prop/obj_traffic_prop.yy",},
     {"name":"spr_car","order":1,"path":"sprites/spr_car/spr_car.yy",},
     {"name":"spr_grass","order":2,"path":"sprites/spr_grass/spr_grass.yy",},

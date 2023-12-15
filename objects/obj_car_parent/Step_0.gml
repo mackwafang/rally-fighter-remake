@@ -19,7 +19,7 @@ if (can_move) {
 	if (is_player) {
 		accelerating = keyboard_check(global.player_input.accelerate);
 		braking = keyboard_check(global.player_input.brake);
-		boosting = keyboard_check(global.player_input.boost);
+		boosting = keyboard_check_pressed(global.player_input.boost);
 	
 		turning = (keyboard_check(global.player_input.turn.right) << 1) | (keyboard_check(global.player_input.turn.left));
 	}
@@ -83,6 +83,13 @@ if (can_move) {
 				turn_rate += clamp(tr, -2, 2);
 				braking = (abs(tr) > 1) | ((nav_road.get_ideal_throttle() < 0.25) && (abs(angle_diff) > 15));
 			}
+			
+			// enables boost
+			if (boost_juice >= 100) {
+				if (irandom(10) < global.difficulty) {
+					boosting = true;
+				}
+			}
 			#endregion
 		}
 	}
@@ -120,7 +127,7 @@ var drive_torque = engine_torque * engine_to_wheel_ratio * transfer_eff;
 	
 var f_drag = -c_drag * velocity;
 var f_rr = -c_rr * velocity;
-var f_surface = -mass * global.gravity_3d * ((on_road) ? 0.2 : 2);
+var f_surface = -mass * global.gravity_3d * ((on_road) ? 0.2 : 4);
 var f_brake = (braking) ? -abs(drive_torque / wheel_radius) * braking_power : 0;
 var f_turn = -abs(turn_rate) * mass;
 if (velocity <= 0) {
@@ -191,6 +198,9 @@ else {
 	else {
 		boost_active = false;
 		boost_juice_penalty = clamp(boost_juice_penalty + 10, 0, 100);
+		if (!is_player) {
+			boosting = false;
+		}
 	}
 }
 
