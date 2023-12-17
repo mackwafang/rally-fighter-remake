@@ -59,6 +59,7 @@
     {"id":{"name":"constants","path":"scripts/constants/constants.yy",},},
     {"id":{"name":"spr_bike","path":"sprites/spr_bike/spr_bike.yy",},},
     {"id":{"name":"spr_starting_number","path":"sprites/spr_starting_number/spr_starting_number.yy",},},
+    {"id":{"name":"world_to_screen","path":"scripts/world_to_screen/world_to_screen.yy",},},
     {"id":{"name":"point_to_line","path":"scripts/point_to_line/point_to_line.yy",},},
     {"id":{"name":"spr_bike_3d","path":"sprites/spr_bike_3d/spr_bike_3d.yy",},},
     {"id":{"name":"init_bike_shadow_buffer","path":"scripts/init_bike_shadow_buffer/init_bike_shadow_buffer.yy",},},

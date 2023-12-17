@@ -138,27 +138,30 @@ gear_shift = function() {
 	//}
 }
 
-is_on_road = function(_x, _y, index) {
+is_on_road = function(_x, _y, road_id) {
 	/// @function			is_on_road(x, y, index)
-	var polygon_x = obj_road_generator.road_list[index].get_collision_x();
-	var polygon_y = obj_road_generator.road_list[index].get_collision_y();
+	var polygon_x = obj_road_generator.road_list[road_id].get_collision_x();
+	var polygon_y = obj_road_generator.road_list[road_id].get_collision_y();
 	
 	return pnpoly(4, polygon_x, polygon_y, _x, _y);
 }
 
 set_on_road = function() {
-	var p_i = last_road_index-1;
-	while(p_i++ < last_road_index + 100) {//global.road_list_length-1) {
-		var road = obj_road_generator.road_list[p_i];
-		var polygon = road.get_collision_points();
-		if (point_distance(x,y,road.x,road.y) > road.get_lanes() * road.lane_width) {continue;}
-		// on road collision
-		on_road = is_on_road(x, y, p_i);
-		if (on_road) {
-			last_road_index = p_i;
-			break;
-		}
-	}
+	last_road_index = find_nearest_road(x, y, last_road_index)._id;
+	on_road = is_on_road(x,y,last_road_index);
+	on_road_index = last_road_index;
+	//var p_i = last_road_index-1;
+	//while(p_i++ < last_road_index + 100) {//global.road_list_length-1) {
+	//	var road = obj_road_generator.road_list[p_i];
+	//	var polygon = road.get_collision_points();
+	//	if (point_distance(x,y,road.x,road.y) > road.get_lanes() * road.lane_width) {continue;}
+	//	// on road collision
+	//	on_road = is_on_road(x, y, p_i);
+	//	if (on_road) {
+	//		last_road_index = p_i;
+	//		break;
+	//	}
+	//}
 	return obj_road_generator.road_list[last_road_index];
 }
 

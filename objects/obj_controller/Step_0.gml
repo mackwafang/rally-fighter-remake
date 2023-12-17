@@ -42,15 +42,17 @@ if (!global.DEBUG_FREE_CAMERA) {
 	}
 	else {
 		gpu_set_zwriteenable(false);
-		camera_set_view_mat(main_camera, matrix_build_lookat(
+		global.view_matrix = matrix_build_lookat(
 			main_camera_target.x+lengthdir_x(-30, main_camera_target.image_angle), 
 			main_camera_target.y+lengthdir_y(-30, main_camera_target.image_angle), 
 			main_camera_target.z + z, 
 			main_camera_target.x+lengthdir_x(500, main_camera_target.image_angle),
 			main_camera_target.y+lengthdir_y(500, main_camera_target.image_angle),
-			main_camera_target.z +z+120, 0, 0, 1)
+			main_camera_target.z +z+120, 0, 0, 1
 		);
-		camera_set_proj_mat(main_camera, matrix_build_projection_perspective_fov(120, room_width/room_height, 1, 5000));
+		
+		camera_set_view_mat(main_camera, global.view_matrix);
+		camera_set_proj_mat(main_camera, global.projection_matrix);
 		camera_apply(main_camera);
 		gpu_set_zwriteenable(true);
 	}

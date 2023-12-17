@@ -9,7 +9,7 @@ function torque_lookup(rpm) {
 		490,		// 6k rpm
 		450,		// 7k rpm
 		400,		// 8k rpm
-		300,		// 9k rpm
+		370,		// 9k rpm
 		250,		// 10k rpm
 	]
 	var index = max(1, min(array_length(torque_table)-2, rpm div 1000));

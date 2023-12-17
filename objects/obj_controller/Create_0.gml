@@ -88,6 +88,11 @@ window_set_size(main_camera_size.width, main_camera_size.height);
 camera_set_view_size(main_camera, main_camera_size.width, main_camera_size.height);
 surface_resize(application_surface, main_camera_size.width, main_camera_size.height);
 
+global.view_matrix = undefined;
+global.projection_matrix = matrix_build_projection_perspective_fov(120, 4/3, 1, 5000);
+
+
+// set up sky box
 vertex_format_begin();
 vertex_format_add_position_3d();
 vertex_format_add_color();

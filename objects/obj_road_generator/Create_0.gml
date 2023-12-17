@@ -45,7 +45,7 @@ for (var i = 0; i < array_length(road_list)-1; i++) {
 	road.direction = point_direction(road.x, road.y, next_road.x, next_road.y);
 	road.length = sqrt(sqr(road.x - next_road.x) + sqr(road.y - next_road.y) + sqr(road.z - next_road.z));// point_distance(road.x, road.y, next_road.x, next_road.y);
 	
-	road.ideal_throttle = (road.length / (control_points_dist / road_segments)) * (global.difficulty / 2);
+	road.ideal_throttle = (road.length / (control_points_dist / road_segments))*0.95;
 	road._id = i;
 	road.lane_width = lane_width;
 	road.zone = cur_zone;
