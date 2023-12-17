@@ -53,7 +53,8 @@ for (var i = 0; i < array_length(road_list)-1; i++) {
 	track_length += road.length;
 	
 	if (lane_change_to != cur_lane_change_to) {
-		cur_lane_change_to += sign(lane_change_to - prev_lane_lane_to) * 0.25;
+		cur_lane_change_to += sign(lane_change_to - prev_lane_lane_to) * 0.5;
+		road.transition_lane = true;
 	}
 	
 	// road changes lane count
@@ -157,6 +158,20 @@ for (var i = 0; i < array_length(road_list) - 1; i++) {
 			break;
 	}
 	
+	if (road.transition_lane) {
+		shoulder_uv = sprite_get_uvs(spr_road, 1);
+		
+		grass_uv = sprite_get_uvs(spr_road_side, 0);
+		if (i > 1) {
+			if (road.transition_lane & !road_list[@i-1].next_road.transition_lane) {
+				grass_uv = sprite_get_uvs(spr_road_side, 1);
+			}
+		}
+		if (!next_road.transition_lane) {
+				grass_uv = sprite_get_uvs(spr_road_side, 2);
+			}
+	}
+	
 	var road_render_points = [
 		 [
 			road.x+lengthdir_x(lane_width*left_lanes, road.direction+90),
@@ -258,8 +273,8 @@ for (var i = 0; i < array_length(road_list) - 1; i++) {
 	
 	switch(road.zone) {
 		// create building
-		case ZONE.CITY:
-			if ((i%3) == 0) {
+		case ZONE.CITY:	
+			if (((i%3) == 0) & (!road.transition_lane)) {
 				for (var j = -1; j <= 1; j += 2) {
 					var func = undefined;
 					switch(j) {
@@ -271,13 +286,13 @@ for (var i = 0; i < array_length(road_list) - 1; i++) {
 							break;
 					}
 					var prop_obj = instance_create_layer(
-						road.x + lengthdir_x(func() * lane_width + 256, road.direction-(90 * j)),
-						road.y + lengthdir_y(func() * lane_width + 256, road.direction-(90 * j)),
+						road.x + lengthdir_x((func() * lane_width + 256) * j , road.direction+90),
+						road.y + lengthdir_y((func() * lane_width + 256) * j, road.direction+90),
 						"Instances",
 						obj_building
 					);
 					prop_obj.z = road.z;
-					prop_obj.direction = road.direction + (j == -1 ? 180 : 0);
+					prop_obj.direction = road.direction + (j == 1 ? 180 : 0);
 				}
 			}
 			break;

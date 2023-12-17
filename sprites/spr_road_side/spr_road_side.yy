@@ -1,10 +1,10 @@
 {
   "resourceType": "GMSprite",
   "resourceVersion": "1.0",
-  "name": "spr_road_no_lane_mark",
-  "bbox_bottom": 95,
+  "name": "spr_road_side",
+  "bbox_bottom": 511,
   "bbox_left": 0,
-  "bbox_right": 63,
+  "bbox_right": 31,
   "bbox_top": 0,
   "bboxMode": 0,
   "collisionKind": 1,
@@ -13,14 +13,14 @@
   "edgeFiltering": false,
   "For3D": false,
   "frames": [
-    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"ff252289-8fb2-4202-8738-f1feb238dd8e",},
-    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"bda4ffb1-096a-4962-ad8f-2b5c9252d73a",},
     {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"70702446-f961-41a6-bf6c-b2a1adfd1366",},
+    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"bda4ffb1-096a-4962-ad8f-2b5c9252d73a",},
     {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"cc6f353b-25d2-44e8-ae89-8b72589ef7e5",},
+    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"ff252289-8fb2-4202-8738-f1feb238dd8e",},
   ],
   "gridX": 0,
   "gridY": 0,
-  "height": 128,
+  "height": 512,
   "HTile": true,
   "layers": [
     {"resourceType":"GMImageLayer","resourceVersion":"1.0","name":"5d5739ba-0781-4665-94e0-af8f75979179","blendMode":0,"displayName":"default","isLocked":false,"opacity":100.0,"visible":true,},
@@ -58,7 +58,7 @@
   "sequence": {
     "resourceType": "GMSequence",
     "resourceVersion": "1.4",
-    "name": "spr_road_no_lane_mark",
+    "name": "spr_road_side",
     "autoRecord": true,
     "backdropHeight": 768,
     "backdropImageOpacity": 0.5,
@@ -80,10 +80,10 @@
     "timeUnits": 1,
     "tracks": [
       {"resourceType":"GMSpriteFramesTrack","resourceVersion":"1.0","name":"frames","builtinName":0,"events":[],"inheritsTrackColour":true,"interpolation":1,"isCreationTrack":false,"keyframes":{"resourceType":"KeyframeStore<SpriteFrameKeyframe>","resourceVersion":"1.0","Keyframes":[
-            {"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"1.0","Channels":{"0":{"resourceType":"SpriteFrameKeyframe","resourceVersion":"1.0","Id":{"name":"ff252289-8fb2-4202-8738-f1feb238dd8e","path":"sprites/spr_road_no_lane_mark/spr_road_no_lane_mark.yy",},},},"Disabled":false,"id":"7b823c6f-2422-43fa-a9ff-52918f0c1e19","IsCreationKey":false,"Key":0.0,"Length":1.0,"Stretch":false,},
-            {"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"1.0","Channels":{"0":{"resourceType":"SpriteFrameKeyframe","resourceVersion":"1.0","Id":{"name":"bda4ffb1-096a-4962-ad8f-2b5c9252d73a","path":"sprites/spr_road_no_lane_mark/spr_road_no_lane_mark.yy",},},},"Disabled":false,"id":"16800452-bb63-4a0f-81cd-3fd5e8abc13c","IsCreationKey":false,"Key":1.0,"Length":1.0,"Stretch":false,},
-            {"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"1.0","Channels":{"0":{"resourceType":"SpriteFrameKeyframe","resourceVersion":"1.0","Id":{"name":"70702446-f961-41a6-bf6c-b2a1adfd1366","path":"sprites/spr_road_no_lane_mark/spr_road_no_lane_mark.yy",},},},"Disabled":false,"id":"b43d40ca-8058-4f6d-a5b3-e06f9775fb81","IsCreationKey":false,"Key":2.0,"Length":1.0,"Stretch":false,},
-            {"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"1.0","Channels":{"0":{"resourceType":"SpriteFrameKeyframe","resourceVersion":"1.0","Id":{"name":"cc6f353b-25d2-44e8-ae89-8b72589ef7e5","path":"sprites/spr_road_no_lane_mark/spr_road_no_lane_mark.yy",},},},"Disabled":false,"id":"73fb90d5-8e9c-404c-847a-16c608a81599","IsCreationKey":false,"Key":3.0,"Length":1.0,"Stretch":false,},
+            {"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"1.0","Channels":{"0":{"resourceType":"SpriteFrameKeyframe","resourceVersion":"1.0","Id":{"name":"70702446-f961-41a6-bf6c-b2a1adfd1366","path":"sprites/spr_road_side/spr_road_side.yy",},},},"Disabled":false,"id":"49bff5a9-8f62-45ee-ac63-5f35a395a2ea","IsCreationKey":false,"Key":0.0,"Length":1.0,"Stretch":false,},
+            {"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"1.0","Channels":{"0":{"resourceType":"SpriteFrameKeyframe","resourceVersion":"1.0","Id":{"name":"bda4ffb1-096a-4962-ad8f-2b5c9252d73a","path":"sprites/spr_road_side/spr_road_side.yy",},},},"Disabled":false,"id":"0a7372a3-3808-4a01-9ed2-8c4b7f1922d9","IsCreationKey":false,"Key":1.0,"Length":1.0,"Stretch":false,},
+            {"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"1.0","Channels":{"0":{"resourceType":"SpriteFrameKeyframe","resourceVersion":"1.0","Id":{"name":"cc6f353b-25d2-44e8-ae89-8b72589ef7e5","path":"sprites/spr_road_side/spr_road_side.yy",},},},"Disabled":false,"id":"ecfeaadd-da1c-48c9-a8b7-b1f4bd6b0ed1","IsCreationKey":false,"Key":2.0,"Length":1.0,"Stretch":false,},
+            {"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"1.0","Channels":{"0":{"resourceType":"SpriteFrameKeyframe","resourceVersion":"1.0","Id":{"name":"ff252289-8fb2-4202-8738-f1feb238dd8e","path":"sprites/spr_road_side/spr_road_side.yy",},},},"Disabled":false,"id":"77c12233-c175-4f89-a24a-6e7eb9162a4e","IsCreationKey":false,"Key":3.0,"Length":1.0,"Stretch":false,},
           ],},"modifiers":[],"spriteId":null,"trackColour":0,"tracks":[],"traits":0,},
     ],
     "visibleRange": null,
@@ -99,5 +99,5 @@
   },
   "type": 0,
   "VTile": true,
-  "width": 64,
+  "width": 32,
 }

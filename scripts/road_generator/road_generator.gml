@@ -16,7 +16,8 @@ function RoadNode(_Point) constructor {
 	_id = -1;
 	next_road = -1;
 	elevation = 0;				// segment elevation in rad
-	zone = 
+	zone = ZONE.SUBURBAN		// road's current zone to render surrounding enviornment
+	transition_lane	= false;	// is road is transitioning to new lane count
 	
 	toString = function() {
 		return $"({x}, {y}, {z}), direction: {direction}, Lanes: {lanes}\n";
