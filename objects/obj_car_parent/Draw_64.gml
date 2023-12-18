@@ -43,8 +43,16 @@ if (ai_behavior.part_of_race) {
 	}
 	else {
 		#region draw data around driver on screen
-		var screen_coord = world_to_screen(x, y, z, global.view_matrix, global.projection_matrix);
-		draw_text(screen_coord[0], screen_coord[1], $"{screen_coord[0]}, {screen_coord[1]}");
+		var screen_coord = world_to_screen(x, y, z+10, global.view_matrix, global.projection_matrix);
+		var bar_border = 2;
+		var bar_height = 8;
+		var bar_width = 30;
+		
+		screen_coord[0] -= bar_width / 2;
+		
+		draw_set_alpha(1 - (abs(dist_along_road - obj_controller.main_camera_target.dist_along_road) / 512));
+		draw_bar_color_border(screen_coord[0], screen_coord[1], hp, max_hp, bar_width, bar_height, bar_border, c_yellow, c_yellow, c_yellow, c_yellow, 0);
+		draw_set_alpha(1);
 		#endregion
 	}
 }
@@ -67,8 +75,9 @@ if (obj_controller.main_camera_target.id == id) {
 	var bar_y = port_height - 32;
 	var bar_height = 8;
 	var bar_width = 80;
-	draw_rectangle_color(bar_x, bar_y, bar_x + bar_width, bar_y - bar_height, 0, 0, 0, 0, false);
-	draw_rectangle_color(bar_x + bar_border, bar_y - bar_border, bar_x + (boost_juice/100*(bar_width - bar_border)), bar_y - bar_height + bar_border, c_yellow, c_yellow, c_yellow, c_yellow, false);
+	draw_bar_color_border(bar_x, bar_y, boost_juice, 100, bar_width, bar_height, bar_border, c_yellow, c_yellow, c_yellow, c_yellow, 0);
+	//draw_rectangle_color(bar_x, bar_y, bar_x + bar_width, bar_y - bar_height, 0, 0, 0, 0, false);
+	//draw_rectangle_color(bar_x + bar_border, bar_y - bar_border, bar_x + (boost_juice/100*(bar_width - bar_border)), bar_y - bar_height + bar_border, c_yellow, c_yellow, c_yellow, c_yellow, false);
 	
 	// rpm odometer
 	var odometer_x = 48;

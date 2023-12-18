@@ -19,7 +19,7 @@ var stay_straight = 5;
 control_points[0] = new Point3D(0, 0, 0);
 for (var s = 1; s < primary_count; s++) {
 	if (s > stay_straight) {
-		next_dir += random_range(-1,1)*(global.difficulty * 20);
+		//next_dir += random_range(-1,1)*(global.difficulty * 30);
 		next_elevation = irandom(600) * choose(-1,0,1);
 	}
 	control_points[s] = new Point3D(
@@ -33,11 +33,11 @@ road_list = generate_roads(control_points, road_segments);
 
 // set up road node data
 var lane_change_duration = 100; //how many nodes until change to new lane
-var lane_change_to = 3; // change this side of road to this number of lanes
-var cur_lane_change_to = 3; // current lane change for transition
-var prev_lane_lane_to = 3; // previous lane change
+var lane_change_to = 1+irandom(2); // change this side of road to this number of lanes
+var cur_lane_change_to = lane_change_to; // current lane change for transition
+var prev_lane_lane_to = lane_change_to; // previous lane change
 var lane_side_affected = ROAD_LANE_CHANGE_AFFECT.BOTH; // which side of the road changes 
-var cur_zone = ZONE.SUBURBAN;
+var cur_zone = choose(ZONE.CITY);
 for (var i = 0; i < array_length(road_list)-1; i++) {
 	var road = road_list[@i];
 	var next_road = road_list[@i+1];
@@ -274,25 +274,36 @@ for (var i = 0; i < array_length(road_list) - 1; i++) {
 	switch(road.zone) {
 		// create building
 		case ZONE.CITY:	
-			if (((i%3) == 0) & (!road.transition_lane)) {
+			if (((i%2) == 0) & (!road.transition_lane)) {
 				for (var j = -1; j <= 1; j += 2) {
 					var func = undefined;
+					var pos = [road.x, road.y];
 					switch(j) {
 						case -1:
-							func = road.get_lanes_right;
+							func = road.get_lanes_left;
+							pos = [next_road.x, next_road.y];
 							break;
 						case 1:
 							func = road.get_lanes_right;
 							break;
 					}
 					var prop_obj = instance_create_layer(
-						road.x + lengthdir_x((func() * lane_width + 256) * j , road.direction+90),
-						road.y + lengthdir_y((func() * lane_width + 256) * j, road.direction+90),
+						pos[0] + lengthdir_x((func() * lane_width + 256) * j , road.direction-90),
+						pos[1] + lengthdir_y((func() * lane_width + 256) * j, road.direction-90),
 						"Instances",
 						obj_building
 					);
 					prop_obj.z = road.z;
-					prop_obj.direction = road.direction + (j == 1 ? 180 : 0);
+					prop_obj.direction = road.direction + (j == -1 ? 180 : 0);
+					prop_obj.building_width = road.length;
+					prop_obj.building_height = 128;
+					prop_obj.z_start = road.z;
+					prop_obj.z_end = next_road.z;
+					if (j == -1) {
+						prop_obj.z_start = next_road.z;
+						prop_obj.z_end = road.z;
+					}
+					prop_obj.init_vertex_buffer();
 				}
 			}
 			break;

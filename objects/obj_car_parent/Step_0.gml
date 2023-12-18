@@ -121,7 +121,7 @@ if (!is_on_road(x, y, last_road_index)) {
 }
 // calculate engine stuff for acceleration
 var engine_to_wheel_ratio = gear_ratio[gear-1] * diff_ratio;
-var engine_torque_max = (horsepower / engine_rpm * 5252) * (boost_active ? 40 : 20);//torque_lookup(engine_rpm)
+var engine_torque_max = (horsepower / engine_rpm * 5252) * 20;//torque_lookup(engine_rpm)
 var engine_torque = engine_torque_max * engine_power;
 var drive_torque = engine_torque * engine_to_wheel_ratio * transfer_eff;
 	
@@ -140,7 +140,7 @@ drive_force = (drive_torque / wheel_radius) + f_drag + f_rr + f_brake + f_surfac
 push_vector.x = max(0, push_vector.x - abs(drive_force));
 push_vector.y = max(0, push_vector.y * 0.95);
 
-drive_torque = drive_force * wheel_radius;
+drive_torque = drive_force * wheel_radius * (boost_active ? 4 : 1);
 acceleration = (drive_torque / inertia);
 
 var wheel_rotation_rate = velocity * 100 / 3600 / wheel_radius;

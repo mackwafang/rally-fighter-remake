@@ -55,6 +55,7 @@
     {"name":"spr_explosion","order":13,"path":"sprites/spr_explosion/spr_explosion.yy",},
     {"name":"spr_car_detail","order":3,"path":"sprites/spr_car_detail/spr_car_detail.yy",},
     {"name":"obj_tree","order":8,"path":"objects/obj_tree/obj_tree.yy",},
+    {"name":"draw_bar_color_border","order":18,"path":"scripts/draw_bar_color_border/draw_bar_color_border.yy",},
     {"name":"spr_cloud","order":18,"path":"sprites/spr_cloud/spr_cloud.yy",},
     {"name":"spr_tree","order":19,"path":"sprites/spr_tree/spr_tree.yy",},
     {"name":"spr_building_side","order":21,"path":"sprites/spr_building_side/spr_building_side.yy",},

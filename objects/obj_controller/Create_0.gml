@@ -1,7 +1,7 @@
 cam_move_speed = 16;
 cam_zoom = 1;
 cam_angle = 0;
-z = -60;
+z = -50;
 
 depth = 10000;
 
@@ -41,7 +41,7 @@ for (var i = 0; i < array_length(participating_vehicles); i++) {
 	car.race_rank = (array_length(participating_vehicles) - i);
 	var road = obj_road_generator.road_list[(i div 3) + 1];
 	var lane_position_x = (((i % 3) / 3) * road.length) + (road.length * (i div 3));
-	var lane_position_y = ((i % road.get_lanes_right()) * road.lane_width) + (road.lane_width / 2);
+	var lane_position_y = ((i % road.get_lanes_right()) * road.lane_width) + (road.lane_width / 2) + (irandom(road.lane_width / 2) * choose(-1,1));
 	
 	var dist = point_distance(road.x, road.y, road.x + lane_position_x, road.y + lane_position_y);
 	var dir = point_direction(road.x, road.y, road.x + lane_position_x, road.y + lane_position_y);
@@ -87,7 +87,6 @@ view_set_hport(0, main_camera_size.height);
 window_set_size(main_camera_size.width, main_camera_size.height);
 camera_set_view_size(main_camera, main_camera_size.width, main_camera_size.height);
 surface_resize(application_surface, main_camera_size.width, main_camera_size.height);
-
 global.view_matrix = undefined;
 global.projection_matrix = matrix_build_projection_perspective_fov(120, 4/3, 1, 5000);
 
