@@ -2,9 +2,9 @@ randomize();
 //random_set_seed(0);
 depth = 1000;
 
-primary_count = 80 * global.difficulty;
+// primary_count = 80 * global.difficulty;
 road_segments = 15;
-control_points = array_create(primary_count);
+control_points = [];
 control_points_dist = 2048;
 lane_width = 80;
 track_length = 0;
@@ -12,26 +12,58 @@ beyond_shoulder_range = 1500;
 
 var t = current_time;
 
-// initialize control points
-var next_dir = 0;
-var next_elevation = 0
-var stay_straight = 5;
-control_points[0] = new Point3D(0, 0, 0);
-for (var s = 1; s < primary_count; s++) {
-	if (s > stay_straight) {
-		next_dir += random_range(-1,1)*(global.difficulty * 20);
-		next_elevation = irandom(500) * choose(-1,0,1);
-	}
-	control_points[s] = new Point3D(
-		control_points[s-1].x + (cos(degtorad(next_dir)) * control_points_dist),//((s < stay_straight) ? control_points_dist : irandom_range(control_points_dist/4, control_points_dist))),
-		control_points[s-1].y + (sin(degtorad(next_dir)) * control_points_dist),//((s < stay_straight) ? control_points_dist : irandom_range(control_points_dist/4, control_points_dist)))
-		control_points[s-1].z + next_elevation//((s < stay_straight) ? control_points_dist : irandom_range(control_points_dist/4, control_points_dist)))
-	);
+
+// initialize control points using path finding via a-star
+grid_width = 64;
+grid_height = 32;
+grid = ds_list_create();
+// intialize random weights for grids
+var next_weight = 0;
+for (var i = 0; i < grid_width* grid_height; i++) {
+	next_weight += irandom(25) * choose(-1,1);
+	ds_list_add(grid, next_weight);
 }
+var control_start = irandom(grid_height) * grid_width;
+var control_end = (irandom(grid_height) * grid_width) - 1;
+control_path = a_star(grid, control_start, control_end, grid_width, a_star_heuristic);
+primary_count = array_length(control_path);
+for (var s = 0; s < array_length(control_path); s++) {
+	var xx = (control_path[s] % grid_width) * control_points_dist;
+	var yy = (control_path[s] div grid_width) * control_points_dist;
+	var zz = grid[|s];
+	control_points[s] = new Point3D(xx, yy, zz);
+}
+
+
+// initialize control points
+//var next_dir = 0;
+//var next_elevation = 0
+//var stay_straight = 5;
+//control_points[0] = new Point3D(0, 0, 0);
+//for (var s = 1; s < primary_count; s++) {
+//	if (s > stay_straight) {
+//		next_dir += random_range(-1,1)*(global.difficulty * 20);
+//		next_elevation = irandom(500) * choose(-1,0,1);
+//	}
+//	control_points[s] = new Point3D(
+//		control_points[s-1].x + (cos(degtorad(next_dir)) * control_points_dist),//((s < stay_straight) ? control_points_dist : irandom_range(control_points_dist/4, control_points_dist))),
+//		control_points[s-1].y + (sin(degtorad(next_dir)) * control_points_dist),//((s < stay_straight) ? control_points_dist : irandom_range(control_points_dist/4, control_points_dist)))
+//		control_points[s-1].z + next_elevation//((s < stay_straight) ? control_points_dist : irandom_range(control_points_dist/4, control_points_dist)))
+//	);
+//}
 
 road_list = generate_roads(control_points, road_segments);
 global.destination_road_index = array_length(road_list) - (road_segments * 2);
 global.race_length = 0;
+
+//set up building vertex buffer
+vertex_format_begin();
+vertex_format_add_position_3d();
+vertex_format_add_color();
+vertex_format_add_texcoord();
+building_vertex_format = vertex_format_end();
+global.building_vertex_buffer = vertex_create_buffer();
+
 
 // set up road node data
 var lane_change_duration = 100; //how many nodes until change to new lane
@@ -47,7 +79,7 @@ for (var i = 0; i < array_length(road_list)-1; i++) {
 	road.direction = point_direction(road.x, road.y, next_road.x, next_road.y);
 	road.length = sqrt(sqr(road.x - next_road.x) + sqr(road.y - next_road.y) + sqr(road.z - next_road.z));// point_distance(road.x, road.y, next_road.x, next_road.y);
 	
-	road.ideal_throttle = (road.length / (control_points_dist / road_segments))*0.95;
+	road.ideal_throttle = (road.length / (control_points_dist / road_segments))*(global.difficulty < 1 ? 0.95 : 1);
 	road._id = i;
 	road.lane_width = lane_width;
 	road.zone = cur_zone;
@@ -115,8 +147,10 @@ vertex_format_add_color();
 vertex_format_add_texcoord();
 road_vertex_format = vertex_format_end();
 road_vertex_buffers = vertex_create_buffer();
-vertex_begin(road_vertex_buffers, road_vertex_format);
 
+
+vertex_begin(global.building_vertex_buffer, building_vertex_format);
+vertex_begin(road_vertex_buffers, road_vertex_format);
 for (var i = 0; i < array_length(road_list) - 1; i++) {
 	// for each road piece
 	var road = road_list[@ i];
@@ -364,6 +398,8 @@ for (var i = 0; i < array_length(road_list) - 1; i++) {
 }
 vertex_end(road_vertex_buffers);
 vertex_freeze(road_vertex_buffers);
+vertex_end(global.building_vertex_buffer);
+vertex_freeze(global.building_vertex_buffer);
 
 global.road_list_length = array_length(road_list);
 

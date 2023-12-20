@@ -31,6 +31,7 @@
     {"name":"spr_grass","order":2,"path":"sprites/spr_grass/spr_grass.yy",},
     {"name":"spr_rank_font_small","order":10,"path":"sprites/spr_rank_font_small/spr_rank_font_small.yy",},
     {"name":"find_nearest_road","order":10,"path":"scripts/find_nearest_road/find_nearest_road.yy",},
+    {"name":"astar","order":19,"path":"scripts/astar/astar.yy",},
     {"name":"spr_prop","order":20,"path":"sprites/spr_prop/spr_prop.yy",},
     {"name":"spr_vehicle_shadow","order":6,"path":"sprites/spr_vehicle_shadow/spr_vehicle_shadow.yy",},
     {"name":"globals","order":5,"path":"scripts/globals/globals.yy",},

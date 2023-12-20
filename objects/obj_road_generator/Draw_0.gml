@@ -1,6 +1,8 @@
 // draw roads
 var tex = sprite_get_texture(spr_road, 0);
 vertex_submit(road_vertex_buffers, pr_trianglelist, tex);
+tex = sprite_get_texture(spr_building_side, 0);
+vertex_submit(global.building_vertex_buffer, pr_trianglelist, tex);
 
 if (global.DEBUG_ROAD_DRAW_CONTROL_POINTS) {
 	for (var i = 0; i < array_length(control_points) - 1; i++) {

@@ -9,6 +9,9 @@ participating_vehicles = [];
 global.total_participating_vehicles = 12;
 global.difficulty = 2;
 global.gravity_3d = 9.8;
+global.race_completed = false;
+
+player_obj = noone;
 
 // cam stuff
 if (global.CAMERA_MODE_3D) {
@@ -16,7 +19,8 @@ if (global.CAMERA_MODE_3D) {
 	gpu_set_ztestenable(true);
 	gpu_set_alphatestenable(true);
 	gpu_set_alphatestref(64);
-	game_set_speed(60, gamespeed_fps);
+	game_set_speed(72, gamespeed_fps);
+	display_reset(0, true);
 	init_bike_shadow_buffer();
 }
 
@@ -28,6 +32,8 @@ for (var i = 0; i < global.total_participating_vehicles; i++) {
 	var car = instance_create_layer(0, 0, "Instances", obj_car);
 	if (i == 0) {
 		car.is_player = true;
+		player_obj = car;
+
 	}
 	car.car_id = i+1;
 	car.depth = 10;

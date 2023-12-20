@@ -49,6 +49,7 @@
     {"id":{"name":"spr_rank_font_small","path":"sprites/spr_rank_font_small/spr_rank_font_small.yy",},},
     {"id":{"name":"road_generator","path":"scripts/road_generator/road_generator.yy",},},
     {"id":{"name":"find_nearest_road","path":"scripts/find_nearest_road/find_nearest_road.yy",},},
+    {"id":{"name":"astar","path":"scripts/astar/astar.yy",},},
     {"id":{"name":"spr_prop","path":"sprites/spr_prop/spr_prop.yy",},},
     {"id":{"name":"spr_vehicle_shadow","path":"sprites/spr_vehicle_shadow/spr_vehicle_shadow.yy",},},
     {"id":{"name":"spr_road","path":"sprites/spr_road/spr_road.yy",},},
