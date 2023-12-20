@@ -22,12 +22,14 @@ max_gear = 6;
 engine_power = 0;		// throttle position
 transfer_eff = 0.8;		// transfer efficiency
 acceleration = 0;		// acceleration value
-braking_power = 50;		// braking magnetude
+braking_power = 25;		// braking magnetude
 zspeed = 0;				// vertical 
 boost_juice = 0;		// boosting meter
 boost_usable = false;	// is boost usable
 boost_active = false;	// if boost is using
 boost_juice_penalty = 0;// penalty for using boost
+
+is_completed = false;	// did vehicle completed race
 
 air_drag_coef = 0.3;	// air drag coefficient
 drag_area = 1.2;		// cross sectional area
@@ -188,6 +190,7 @@ on_death = function() {
 		velocity = 0;
 		gear = 1;
 		rpm = 1000;
+		boost_active = false;
 		engine_power = 0;
 		if (ai_behavior.part_of_race) {
 			image_alpha = 0;

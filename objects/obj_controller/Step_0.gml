@@ -48,11 +48,12 @@ if (!global.DEBUG_FREE_CAMERA) {
 			main_camera_target.z + z, 
 			main_camera_target.x+lengthdir_x(500, main_camera_target.image_angle),
 			main_camera_target.y+lengthdir_y(500, main_camera_target.image_angle),
-			main_camera_target.z +z+120, 0, 0, 1
+			main_camera_target.z+z+120, 0, 0, 1
 		);
 		
 		camera_set_view_mat(main_camera, global.view_matrix);
 		camera_set_proj_mat(main_camera, global.projection_matrix);
+		audio_listener_orientation(0,0,1,0,1,0);
 		camera_apply(main_camera);
 		gpu_set_zwriteenable(true);
 	}
@@ -88,6 +89,7 @@ if (global.GAMEPLAY_CARS) {
 			car.on_road_index = road_at_view_edge;
 			car.max_gear = 3;
 			car.z = road_at_view_edge.z;
+			car.ai_behavior.desired_lane = irandom(road_at_view_edge.get_lanes_right());
 		}
 	}
 }

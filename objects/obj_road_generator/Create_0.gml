@@ -19,8 +19,8 @@ var stay_straight = 5;
 control_points[0] = new Point3D(0, 0, 0);
 for (var s = 1; s < primary_count; s++) {
 	if (s > stay_straight) {
-		//next_dir += random_range(-1,1)*(global.difficulty * 30);
-		next_elevation = irandom(600) * choose(-1,0,1);
+		next_dir += random_range(-1,1)*(global.difficulty * 20);
+		next_elevation = irandom(500) * choose(-1,0,1);
 	}
 	control_points[s] = new Point3D(
 		control_points[s-1].x + (cos(degtorad(next_dir)) * control_points_dist),//((s < stay_straight) ? control_points_dist : irandom_range(control_points_dist/4, control_points_dist))),
@@ -30,6 +30,8 @@ for (var s = 1; s < primary_count; s++) {
 }
 
 road_list = generate_roads(control_points, road_segments);
+global.destination_road_index = array_length(road_list) - (road_segments * 2);
+global.race_length = 0;
 
 // set up road node data
 var lane_change_duration = 100; //how many nodes until change to new lane
@@ -129,10 +131,10 @@ for (var i = 0; i < array_length(road_list) - 1; i++) {
 	var right_lanes = road.get_lanes_right();
 	var next_left_lanes = next_road.get_lanes_left();
 	var next_right_lanes = next_road.get_lanes_right();
-	var left_subimage = max(left_lanes, next_left_lanes);
-	var right_subimage = max(right_lanes, next_right_lanes);
-	var left_lane_sprite = (left_lanes != next_left_lanes) ? spr_road_no_lane_mark : spr_road;
-	var right_lane_sprite = (right_lanes != next_right_lanes) ? spr_road_no_lane_mark : spr_road;
+	var left_subimage = max(left_lanes, next_left_lanes)+4;
+	var right_subimage = max(right_lanes, next_right_lanes)+1;
+	var left_lane_sprite = (left_lanes != next_left_lanes) ? spr_road : spr_road;
+	var right_lane_sprite = (right_lanes != next_right_lanes) ? spr_road : spr_road;
 	var collision_points = [
 		 [
 			road.x+lengthdir_x(lane_width*(left_lanes + (road.shoulder[0] ? 1 : 0)), road.direction+90),
@@ -147,8 +149,6 @@ for (var i = 0; i < array_length(road_list) - 1; i++) {
 			road.y+lengthdir_y(lane_width*(right_lanes + (road.shoulder[1] ? 1 : 0)), road.direction-90),
 		]
 	];
-	var left_uv = sprite_get_uvs(left_lane_sprite, left_subimage);
-	var right_uv = sprite_get_uvs(right_lane_sprite, right_subimage);
 	var shoulder_uv = sprite_get_uvs(spr_road_shoulder, 0);
 	var grass_uv = sprite_get_uvs(spr_grass, 0);
 	switch(road.zone) {
@@ -159,18 +159,35 @@ for (var i = 0; i < array_length(road_list) - 1; i++) {
 	}
 	
 	if (road.transition_lane) {
-		shoulder_uv = sprite_get_uvs(spr_road, 1);
-		
+		// create lane intersection
+		shoulder_uv = sprite_get_uvs(spr_road_shoulder, 2);
 		grass_uv = sprite_get_uvs(spr_road_side, 0);
-		if (i > 1) {
-			if (road.transition_lane & !road_list[@i-1].next_road.transition_lane) {
-				grass_uv = sprite_get_uvs(spr_road_side, 1);
-			}
-		}
+		left_subimage = 0;
+		right_subimage = 0;
 		if (!next_road.transition_lane) {
-				grass_uv = sprite_get_uvs(spr_road_side, 2);
-			}
+			// far end
+			grass_uv = sprite_get_uvs(spr_road_side, 2);
+			left_subimage = 1;
+			right_subimage = 1;
+		}
 	}
+	else {
+		if (next_road.transition_lane) {
+			left_subimage = 1;
+			right_subimage = 1;
+		}
+	}
+	
+	if (i == global.destination_road_index) {
+		left_lane_sprite = spr_checkered;
+		right_lane_sprite = spr_checkered;
+		left_subimage = 0;
+		right_subimage = 0;
+		global.race_length = road.length_to_point;
+	}
+	
+	var left_uv = texture_get_uvs(sprite_get_texture(left_lane_sprite, left_subimage));//sprite_get_uvs(left_lane_sprite, left_subimage);
+	var right_uv = texture_get_uvs(sprite_get_texture(right_lane_sprite, right_subimage));//sprite_get_uvs(right_lane_sprite, right_subimage);
 	
 	var road_render_points = [
 		 [
@@ -227,13 +244,13 @@ for (var i = 0; i < array_length(road_list) - 1; i++) {
 		[new Point3D(road_render_points[0][2], road_render_points[1][2], next_road.z), new Point(right_uv[2], right_uv[3])],
 		
 		//right shoulder 
-		[new Point3D(road_render_points[0][2], road_render_points[1][2], next_road.z), new Point(shoulder_uv[0], shoulder_uv[1])],
+		[new Point3D(road_render_points[0][3], road_render_points[1][3], road.z), new Point(shoulder_uv[0], shoulder_uv[1])],
 		[new Point3D(road.x+lengthdir_x(lane_width*(right_lanes+1), road.direction-90), road.y+lengthdir_y(lane_width*(next_right_lanes+1), road.direction-90), road.z), new Point(shoulder_uv[0], shoulder_uv[3])],
-		[new Point3D(road_render_points[0][3], road_render_points[1][3], road.z), new Point(shoulder_uv[2], shoulder_uv[1])],
+		[new Point3D(road_render_points[0][2], road_render_points[1][2], next_road.z), new Point(shoulder_uv[2], shoulder_uv[1])],
 		
 		[new Point3D(road_render_points[0][2], road_render_points[1][2], next_road.z), new Point(shoulder_uv[2], shoulder_uv[1])],
-		[new Point3D(next_road.x+lengthdir_x(lane_width*(next_right_lanes+1), next_road.direction-90), next_road.y+lengthdir_y(lane_width*(next_right_lanes+1), next_road.direction-90), next_road.z), new Point(shoulder_uv[2], shoulder_uv[3])],
 		[new Point3D(road.x+lengthdir_x(lane_width*(right_lanes+1), road.direction-90), road.y+lengthdir_y(lane_width*(next_right_lanes+1), road.direction-90), road.z), new Point(shoulder_uv[0], shoulder_uv[3])],
+		[new Point3D(next_road.x+lengthdir_x(lane_width*(next_right_lanes+1), next_road.direction-90), next_road.y+lengthdir_y(lane_width*(next_right_lanes+1), next_road.direction-90), next_road.z), new Point(shoulder_uv[2], shoulder_uv[3])],
 		
 		// right grass
 		[new Point3D(road_render_points[0][2], road_render_points[1][2], next_road.z+5), new Point(grass_uv[0], grass_uv[1])],
@@ -274,36 +291,54 @@ for (var i = 0; i < array_length(road_list) - 1; i++) {
 	switch(road.zone) {
 		// create building
 		case ZONE.CITY:	
-			if (((i%2) == 0) & (!road.transition_lane)) {
-				for (var j = -1; j <= 1; j += 2) {
-					var func = undefined;
-					var pos = [road.x, road.y];
-					switch(j) {
-						case -1:
-							func = road.get_lanes_left;
-							pos = [next_road.x, next_road.y];
-							break;
-						case 1:
-							func = road.get_lanes_right;
-							break;
+			if (!road.transition_lane) {
+				// create buildings
+				if ((i%2) == 0) {
+					for (var j = -1; j <= 1; j += 2) {
+						var func = undefined;
+						var pos = [road.x, road.y];
+						switch(j) {
+							case -1:
+								func = road.get_lanes_left;
+								pos = [next_road.x, next_road.y];
+								break;
+							case 1:
+								func = road.get_lanes_right;
+								break;
+						}
+						var prop_obj = instance_create_layer(
+							pos[0] + lengthdir_x((func() * lane_width + 256) * j , road.direction-90),
+							pos[1] + lengthdir_y((func() * lane_width + 256) * j, road.direction-90),
+							"Instances",
+							obj_building
+						);
+						prop_obj.z = road.z;
+						prop_obj.direction = road.direction + (j == -1 ? 180 : 0);
+						prop_obj.building_width = road.length;
+						prop_obj.building_height = 128;
+						prop_obj.z_start = road.z;
+						prop_obj.z_end = next_road.z;
+						if (j == -1) {
+							prop_obj.z_start = next_road.z;
+							prop_obj.z_end = road.z;
+						}
+						prop_obj.init_vertex_buffer();
 					}
-					var prop_obj = instance_create_layer(
-						pos[0] + lengthdir_x((func() * lane_width + 256) * j , road.direction-90),
-						pos[1] + lengthdir_y((func() * lane_width + 256) * j, road.direction-90),
-						"Instances",
-						obj_building
+				}
+				// create city trees
+				if ((i%4) == 0) {
+					var begin_length = choose(
+						lane_width*(left_lanes+0.5),
+						-lane_width*(right_lanes+0.5),
 					);
-					prop_obj.z = road.z;
-					prop_obj.direction = road.direction + (j == -1 ? 180 : 0);
-					prop_obj.building_width = road.length;
-					prop_obj.building_height = 128;
-					prop_obj.z_start = road.z;
-					prop_obj.z_end = next_road.z;
-					if (j == -1) {
-						prop_obj.z_start = next_road.z;
-						prop_obj.z_end = road.z;
-					}
-					prop_obj.init_vertex_buffer();
+					var tree_obj = instance_create_layer(
+						road.x + lengthdir_x(begin_length, road.direction + 90),
+						road.y + lengthdir_y(begin_length, road.direction + 90),
+						"Instances",
+						obj_tree
+					);
+					tree_obj.image_index = choose(1,2);
+					tree_obj.z = road.z;
 				}
 			}
 			break;

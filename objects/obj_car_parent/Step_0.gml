@@ -119,6 +119,19 @@ if (!is_on_road(x, y, last_road_index)) {
 	// probably not on that segment anymore, recheck
 	on_road_index = set_on_road();
 }
+
+// finish
+
+is_completed = dist_along_road >= global.race_length;
+if (is_completed) {
+	can_move = false;
+	braking = true;
+	accelerating = false;
+	boosting = false;
+	boost_active = false;
+	engine_power = 0;
+}
+
 // calculate engine stuff for acceleration
 var engine_to_wheel_ratio = gear_ratio[gear-1] * diff_ratio;
 var engine_torque_max = (horsepower / engine_rpm * 5252) * 20;//torque_lookup(engine_rpm)
@@ -128,12 +141,12 @@ var drive_torque = engine_torque * engine_to_wheel_ratio * transfer_eff;
 var f_drag = -c_drag * velocity;
 var f_rr = -c_rr * velocity;
 var f_surface = -mass * global.gravity_3d * ((on_road) ? 0.2 : 4);
-var f_brake = (braking) ? -abs(drive_torque / wheel_radius) * braking_power : 0;
+var f_brake = (braking) ? -braking_power * 1000 : 0;
 var f_turn = -abs(turn_rate) * mass;
 if (velocity <= 0) {
 	f_brake = 0;
 	f_surface = 0;
-}	
+}
 	
 drive_force = (drive_torque / wheel_radius) + f_drag + f_rr + f_brake + f_surface + f_turn - push_vector.x;
 
@@ -148,8 +161,6 @@ engine_rpm = (wheel_rotation_rate * engine_to_wheel_ratio * 60 / (2 * pi));
 
 velocity = clamp(velocity, 0, max_velocity);
 
-
-	
 gear_shift(); // auto gear shift
 engine_rpm = clamp(engine_rpm, 1000, engine_rpm_max);
 engine_power = clamp(engine_power, 0, 1);
@@ -157,15 +168,15 @@ gear_shift_wait = clamp(gear_shift_wait-1, 0, 60);
 	
 var engine_sound_pitch = (engine_rpm / engine_rpm_max)+0.3;
 if (obj_controller.main_camera_target.id == id) {
-	audio_listener_position(x, y, 40);
+	audio_listener_position(x, y, z);
 }
 audio_emitter_pitch(engine_sound_emitter, engine_sound_pitch);
 if (engine_sound_interval == 0) {
-	// audio_play_sound_on(engine_sound_emitter, snd_car, false, 1);
+	audio_play_sound_on(engine_sound_emitter, snd_car, false, 1);
 }
-audio_emitter_position(engine_sound_emitter, x, y, 0);
+audio_emitter_position(engine_sound_emitter, x, y, z);
 
-engine_sound_interval = (engine_sound_interval + 1) % 1;
+engine_sound_interval = (engine_sound_interval + 1) % 3;
 
 // remove non-participating cars when too far away
 if (abs(obj_controller.main_camera_target.dist_along_road - dist_along_road) > 3000) {

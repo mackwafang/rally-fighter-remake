@@ -5,7 +5,7 @@ draw_text(0, 0, fps);
 // draw race length
 draw_set_valign(fa_top);
 draw_set_halign(fa_right);
-draw_text(main_camera_size.width, 0, $"{obj_road_generator.track_length / global.WORLD_TO_REAL_SCALE / 10000} km");
+draw_text(main_camera_size.width, 0, $"{global.race_length / global.WORLD_TO_REAL_SCALE / 10000} km");
 
 
 var ranking_verticle_cap = 20;

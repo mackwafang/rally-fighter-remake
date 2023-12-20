@@ -15,6 +15,7 @@
   "frames": [
     {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"3cbb13df-f9e0-4732-a375-8746894430c5",},
     {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"476fcb5f-ed5a-4896-a19e-9e00b65f9452",},
+    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"b6c741bd-e859-44a6-abea-ae30fba4e841",},
   ],
   "gridX": 0,
   "gridY": 0,
@@ -44,7 +45,7 @@
     "events": {"resourceType":"KeyframeStore<MessageEventKeyframe>","resourceVersion":"1.0","Keyframes":[],},
     "eventStubScript": null,
     "eventToFunction": {},
-    "length": 2.0,
+    "length": 3.0,
     "lockOrigin": false,
     "moments": {"resourceType":"KeyframeStore<MomentsEventKeyframe>","resourceVersion":"1.0","Keyframes":[],},
     "playback": 1,
@@ -57,6 +58,7 @@
       {"resourceType":"GMSpriteFramesTrack","resourceVersion":"1.0","name":"frames","builtinName":0,"events":[],"inheritsTrackColour":true,"interpolation":1,"isCreationTrack":false,"keyframes":{"resourceType":"KeyframeStore<SpriteFrameKeyframe>","resourceVersion":"1.0","Keyframes":[
             {"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"1.0","Channels":{"0":{"resourceType":"SpriteFrameKeyframe","resourceVersion":"1.0","Id":{"name":"3cbb13df-f9e0-4732-a375-8746894430c5","path":"sprites/spr_road_shoulder/spr_road_shoulder.yy",},},},"Disabled":false,"id":"8863803a-b757-491d-b68f-11417ec40c5d","IsCreationKey":false,"Key":0.0,"Length":1.0,"Stretch":false,},
             {"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"1.0","Channels":{"0":{"resourceType":"SpriteFrameKeyframe","resourceVersion":"1.0","Id":{"name":"476fcb5f-ed5a-4896-a19e-9e00b65f9452","path":"sprites/spr_road_shoulder/spr_road_shoulder.yy",},},},"Disabled":false,"id":"923c6ebf-2976-4976-b814-5ae64022e37e","IsCreationKey":false,"Key":1.0,"Length":1.0,"Stretch":false,},
+            {"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"1.0","Channels":{"0":{"resourceType":"SpriteFrameKeyframe","resourceVersion":"1.0","Id":{"name":"b6c741bd-e859-44a6-abea-ae30fba4e841","path":"sprites/spr_road_shoulder/spr_road_shoulder.yy",},},},"Disabled":false,"id":"6ef753ac-2d1b-4a94-be1f-f4d5848e2039","IsCreationKey":false,"Key":2.0,"Length":1.0,"Stretch":false,},
           ],},"modifiers":[],"spriteId":null,"trackColour":0,"tracks":[],"traits":0,},
     ],
     "visibleRange": null,

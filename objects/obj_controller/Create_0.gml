@@ -16,11 +16,10 @@ if (global.CAMERA_MODE_3D) {
 	gpu_set_ztestenable(true);
 	gpu_set_alphatestenable(true);
 	gpu_set_alphatestref(64);
-	
+	game_set_speed(60, gamespeed_fps);
 	init_bike_shadow_buffer();
 }
 
-audio_listener_orientation(0,0,1,0,0,-1);
 
 instance_create_layer(0, 0, "Instances", obj_road_generator);
 

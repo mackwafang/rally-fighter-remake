@@ -1,11 +1,11 @@
 var timescale = delta_time / 1000000;
 var vel = (velocity * 0.75) * timescale / global.WORLD_TO_REAL_SCALE;
 var nearest_road = find_nearest_road(
-	x + lengthdir_x(vel, image_angle),
-	y + lengthdir_y(vel, image_angle),
+	x + lengthdir_x(vel, direction),
+	y + lengthdir_y(vel, direction),
 	on_road_index
 );
-var lerp_value = (dist_along_road + vel - nearest_road.length_to_point) / nearest_road.length;
+var lerp_value = (dist_along_road - nearest_road.length_to_point + vel) / nearest_road.length;
 zlerp = lerp(nearest_road.z, nearest_road.next_road.z, lerp_value % 1);
 vertical_on_road = (z+zspeed >= zlerp);
 if (vertical_on_road) {
