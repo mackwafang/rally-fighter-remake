@@ -128,4 +128,28 @@ if (obj_controller.main_camera_target.id == id) {
 	draw_set_valign(fa_top);
 	draw_set_halign(fa_center);
 	draw_text(128,port_height - 32,$"{ai_behavior.race_rank}");
+	
+	// draw info to nearest vehicle
+	var dist_to_closest = infinity;
+	var closest_car_index = noone;
+	var ahead = -1;
+	for (var diff = -1; diff <= 2; diff += 2) {
+		var rank = race_rank + diff - 1;
+		if ((0 < rank) && (rank < global.total_participating_vehicles)) {
+			var dist = abs(global.car_ranking[rank].dist_along_road - dist_along_road);
+			if (dist < dist_to_closest) {
+				dist_to_closest = dist;
+				closest_car_index = global.car_ranking[rank];
+				ahead = diff;
+			}
+		}
+	}
+	
+	draw_set_valign(fa_bottom);
+	draw_set_halign(fa_right);
+	draw_sprite(spr_ui_ahead_behind, (ahead == -1) ? 0 : 1, port_width - 32, port_height - 34);
+	var real_dist = dist_to_closest / global.WORLD_TO_REAL_SCALE;
+	var scale = (real_dist < 10000) ? 10 : 10000;
+	draw_text(port_width - 48, port_height - 32, $"{real_dist / scale}");
+	draw_text(port_width - 32, port_height - 16, closest_car_index);
 }

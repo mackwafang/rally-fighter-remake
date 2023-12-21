@@ -18,6 +18,6 @@
   "preload": false,
   "sampleRate": 5512,
   "soundFile": "snd_car.WAV",
-  "type": 1,
+  "type": 2,
   "volume": 0.1,
 }

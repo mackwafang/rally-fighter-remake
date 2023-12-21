@@ -14,23 +14,39 @@ var t = current_time;
 
 
 // initialize control points using path finding via a-star
-grid_width = 64;
-grid_height = 32;
+grid_width = 64 * global.difficulty;
+grid_height = 64 * global.difficulty;
 grid = ds_list_create();
 // intialize random weights for grids
-var next_weight = 0;
-for (var i = 0; i < grid_width* grid_height; i++) {
-	next_weight += irandom(25) * choose(-1,1);
-	ds_list_add(grid, next_weight);
+print("Creating grid");
+perlin_config = {
+	inc: 0.15,
+	X: random(1000),
+	Y: random(1000),
 }
-var control_start = irandom(grid_height) * grid_width;
-var control_end = (irandom(grid_height) * grid_width) - 1;
+for (var i = 0; i < grid_height*grid_width; i++) {ds_list_add(grid, 0);}
+
+for (var yy = 0; yy < grid_height; yy++) {
+	var Y_temp = perlin_config.Y;
+	for (var xx = 0; xx < grid_width; xx++) {
+		var index = xx + (yy * grid_height);
+		var value = perlin_noise(perlin_config.X, Y_temp);
+		grid[|index] = value*512;
+		Y_temp += perlin_config.inc;
+	}
+	perlin_config.X += perlin_config.inc;
+}
+print($"{ds_list_size(grid)} {grid_height * grid_width}");
+print("Creating road");
+var init_grid = irandom(grid_height)
+var control_start =  init_grid * grid_width;
+var control_end = (min(grid_height, max(0, init_grid + irandom_range(-8 * global.difficulty, 8 * global.difficulty))) * grid_width) - 1;
 control_path = a_star(grid, control_start, control_end, grid_width, a_star_heuristic);
 primary_count = array_length(control_path);
 for (var s = 0; s < array_length(control_path); s++) {
-	var xx = (control_path[s] % grid_width) * control_points_dist;
-	var yy = (control_path[s] div grid_width) * control_points_dist;
-	var zz = grid[|s];
+	var xx = ((control_path[s] % grid_width) * control_points_dist);// + (irandom(control_points_dist) * choose(-0.5, 0.5));
+	var yy = ((control_path[s] div grid_width) * control_points_dist);// + (irandom(control_points_dist) * choose(-0.5, 0.5));
+	var zz = -grid[|s];
 	control_points[s] = new Point3D(xx, yy, zz);
 }
 
@@ -51,7 +67,7 @@ for (var s = 0; s < array_length(control_path); s++) {
 //		control_points[s-1].z + next_elevation//((s < stay_straight) ? control_points_dist : irandom_range(control_points_dist/4, control_points_dist)))
 //	);
 //}
-
+print("Rendering Road")
 road_list = generate_roads(control_points, road_segments);
 global.destination_road_index = array_length(road_list) - (road_segments * 2);
 global.race_length = 0;
@@ -79,7 +95,7 @@ for (var i = 0; i < array_length(road_list)-1; i++) {
 	road.direction = point_direction(road.x, road.y, next_road.x, next_road.y);
 	road.length = sqrt(sqr(road.x - next_road.x) + sqr(road.y - next_road.y) + sqr(road.z - next_road.z));// point_distance(road.x, road.y, next_road.x, next_road.y);
 	
-	road.ideal_throttle = (road.length / (control_points_dist / road_segments))*(global.difficulty < 1 ? 0.95 : 1);
+	road.ideal_throttle = (road.length / (control_points_dist / road_segments))*(global.difficulty < 1 ? 0.75 : 1);
 	road._id = i;
 	road.lane_width = lane_width;
 	road.zone = cur_zone;
@@ -408,3 +424,6 @@ obj_controller.y = road_list[0].y;
 
 show_debug_message($"road generation completed in {current_time - t}ms");
 show_debug_message($"Road has {array_length(road_points)} points");
+
+
+vehicle_current_pos_ping = 0;

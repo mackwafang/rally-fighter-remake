@@ -49,23 +49,24 @@ for (var i = 0; i < array_length(participating_vehicles); i++) {
 	var lane_position_y = ((i % road.get_lanes_right()) * road.lane_width) + (road.lane_width / 2) + (irandom(road.lane_width / 2) * choose(-1,1));
 	
 	var dist = point_distance(road.x, road.y, road.x + lane_position_x, road.y + lane_position_y);
-	var dir = point_direction(road.x, road.y, road.x + lane_position_x, road.y + lane_position_y);
+	var dir = point_direction(road.x, road.y, road.x + lane_position_x, road.y + lane_position_y) + road.direction;
 	
 	car.x = road.x + lengthdir_x(dist, dir);
 	car.y = road.y + lengthdir_y(dist, dir);
-	car.image_angle = road.direction;
+	car.direction = road.direction;
 	if (!car.is_player) {
 		car.can_move = false;
 	}
 	car.horsepower = 30 * global.difficulty;
 	car.ai_behavior.part_of_race = true;	
 	car.ai_behavior.desired_lane = (i % 3);
+	car.on_road_index = car.set_on_road();
 	//for (var g = 0; g < array_length(car.gear_shift_rpm); g++) {
 	//	car.gear_shift_rpm[g][1] += (500 * global.difficulty);
 	//}
 }
-car_ranking = [];
-array_copy(car_ranking, 0, participating_vehicles, 0, array_length(participating_vehicles));
+global.car_ranking = [];
+array_copy(global.car_ranking, 0, participating_vehicles, 0, array_length(participating_vehicles));
 
 if (!global.DEBUG_FREE_CAMERA) {
 	if (global.CAMERA_MODE_3D) {
@@ -82,6 +83,7 @@ else {
 		height: 480,
 	}
 }
+vehicle_current_pos_ping = 0;
 // set camera size
 participating_camera_index = 0;
 main_camera = view_camera[view_current];
@@ -93,7 +95,7 @@ window_set_size(main_camera_size.width, main_camera_size.height);
 camera_set_view_size(main_camera, main_camera_size.width, main_camera_size.height);
 surface_resize(application_surface, main_camera_size.width, main_camera_size.height);
 global.view_matrix = undefined;
-global.projection_matrix = matrix_build_projection_perspective_fov(120, 4/3, 1, 5000);
+global.projection_matrix = matrix_build_projection_perspective_fov(120, 4/3, 1, 4000);
 
 
 // set up sky box

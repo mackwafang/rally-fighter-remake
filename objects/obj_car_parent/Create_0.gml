@@ -81,9 +81,8 @@ ai_behavior = {
 		/// @function	change_lane(road);
 		self.desired_lane = irandom(road_index.get_lanes_right()-1);
 	},
-	race_rank: 1,
 }
-
+race_rank = 0;
 // audio emitter for engine
 engine_sound_emitter = audio_emitter_create();
 audio_falloff_set_model(audio_falloff_exponent_distance);
@@ -101,7 +100,6 @@ vehicle_color = {
 	tetriary: 0,
 };
 dist_along_road = 0;							// how far along the road it is
-race_rank = 0;
 
 // functions
 gear_shift_up = function() {
@@ -205,9 +203,6 @@ on_death = function() {
 		}
 	}
 }
-
-
-on_road_index = set_on_road();					// keep track of which road segment its on 
 
 alarm[0] = 1;
 alarm[1] = 1200;

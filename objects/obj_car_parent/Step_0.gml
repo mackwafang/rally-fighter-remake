@@ -32,7 +32,7 @@ if (can_move) {
 		if (is_player) {
 			engine_power += 0.1;
 			if (global.GAMEPLAY_TURN_GUIDE) {
-				turn_rate += (angle_diff / 90); // moving along curved road
+				turn_rate += (angle_diff / 120); // moving along curved road
 			}
 		}
 		else {
@@ -147,8 +147,9 @@ if (velocity <= 0) {
 	f_brake = 0;
 	f_surface = 0;
 }
+var f_incline = arcsin(on_road_index.elevation / on_road_index.length) * mass * global.gravity_3d;
 	
-drive_force = (drive_torque / wheel_radius) + f_drag + f_rr + f_brake + f_surface + f_turn - push_vector.x;
+drive_force = (drive_torque / wheel_radius) + f_drag + f_rr + f_brake + f_surface + f_turn + f_incline - push_vector.x;
 
 push_vector.x = max(0, push_vector.x - abs(drive_force));
 push_vector.y = max(0, push_vector.y * 0.95);
@@ -172,11 +173,11 @@ if (obj_controller.main_camera_target.id == id) {
 }
 audio_emitter_pitch(engine_sound_emitter, engine_sound_pitch);
 if (engine_sound_interval == 0) {
-	audio_play_sound_on(engine_sound_emitter, snd_car, false, 1);
+	audio_play_sound_on(engine_sound_emitter, (boost_active ? snd_boost : snd_car), false, 1);
 }
 audio_emitter_position(engine_sound_emitter, x, y, z);
 
-engine_sound_interval = (engine_sound_interval + 1) % 3;
+engine_sound_interval = (engine_sound_interval + 1) % 2;
 
 // remove non-participating cars when too far away
 if (abs(obj_controller.main_camera_target.dist_along_road - dist_along_road) > 3000) {
@@ -204,7 +205,7 @@ if (!boost_active) {
 }
 else {
 	if (boost_juice > 0) {
-		boost_juice -= 0.5;
+		boost_juice -= 0.25;
 	}
 	else {
 		boost_active = false;

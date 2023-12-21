@@ -32,12 +32,20 @@ function a_star(_grid, _start, _end, width, _h) {
 		searched[|current] = true; //  add to search
 		
 		// finding neighbors
-		var neighbor_index = [-1, 1, -width, width];
+		//var neighbor_index = [-1, 1, -width, width];
+		//if (current % width == 0) {
+		//	neighbor_index = [1, -width, width];
+		//}
+		//if (current % width == width-1) {
+		//	neighbor_index = [-1, -width, width];
+		//}
+		
+		var neighbor_index = [-1, 1, -width-1, -width, -width+1, width-1, width+1];
 		if (current % width == 0) {
-			neighbor_index = [1, -width, width];
+			neighbor_index = [1, -width, -width+1, width, width+1];
 		}
 		if (current % width == width-1) {
-			neighbor_index = [-1, -width, width];
+			neighbor_index = [-1, -width, -width-1, width, width-1];
 		}
 		
 		var neighbors = ds_list_create();
@@ -71,7 +79,6 @@ function a_star(_grid, _start, _end, width, _h) {
 		// post process
 		ds_list_destroy(neighbors);
 	}
-	
 	var path = [];
 	var cur = parent[|_end];
 	while (true) {
@@ -80,5 +87,11 @@ function a_star(_grid, _start, _end, width, _h) {
 		if (cur == _start) {break;}
 	}
 	path[array_length(path)] = _start;
+	
+	ds_priority_destroy(frontier);
+	ds_list_destroy(searched);
+	ds_list_destroy(parent);
+	ds_list_destroy(g);
+	
 	return path;
 }
