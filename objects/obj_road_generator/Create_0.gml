@@ -20,7 +20,7 @@ grid = ds_list_create();
 // intialize random weights for grids
 print("Creating grid");
 perlin_config = {
-	inc: 0.15,
+	inc: 0.25,
 	X: random(1000),
 	Y: random(1000),
 }

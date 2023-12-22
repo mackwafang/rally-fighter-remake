@@ -167,7 +167,7 @@ engine_rpm = clamp(engine_rpm, 1000, engine_rpm_max);
 engine_power = clamp(engine_power, 0, 1);
 gear_shift_wait = clamp(gear_shift_wait-1, 0, 60);
 	
-var engine_sound_pitch = (engine_rpm / engine_rpm_max)+1;
+var engine_sound_pitch = ((engine_rpm / engine_rpm_max)+1.2) - (gear / 9);
 if (obj_controller.main_camera_target.id == id) {
 	audio_listener_position(x, y, z);
 }

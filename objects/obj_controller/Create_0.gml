@@ -99,7 +99,10 @@ surface_resize(application_surface, main_camera_size.width, main_camera_size.hei
 global.view_matrix = undefined;
 global.projection_matrix = matrix_build_projection_perspective_fov(120, 4/3, 1, 4000);
 
+// minimap
+minimap_surface = surface_create(320, 240);
 
+#region Skybox
 // set up sky box
 vertex_format_begin();
 vertex_format_add_position_3d();
@@ -148,5 +151,6 @@ vertex_position_3d_uv(skybox_vertex_buffer, 1000, 1000, 0, 0, 0);
 
 vertex_end(skybox_vertex_buffer);
 vertex_freeze(skybox_vertex_buffer);
+#endregion
 
 alarm[0] = 5 * 60; // starting timer
