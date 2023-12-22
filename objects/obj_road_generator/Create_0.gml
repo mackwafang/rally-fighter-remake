@@ -46,7 +46,7 @@ primary_count = array_length(control_path);
 for (var s = 0; s < array_length(control_path); s++) {
 	var xx = ((control_path[s] % grid_width) * control_points_dist);// + (irandom(control_points_dist) * choose(-0.5, 0.5));
 	var yy = ((control_path[s] div grid_width) * control_points_dist);// + (irandom(control_points_dist) * choose(-0.5, 0.5));
-	var zz = -grid[|s];
+	var zz = -grid[|s] + random_range(-200, 200);
 	control_points[s] = new Point3D(xx, yy, zz);
 }
 

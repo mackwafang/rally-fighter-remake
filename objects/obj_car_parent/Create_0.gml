@@ -40,7 +40,7 @@ engine_sound_interval = 0;
 car_id = -1;			// car id
 
 inertia = mass * (wheel_radius * wheel_radius) / 2;		// constant value for car's inertia
-c_drag = 0.5 * air_drag_coef * drag_area * AIR_DENSITY;					// constant value for car's air drag
+c_drag = 0.5 * air_drag_coef * drag_area * AIR_DENSITY;	// constant value for car's air drag
 c_rr = 20 * c_drag;										// constant value for car's drag
 
 //gear's ratio
@@ -86,7 +86,7 @@ race_rank = 0;
 // audio emitter for engine
 engine_sound_emitter = audio_emitter_create();
 audio_falloff_set_model(audio_falloff_exponent_distance);
-audio_emitter_falloff(engine_sound_emitter, 128, 258, 1);
+audio_emitter_falloff(engine_sound_emitter, 64, 128, 1);
 
 // misc
 last_road_index = 0;					// last road index was checked for off road

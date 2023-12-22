@@ -53,7 +53,6 @@ if (!global.DEBUG_FREE_CAMERA) {
 		
 		camera_set_view_mat(main_camera, global.view_matrix);
 		camera_set_proj_mat(main_camera, global.projection_matrix);
-		audio_listener_orientation(0,0,1,0,1,0);
 		camera_apply(main_camera);
 		gpu_set_zwriteenable(true);
 	}
