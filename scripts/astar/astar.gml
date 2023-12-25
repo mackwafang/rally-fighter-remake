@@ -79,6 +79,7 @@ function a_star(_grid, _start, _end, width, _h) {
 		// post process
 		ds_list_destroy(neighbors);
 	}
+	print("Retracing road");
 	var path = [];
 	var cur = parent[|_end];
 	while (true) {
@@ -87,6 +88,7 @@ function a_star(_grid, _start, _end, width, _h) {
 		if (cur == _start) {break;}
 	}
 	path[array_length(path)] = _start;
+	path = array_reverse(path);
 	
 	ds_priority_destroy(frontier);
 	ds_list_destroy(searched);

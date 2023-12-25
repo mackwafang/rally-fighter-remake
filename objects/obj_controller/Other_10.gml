@@ -1,1 +1,0 @@
-matrix = matrix_build(x, y, z, 0, 0, 0, render_scale.x, render_scale.y, render_scale.z);

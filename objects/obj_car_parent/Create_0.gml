@@ -44,7 +44,7 @@ c_drag = 0.5 * air_drag_coef * drag_area * AIR_DENSITY;	// constant value for ca
 c_rr = 20 * c_drag;										// constant value for car's drag
 
 //gear's ratio
-gear_ratio = [3, 2.5, 2, 4.5/3, 10/8, 11/10];
+gear_ratio = [3, 2.5, 2, 5/3, 10/7, 11/9];
 diff_ratio = 3.5;
 gear_shift_rpm = [
 	[0, 9000],
@@ -194,7 +194,7 @@ on_death = function() {
 			image_alpha = 0;
 			is_respawning = true;
 			can_move = false;
-			alarm[2] = 120;
+			alarm[2] = round(20000 * global.deltatime);
 			//solid = false;
 			mask_index = spr_empty;
 		}

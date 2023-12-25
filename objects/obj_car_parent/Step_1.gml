@@ -1,12 +1,11 @@
-var timescale = delta_time / 1000000;
-var vel = (velocity * 0.75) * timescale / global.WORLD_TO_REAL_SCALE;
+var vel = (velocity * 0.75) * global.deltatime / global.WORLD_TO_REAL_SCALE;
 var nearest_road = find_nearest_road(
 	x + lengthdir_x(vel, direction),
 	y + lengthdir_y(vel, direction),
 	on_road_index
 );
-var lerp_value = (dist_along_road - nearest_road.length_to_point + vel) / nearest_road.length;
-zlerp = lerp(nearest_road.z, nearest_road.next_road.z, lerp_value % 1);
+var lerp_value = (dist_along_road - on_road_index.length_to_point + vel) / on_road_index.length;
+zlerp = lerp(on_road_index.z, on_road_index.next_road.z, lerp_value);
 vertical_on_road = (z+zspeed >= zlerp);
 if (vertical_on_road) {
 	drive_force -= sin(nearest_road.elevation) * global.gravity_3d * mass;
@@ -14,7 +13,7 @@ if (vertical_on_road) {
 }
 else {
 	// FREE FALLING
-	zspeed += global.gravity_3d * timescale;
+	zspeed += global.gravity_3d * global.deltatime;
 }
 z += zspeed;
 z = clamp(z, -500, zlerp);
@@ -32,4 +31,4 @@ if (!is_respawning) {
 	image_angle = direction;
 }
 
-velocity += acceleration * timescale;// * gear_ratio[gear-1];
+velocity += acceleration * global.deltatime;// * gear_ratio[gear-1];

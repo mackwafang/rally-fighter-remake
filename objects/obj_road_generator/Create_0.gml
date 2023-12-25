@@ -39,14 +39,14 @@ for (var yy = 0; yy < grid_height; yy++) {
 print($"{ds_list_size(grid)} {grid_height * grid_width}");
 print("Creating road");
 var init_grid = irandom(grid_height)
-var control_start =  init_grid * grid_width;
+var control_start = init_grid * grid_width;
 var control_end = (min(grid_height, max(0, init_grid + irandom_range(-8 * global.difficulty, 8 * global.difficulty))) * grid_width) - 1;
-control_path = a_star(grid, control_start, control_end, grid_width, a_star_heuristic);
+control_path = a_star(grid, control_start, control_end, grid_width, a_star_heuristic); // holds grid values to generate control poitns
 primary_count = array_length(control_path);
 for (var s = 0; s < array_length(control_path); s++) {
 	var xx = ((control_path[s] % grid_width) * control_points_dist);// + (irandom(control_points_dist) * choose(-0.5, 0.5));
 	var yy = ((control_path[s] div grid_width) * control_points_dist);// + (irandom(control_points_dist) * choose(-0.5, 0.5));
-	var zz = -grid[|s] + random_range(-200, 200);
+	var zz = (-grid[|s] + 256)*2;
 	control_points[s] = new Point3D(xx, yy, zz);
 }
 
@@ -164,8 +164,6 @@ vertex_format_add_texcoord();
 road_vertex_format = vertex_format_end();
 road_vertex_buffers = vertex_create_buffer();
 
-
-vertex_begin(global.building_vertex_buffer, building_vertex_format);
 vertex_begin(road_vertex_buffers, road_vertex_format);
 for (var i = 0; i < array_length(road_list) - 1; i++) {
 	// for each road piece
@@ -300,7 +298,7 @@ for (var i = 0; i < array_length(road_list) - 1; i++) {
 		
 		[new Point3D(road_render_points[0][2], road_render_points[1][2], next_road.z), new Point(shoulder_uv[2], shoulder_uv[1])],
 		[new Point3D(road.x+lengthdir_x(lane_width*(right_lanes+1), road.direction-90), road.y+lengthdir_y(lane_width*(next_right_lanes+1), road.direction-90), road.z), new Point(shoulder_uv[0], shoulder_uv[3])],
-		[new Point3D(next_road.x+lengthdir_x(lane_width*(next_right_lanes+1), next_road.direction-90), next_road.y+lengthdir_y(lane_width*(next_right_lanes+1), next_road.direction-90), next_road.z), new Point(shoulder_uv[2], shoulder_uv[3])],
+		[new Point3D(next_road.x+lengthdir_x(next_road.lane_width*(next_right_lanes+1), next_road.direction-90), next_road.y+lengthdir_y(next_road.lane_width*(next_right_lanes+1), next_road.direction-90), next_road.z), new Point(shoulder_uv[2], shoulder_uv[3])],
 		
 		// right grass
 		[new Point3D(road_render_points[0][2], road_render_points[1][2], next_road.z+5), new Point(grass_uv[0], grass_uv[1])],
@@ -326,7 +324,6 @@ for (var i = 0; i < array_length(road_list) - 1; i++) {
 	}
 	
 	// create speed limit sign
-		
 	if ((i % 100) == 0) {
 		var prop_obj = instance_create_layer(
 			collision_points[0][2],
@@ -337,7 +334,17 @@ for (var i = 0; i < array_length(road_list) - 1; i++) {
 		prop_obj.image_index = 0;
 		prop_obj.z = road.z;
 	}
-	
+}
+vertex_end(road_vertex_buffers);
+vertex_freeze(road_vertex_buffers);
+
+// create props
+vertex_begin(global.building_vertex_buffer, building_vertex_format);
+for (var i = 0; i < array_length(road_list) - 1; i++) {
+	var road = road_list[@i];
+	var next_road = road_list[@i+1];
+	var left_lanes = road.get_lanes_left();
+	var right_lanes = road.get_lanes_right();
 	switch(road.zone) {
 		// create building
 		case ZONE.CITY:	
@@ -412,8 +419,6 @@ for (var i = 0; i < array_length(road_list) - 1; i++) {
 			break;
 	}
 }
-vertex_end(road_vertex_buffers);
-vertex_freeze(road_vertex_buffers);
 vertex_end(global.building_vertex_buffer);
 vertex_freeze(global.building_vertex_buffer);
 

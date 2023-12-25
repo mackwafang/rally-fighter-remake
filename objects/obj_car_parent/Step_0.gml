@@ -101,11 +101,11 @@ if (can_move) {
 		// checking turning
 		if (turning & 1 == 0) {
 			// checking left turn
-			turn_rate -= 0.15;
+			turn_rate -= 10 * global.deltatime;
 		}
 		else if (turning & 2 == 0) {
 			// checking right turn
-			turn_rate += 0.15;
+			turn_rate += 10 * global.deltatime;
 		}
 	}
 
@@ -124,7 +124,6 @@ if (!is_on_road(x, y, last_road_index)) {
 
 is_completed = dist_along_road >= global.race_length;
 if (is_completed) {
-	can_move = false;
 	braking = true;
 	accelerating = false;
 	boosting = false;
@@ -142,7 +141,7 @@ var f_drag = -c_drag * velocity;
 var f_rr = -c_rr * velocity;
 var f_surface = -mass * global.gravity_3d * ((on_road) ? 0.2 : 4);
 var f_brake = (braking) ? -braking_power * 1000 : 0;
-var f_turn = -abs(turn_rate) * mass;
+var f_turn = -abs(turn_rate) * mass / 2;
 if (velocity <= 0) {
 	f_brake = 0;
 	f_surface = 0;
@@ -167,7 +166,7 @@ engine_rpm = clamp(engine_rpm, 1000, engine_rpm_max);
 engine_power = clamp(engine_power, 0, 1);
 gear_shift_wait = clamp(gear_shift_wait-1, 0, 60);
 	
-var engine_sound_pitch = ((engine_rpm / engine_rpm_max)+1.2) - (gear / 9);
+var engine_sound_pitch = ((engine_rpm / engine_rpm_max)+1.2) - (gear / 12);
 if (obj_controller.main_camera_target.id == id) {
 	audio_listener_position(x, y, z);
 }
@@ -200,12 +199,12 @@ if (!boost_active) {
 	}
 	
 	if (boost_juice < 100) {
-		boost_juice += 0.1 * (1 - (boost_juice_penalty / 100));
+		boost_juice += 0.1 * (1 - (boost_juice_penalty / 100)) * global.deltatime * 100;
 	}
 }
 else {
 	if (boost_juice > 0) {
-		boost_juice -= 0.25;
+		boost_juice -= 0.25 * global.deltatime * 100;
 	}
 	else {
 		boost_active = false;

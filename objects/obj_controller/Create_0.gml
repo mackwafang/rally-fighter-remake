@@ -3,13 +3,17 @@ cam_zoom = 1;
 cam_angle = 0;
 z = -50;
 
-depth = 10000;
+depth = -10000;
 
 participating_vehicles = [];
 global.total_participating_vehicles = 12;
 global.difficulty = 2;
 global.gravity_3d = 9.8;
 global.race_completed = false;
+global.game_state_paused = false;
+global.race_timer = 0;
+global.deltatime = delta_time / 1000000;
+global.display_freq = display_get_frequency();
 
 player_obj = noone;
 
@@ -19,11 +23,11 @@ if (global.CAMERA_MODE_3D) {
 	gpu_set_ztestenable(true);
 	gpu_set_alphatestenable(true);
 	gpu_set_alphatestref(64);
-	game_set_speed(72, gamespeed_fps);
+	game_set_speed(global.display_freq, gamespeed_fps);
 	display_reset(0, true);
 	init_bike_shadow_buffer();
 	
-	audio_listener_orientation(0,0,-1,0,-1,0);
+	audio_listener_orientation(0,-1,0,0,0,-1);
 }
 
 
@@ -40,6 +44,7 @@ for (var i = 0; i < global.total_participating_vehicles; i++) {
 	car.car_id = i+1;
 	car.depth = 10;
 	car.z = -10;
+	car.vehicle_type = VEHICLE_TYPE.BIKE;
 	participating_vehicles[array_length(participating_vehicles)] = car;
 }
 
@@ -100,7 +105,30 @@ global.view_matrix = undefined;
 global.projection_matrix = matrix_build_projection_perspective_fov(120, 4/3, 1, 4000);
 
 // minimap
-minimap_surface = surface_create(320, 240);
+minimap_config = {
+	border: 6,
+	surface_width: 0,
+	surface_height: 0,
+	width: 100,
+	height: 100,
+	x: 32,
+	y: 32
+}
+
+// outline shader setting
+global.outline_shader_pixel_w = shader_get_uniform(shd_outline, "pixel_w");
+global.outline_shader_pixel_h = shader_get_uniform(shd_outline, "pixel_h");
+global.outline_shader_alpha_override = shader_get_uniform(shd_outline, "alpha_override");
+
+if (global.DEBUG_DRAW_MINIMAP) {
+	minimap_config.surface_width = minimap_config.border * obj_road_generator.grid_width;
+	minimap_config.surface_height = minimap_config.border * obj_road_generator.grid_height;
+	minimap_surface = surface_create(minimap_config.width, minimap_config.height);
+	
+	surface_set_target(minimap_surface);
+	draw_clear_alpha(c_white, 0);
+	surface_reset_target();
+}
 
 #region Skybox
 // set up sky box
@@ -153,4 +181,4 @@ vertex_end(skybox_vertex_buffer);
 vertex_freeze(skybox_vertex_buffer);
 #endregion
 
-alarm[0] = 5 * 60; // starting timer
+alarm[0] = round(5 * global.display_freq); // starting timer

@@ -1,4 +1,4 @@
-
+global.deltatime = delta_time / 1000000;
 for (var rank = 0; rank < array_length(global.car_ranking); rank++) {
 	global.car_ranking[rank].race_rank = rank+1;
 }
