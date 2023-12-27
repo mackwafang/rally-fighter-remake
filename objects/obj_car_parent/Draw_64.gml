@@ -66,13 +66,13 @@ if (ai_behavior.part_of_race) {
 #endregion
 
 if (obj_controller.main_camera_target.id == id) {
-	draw_text(16, 16, $"onroad: {on_road ? "true" : "false"}");
-	draw_set_valign(fa_top);
-	draw_set_halign(fa_right);
-	draw_text(port_width - 128, 16, $"accel: {accelerating}");
-	draw_text(port_width - 128, 32, $"boost: {boosting}");
-	draw_text(port_width - 128, 48, $"brake: {braking}");
-	draw_text(port_width - 128, 64, $"finish: {is_completed}");
+	//draw_text(16, 16, $"onroad: {on_road ? "true" : "false"}");
+	//draw_set_valign(fa_top);
+	//draw_set_halign(fa_right);
+	//draw_text(port_width - 128, 16, $"accel: {accelerating}");
+	//draw_text(port_width - 128, 32, $"boost: {boosting}");
+	//draw_text(port_width - 128, 48, $"brake: {braking}");
+	//draw_text(port_width - 128, 64, $"finish: {is_completed}");
 	//draw_text(16, 16, $"{x}, {y}, {z}");
 	//draw_text(16, 32, $"hp {horsepower}");
 	//for (var i = 0; i < max_gear; i++) {
@@ -124,8 +124,10 @@ if (obj_controller.main_camera_target.id == id) {
 	)
 	draw_set_valign(fa_bottom);
 	draw_set_halign(fa_center);
-	draw_text(odometer_x, odometer_y - 48, $"{round(acceleration * global.WORLD_TO_REAL_SCALE / 10)} MPH");
-	draw_text(odometer_x, odometer_y - 32, $"{round(velocity * global.WORLD_TO_REAL_SCALE / 10)} MPH");
+	var speed_unit = (global.GAMEPLAY_MEASURE_METRICS == MEASURE.METRIC ? "KMH" : "MPH");
+	var speed_scale = (global.GAMEPLAY_MEASURE_METRICS == MEASURE.METRIC ? 1 : KMH_TO_MPH);	
+	draw_text(odometer_x, odometer_y - 48, $"{round(acceleration * speed_scale * global.WORLD_TO_REAL_SCALE / 10)} {speed_unit}");
+	draw_text(odometer_x, odometer_y - 32, $"{round(velocity * speed_scale * global.WORLD_TO_REAL_SCALE / 10)} {speed_unit}");
 	
 	// gear
 	draw_set_valign(fa_top);

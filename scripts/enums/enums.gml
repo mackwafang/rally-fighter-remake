@@ -17,3 +17,8 @@ enum ZONE {
 	DESERT,
 	BEACH,
 }
+
+enum MEASURE {
+	METRIC,
+	EMPERIAL
+}

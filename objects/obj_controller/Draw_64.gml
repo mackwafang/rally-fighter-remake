@@ -1,6 +1,8 @@
 
 var port_width = view_wport[obj_controller.main_camera];
 var port_height = view_hport[obj_controller.main_camera];
+var dist_unit = (global.GAMEPLAY_MEASURE_METRICS == MEASURE.METRIC ? "km" : "mi");
+var dist_scale = (global.GAMEPLAY_MEASURE_METRICS == MEASURE.METRIC ? 1 : KMH_TO_MPH);	
 
 draw_set_valign(fa_top);
 draw_set_halign(fa_left);
@@ -9,7 +11,7 @@ draw_text(0, 0, fps);
 // draw race length
 draw_set_valign(fa_top);
 draw_set_halign(fa_right);
-draw_text(main_camera_size.width, 0, $"{global.race_length / global.WORLD_TO_REAL_SCALE / 10000} km");
+draw_text(main_camera_size.width, 0, $"{global.race_length / global.WORLD_TO_REAL_SCALE * dist_scale / 10000} {dist_unit}");
 
 
 var ranking_verticle_cap = 20;
@@ -20,9 +22,9 @@ for (var rank = 0; rank < array_length(global.car_ranking); rank++) {
 	//if (rank > 0) {
 	//	dist = vehicle.dist_along_road - car_ranking[0].dist_along_road;
 	//}
-	var distance_display = dist / global.WORLD_TO_REAL_SCALE / 10000;
+	var distance_display = dist / global.WORLD_TO_REAL_SCALE * dist_scale / 10000;
 	draw_text(main_camera_size.width - 32, 16 + (rank * ranking_verticle_cap), vehicle.race_rank);
-	draw_text(main_camera_size.width - 48, 16 + (rank * ranking_verticle_cap), $"{distance_display} km");
+	draw_text(main_camera_size.width - 48, 16 + (rank * ranking_verticle_cap), $"{distance_display} {dist_unit}");
 	draw_sprite_ext(vehicle.sprite_index, vehicle.image_index, main_camera_size.width - 16, 24 + (rank * ranking_verticle_cap), 1, 1, 90, vehicle.image_blend, 1);
 	if (vehicle.is_respawning) {
 		draw_sprite_ext(spr_cross, 0, main_camera_size.width - 16, 24 + (rank * ranking_verticle_cap), 1, 1, 90, c_white, 1);
@@ -76,15 +78,16 @@ if (global.DEBUG_DRAW_MINIMAP) {
 		}
 	}
 
-	//for (var i = 0; i < ds_list_size(obj_road_generator.grid)-1; i++) {
-	//	var grid = obj_road_generator.grid[|i];
-	//	var x1 = (i % obj_road_generator.grid_width) * minimap_config.border;
-	//	var y1 = ((i div obj_road_generator.grid_width)-top_cp) * minimap_config.border;
-	//	var x2 = ((i % obj_road_generator.grid_width)+1) * minimap_config.border;
-	//	var y2 = ((i div obj_road_generator.grid_width)+1-top_cp) * minimap_config.border;
-	//	var color = make_color_rgb(grid / 2, grid / 2, grid / 2);
-	//	draw_rectangle_color(x1, y1, x2, y2, color, color, color, color, false);
-	//}
+	for (var i = 0; i < ds_list_size(obj_road_generator.grid)-1; i++) {
+		var grid = obj_road_generator.grid[|i];
+		var x1 = (i % obj_road_generator.grid_width) * minimap_config.border;
+		var y1 = ((i div obj_road_generator.grid_width)-top_cp) * minimap_config.border;
+		var x2 = ((i % obj_road_generator.grid_width)+1) * minimap_config.border;
+		var y2 = ((i div obj_road_generator.grid_width)+1-top_cp) * minimap_config.border;
+		var color = (grid+1)*128;
+		color = make_color_rgb(grid / 2, grid / 2, grid / 2);
+		draw_rectangle_color(x1, y1, x2, y2, color, color, color, color, false);
+	}
 
 	for (var i = 0; i < array_length(obj_road_generator.control_path)-1; i++) {
 		var x1 = (((obj_road_generator.control_path[i] % obj_road_generator.grid_width))*minimap_config.border) + 32;

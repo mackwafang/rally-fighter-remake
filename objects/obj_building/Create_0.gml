@@ -5,6 +5,7 @@ image_index = irandom(image_number);
 building_height = 256;
 building_width = 32;
 building_length = 512;
+building_color = make_color_rgb(irandom(255), irandom(255), irandom(255));
 z_start = 0;
 z_end = -32;
 
@@ -46,12 +47,12 @@ function init_vertex_buffer() {
 	vertex_position_3d_uv(global.building_vertex_buffer, x2, y2, z_start-building_height, uv[0], uv[1]);
 
 	// -y
-	vertex_position_3d_uv(global.building_vertex_buffer, x1, y1, z_end-building_height, building_uv[0], building_uv[1]);
-	vertex_position_3d_uv(global.building_vertex_buffer, x1, y1, z_end, building_uv[0], building_uv[3]);
-	vertex_position_3d_uv(global.building_vertex_buffer, x0, y0, z_start, building_uv[2], building_uv[3]);
-	vertex_position_3d_uv(global.building_vertex_buffer, x0, y0, z_start, building_uv[2], building_uv[3]);
-	vertex_position_3d_uv(global.building_vertex_buffer, x0, y0, z_start-building_height, building_uv[2], building_uv[1]);
-	vertex_position_3d_uv(global.building_vertex_buffer, x1, y1, z_end-building_height, building_uv[0], building_uv[1]);
+	vertex_position_3d_uv(global.building_vertex_buffer, x1, y1, z_end-building_height, building_uv[0], building_uv[1], building_color);
+	vertex_position_3d_uv(global.building_vertex_buffer, x1, y1, z_end, building_uv[0], building_uv[3], building_color);
+	vertex_position_3d_uv(global.building_vertex_buffer, x0, y0, z_start, building_uv[2], building_uv[3], building_color);
+	vertex_position_3d_uv(global.building_vertex_buffer, x0, y0, z_start, building_uv[2], building_uv[3], building_color);
+	vertex_position_3d_uv(global.building_vertex_buffer, x0, y0, z_start-building_height, building_uv[2], building_uv[1], building_color);
+	vertex_position_3d_uv(global.building_vertex_buffer, x1, y1, z_end-building_height, building_uv[0], building_uv[1], building_color);
 
 	// -x
 	vertex_position_3d_uv(global.building_vertex_buffer, x0, y0, z_start-building_height, uv[0], uv[1]);

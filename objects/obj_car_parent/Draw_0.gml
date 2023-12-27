@@ -33,6 +33,10 @@ if (global.CAMERA_MODE_3D) {
 	draw_set_alpha(1);
 	matrix_set(matrix_world, matrix_build_identity());
 }
+else {
+	var nearest_road = find_nearest_road(x, y, 0);
+	draw_line_width(x, y, nearest_road.x, nearest_road.y, 4);
+}
 //draw_sprite_ext(vehicle_detail_index, image_index, x, y, image_xscale, image_yscale, image_angle, c_white, image_alpha);
 
 if (global.DEBUG_CAR) {

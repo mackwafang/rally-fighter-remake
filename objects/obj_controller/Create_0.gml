@@ -6,11 +6,12 @@ z = -50;
 depth = -10000;
 
 participating_vehicles = [];
-global.total_participating_vehicles = 12;
+global.total_participating_vehicles = 1;
 global.difficulty = 2;
 global.gravity_3d = 9.8;
 global.race_completed = false;
 global.game_state_paused = false;
+global.race_started = false;
 global.race_timer = 0;
 global.deltatime = delta_time / 1000000;
 global.display_freq = display_get_frequency();
@@ -64,7 +65,7 @@ for (var i = 0; i < array_length(participating_vehicles); i++) {
 	if (!car.is_player) {
 		car.can_move = false;
 	}
-	car.horsepower = 30 * global.difficulty;
+	car.horsepower = 35 * (global.difficulty * 0.75);
 	car.ai_behavior.part_of_race = true;	
 	car.ai_behavior.desired_lane = (i % 3);
 	car.on_road_index = car.set_on_road();

@@ -10,9 +10,9 @@ dist_along_road = on_road_index.length_to_point + point_distance(on_road_index.x
 vec_to_road.x += lengthdir_x(((ai_behavior.desired_lane + 0.5) * on_road_index.lane_width), on_road_index.direction-90);
 vec_to_road.y += lengthdir_y(((ai_behavior.desired_lane + 0.5) * on_road_index.lane_width), on_road_index.direction-90);
 var dist_to_road = point_distance(x,y,vec_to_road.x,vec_to_road.y);
-if (dist_to_road > 1024) {
-	hp = 0;
-}
+//if (dist_to_road > 1024) {
+//	hp = 0;
+//}
 
 if (can_move) {
 	// player moving
@@ -121,14 +121,15 @@ if (!is_on_road(x, y, last_road_index)) {
 }
 
 // finish
-
 is_completed = dist_along_road >= global.race_length;
-if (is_completed) {
-	braking = true;
-	accelerating = false;
-	boosting = false;
-	boost_active = false;
-	engine_power = 0;
+if (ai_behavior.part_of_race || is_player) {
+	if (is_completed) {
+		braking = true;
+		accelerating = false;
+		boosting = false;
+		boost_active = false;
+		engine_power = 0;
+	}
 }
 
 // calculate engine stuff for acceleration
@@ -166,20 +167,22 @@ engine_rpm = clamp(engine_rpm, 1000, engine_rpm_max);
 engine_power = clamp(engine_power, 0, 1);
 gear_shift_wait = clamp(gear_shift_wait-1, 0, 60);
 	
-var engine_sound_pitch = ((engine_rpm / engine_rpm_max)+1.2) - (gear / 12);
-if (obj_controller.main_camera_target.id == id) {
-	audio_listener_position(x, y, z);
+if (hp > 0) {
+	var engine_sound_pitch = ((engine_rpm / engine_rpm_max)+1.0);// - (gear / 12);
+	if (obj_controller.main_camera_target.id == id) {
+		audio_listener_position(x, y, z);
+	}
+	if (engine_sound_interval == 0) {
+		audio_play_sound_on(engine_sound_emitter, (boost_active ? snd_boost : snd_car), false, 1);
+	}
+	audio_emitter_pitch(engine_sound_emitter, engine_sound_pitch);
+	audio_emitter_position(engine_sound_emitter, x, y, z);
+	engine_sound_interval = (engine_sound_interval + 1) % (engine_rpm < 2000 ? 6 : 3);
 }
-if (engine_sound_interval == 0) {
-	audio_play_sound_on(engine_sound_emitter, (boost_active ? snd_boost : snd_car), false, 1);
-}
-audio_emitter_pitch(engine_sound_emitter, engine_sound_pitch);
-audio_emitter_position(engine_sound_emitter, x, y, z);
 
-engine_sound_interval = (engine_sound_interval + 1) % (engine_rpm < 2000 ? 4 : 2);
 
 // remove non-participating cars when too far away
-if (abs(obj_controller.main_camera_target.dist_along_road - dist_along_road) > 3000) {
+if (abs(obj_controller.main_camera_target.dist_along_road - dist_along_road) > 6000) {
 	if (!global.DEBUG_FREE_CAMERA) {
 		if (!ai_behavior.part_of_race) {
 			instance_destroy()
@@ -198,8 +201,8 @@ if (!boost_active) {
 		boost_active = true;
 	}
 	
-	if (boost_juice < 100) {
-		boost_juice += 0.1 * (1 - (boost_juice_penalty / 100)) * global.deltatime * 100;
+	if (boost_juice < 100 && global.race_started) {
+		boost_juice += (0.1 * global.difficulty) * (1 - (boost_juice_penalty / 100)) * global.deltatime * 100;
 	}
 }
 else {

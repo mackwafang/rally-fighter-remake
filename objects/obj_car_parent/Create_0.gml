@@ -149,7 +149,9 @@ is_on_road = function(_x, _y, road_id) {
 set_on_road = function() {
 	last_road_index = find_nearest_road(x, y, last_road_index)._id;
 	on_road = is_on_road(x,y,last_road_index);
-	on_road_index = last_road_index;
+	if (on_road) {
+		on_road_index = last_road_index;
+	}
 	//var p_i = last_road_index-1;
 	//while(p_i++ < last_road_index + 100) {//global.road_list_length-1) {
 	//	var road = obj_road_generator.road_list[p_i];

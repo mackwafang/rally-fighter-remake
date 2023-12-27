@@ -29,6 +29,7 @@
     {"name":"spr_building_front","order":22,"path":"sprites/spr_building_front/spr_building_front.yy",},
     {"name":"obj_traffic_prop","order":6,"path":"objects/obj_traffic_prop/obj_traffic_prop.yy",},
     {"name":"spr_car","order":1,"path":"sprites/spr_car/spr_car.yy",},
+    {"name":"snd_race_1","order":2,"path":"sounds/snd_race_1/snd_race_1.yy",},
     {"name":"spr_grass","order":2,"path":"sprites/spr_grass/spr_grass.yy",},
     {"name":"spr_rank_font_small","order":10,"path":"sprites/spr_rank_font_small/spr_rank_font_small.yy",},
     {"name":"find_nearest_road","order":10,"path":"scripts/find_nearest_road/find_nearest_road.yy",},

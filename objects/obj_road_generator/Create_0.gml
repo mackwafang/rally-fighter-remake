@@ -14,13 +14,13 @@ var t = current_time;
 
 
 // initialize control points using path finding via a-star
-grid_width = 64 * global.difficulty;
-grid_height = 64 * global.difficulty;
+grid_width = 72 * global.difficulty;
+grid_height = 72 * global.difficulty;
 grid = ds_list_create();
 // intialize random weights for grids
 print("Creating grid");
 perlin_config = {
-	inc: 0.25,
+	inc: 0.5,
 	X: random(1000),
 	Y: random(1000),
 }
@@ -31,7 +31,7 @@ for (var yy = 0; yy < grid_height; yy++) {
 	for (var xx = 0; xx < grid_width; xx++) {
 		var index = xx + (yy * grid_height);
 		var value = perlin_noise(perlin_config.X, Y_temp);
-		grid[|index] = value*512;
+		grid[|index] = value;
 		Y_temp += perlin_config.inc;
 	}
 	perlin_config.X += perlin_config.inc;
@@ -46,30 +46,13 @@ primary_count = array_length(control_path);
 for (var s = 0; s < array_length(control_path); s++) {
 	var xx = ((control_path[s] % grid_width) * control_points_dist);// + (irandom(control_points_dist) * choose(-0.5, 0.5));
 	var yy = ((control_path[s] div grid_width) * control_points_dist);// + (irandom(control_points_dist) * choose(-0.5, 0.5));
-	var zz = (-grid[|s] + 256)*2;
+	var zz = grid[|s]*1024;
 	control_points[s] = new Point3D(xx, yy, zz);
 }
 
-
-// initialize control points
-//var next_dir = 0;
-//var next_elevation = 0
-//var stay_straight = 5;
-//control_points[0] = new Point3D(0, 0, 0);
-//for (var s = 1; s < primary_count; s++) {
-//	if (s > stay_straight) {
-//		next_dir += random_range(-1,1)*(global.difficulty * 20);
-//		next_elevation = irandom(500) * choose(-1,0,1);
-//	}
-//	control_points[s] = new Point3D(
-//		control_points[s-1].x + (cos(degtorad(next_dir)) * control_points_dist),//((s < stay_straight) ? control_points_dist : irandom_range(control_points_dist/4, control_points_dist))),
-//		control_points[s-1].y + (sin(degtorad(next_dir)) * control_points_dist),//((s < stay_straight) ? control_points_dist : irandom_range(control_points_dist/4, control_points_dist)))
-//		control_points[s-1].z + next_elevation//((s < stay_straight) ? control_points_dist : irandom_range(control_points_dist/4, control_points_dist)))
-//	);
-//}
 print("Rendering Road")
 road_list = generate_roads(control_points, road_segments);
-global.destination_road_index = array_length(road_list) - (road_segments * 2);
+global.destination_road_index = array_length(road_list) - (road_segments * 4);
 global.race_length = 0;
 
 //set up building vertex buffer
@@ -185,16 +168,16 @@ for (var i = 0; i < array_length(road_list) - 1; i++) {
 	var right_lane_sprite = (right_lanes != next_right_lanes) ? spr_road : spr_road;
 	var collision_points = [
 		 [
-			road.x+lengthdir_x(lane_width*(left_lanes + (road.shoulder[0] ? 1 : 0)), road.direction+90),
-			next_road.x+lengthdir_x(lane_width*(next_left_lanes + (next_road.shoulder[0] ? 1 : 0)), next_road.direction+90),
-			next_road.x+lengthdir_x(lane_width*(next_right_lanes + (next_road.shoulder[1] ? 1 : 0)), next_road.direction-90),
-			road.x+lengthdir_x(lane_width*(right_lanes + (road.shoulder[1] ? 1 : 0)), road.direction-90),
+			road.x+lengthdir_x(lane_width*(left_lanes + (road.shoulder[0] ? 1 : 0)) + beyond_shoulder_range, road.direction+90),
+			next_road.x+lengthdir_x(lane_width*(next_left_lanes + (next_road.shoulder[0] ? 1 : 0)) + beyond_shoulder_range, next_road.direction+90),
+			next_road.x+lengthdir_x(lane_width*(next_right_lanes + (next_road.shoulder[1] ? 1 : 0)) + beyond_shoulder_range, next_road.direction-90),
+			road.x+lengthdir_x(lane_width*(right_lanes + (road.shoulder[1] ? 1 : 0)) + beyond_shoulder_range, road.direction-90),
 		],
 		[
-			road.y+lengthdir_y(lane_width*(left_lanes + (road.shoulder[0] ? 1 : 0)), road.direction+90),
-			next_road.y+lengthdir_y(lane_width*(next_left_lanes + (next_road.shoulder[0] ? 1 : 0)), next_road.direction+90),
-			next_road.y+lengthdir_y(lane_width*(next_right_lanes+ (next_road.shoulder[1] ? 1 : 0)), next_road.direction-90),
-			road.y+lengthdir_y(lane_width*(right_lanes + (road.shoulder[1] ? 1 : 0)), road.direction-90),
+			road.y+lengthdir_y(lane_width*(left_lanes + (road.shoulder[0] ? 1 : 0)) + beyond_shoulder_range, road.direction+90),
+			next_road.y+lengthdir_y(lane_width*(next_left_lanes + (next_road.shoulder[0] ? 1 : 0)) + beyond_shoulder_range, next_road.direction+90),
+			next_road.y+lengthdir_y(lane_width*(next_right_lanes+ (next_road.shoulder[1] ? 1 : 0)) + beyond_shoulder_range, next_road.direction-90),
+			road.y+lengthdir_y(lane_width*(right_lanes + (road.shoulder[1] ? 1 : 0)) + beyond_shoulder_range, road.direction-90),
 		]
 	];
 	var shoulder_uv = sprite_get_uvs(spr_road_shoulder, 0);
@@ -298,7 +281,7 @@ for (var i = 0; i < array_length(road_list) - 1; i++) {
 		
 		[new Point3D(road_render_points[0][2], road_render_points[1][2], next_road.z), new Point(shoulder_uv[2], shoulder_uv[1])],
 		[new Point3D(road.x+lengthdir_x(lane_width*(right_lanes+1), road.direction-90), road.y+lengthdir_y(lane_width*(next_right_lanes+1), road.direction-90), road.z), new Point(shoulder_uv[0], shoulder_uv[3])],
-		[new Point3D(next_road.x+lengthdir_x(next_road.lane_width*(next_right_lanes+1), next_road.direction-90), next_road.y+lengthdir_y(next_road.lane_width*(next_right_lanes+1), next_road.direction-90), next_road.z), new Point(shoulder_uv[2], shoulder_uv[3])],
+		[new Point3D(next_road.x+lengthdir_x(lane_width*(next_right_lanes+1), next_road.direction-90), next_road.y+lengthdir_y(lane_width*(next_right_lanes+1), next_road.direction-90), next_road.z), new Point(shoulder_uv[2], shoulder_uv[3])],
 		
 		// right grass
 		[new Point3D(road_render_points[0][2], road_render_points[1][2], next_road.z+5), new Point(grass_uv[0], grass_uv[1])],
@@ -350,37 +333,35 @@ for (var i = 0; i < array_length(road_list) - 1; i++) {
 		case ZONE.CITY:	
 			if (!road.transition_lane) {
 				// create buildings
-				if ((i%2) == 0) {
-					for (var j = -1; j <= 1; j += 2) {
-						var func = undefined;
-						var pos = [road.x, road.y];
-						switch(j) {
-							case -1:
-								func = road.get_lanes_left;
-								pos = [next_road.x, next_road.y];
-								break;
-							case 1:
-								func = road.get_lanes_right;
-								break;
-						}
-						var prop_obj = instance_create_layer(
-							pos[0] + lengthdir_x((func() * lane_width + 256) * j , road.direction-90),
-							pos[1] + lengthdir_y((func() * lane_width + 256) * j, road.direction-90),
-							"Instances",
-							obj_building
-						);
-						prop_obj.z = road.z;
-						prop_obj.direction = road.direction + (j == -1 ? 180 : 0);
-						prop_obj.building_width = road.length;
-						prop_obj.building_height = 128;
-						prop_obj.z_start = road.z;
-						prop_obj.z_end = next_road.z;
-						if (j == -1) {
-							prop_obj.z_start = next_road.z;
-							prop_obj.z_end = road.z;
-						}
-						prop_obj.init_vertex_buffer();
+				for (var j = -1; j <= 1; j += 2) {
+					var func = undefined;
+					var pos = [road.x, road.y];
+					switch(j) {
+						case -1:
+							func = road.get_lanes_left;
+							pos = [next_road.x, next_road.y];
+							break;
+						case 1:
+							func = road.get_lanes_right;
+							break;
 					}
+					var prop_obj = instance_create_layer(
+						pos[0] + lengthdir_x((func() * lane_width + 256) * j , road.direction-90),
+						pos[1] + lengthdir_y((func() * lane_width + 256) * j, road.direction-90),
+						"Instances",
+						obj_building
+					);
+					prop_obj.z = road.z;
+					prop_obj.direction = road.direction + (j == -1 ? 180 : 0);
+					prop_obj.building_width = road.length * 0.75;
+					prop_obj.building_height = 256;
+					prop_obj.z_start = road.z;
+					prop_obj.z_end = next_road.z;
+					if (j == -1) {
+						prop_obj.z_start = next_road.z;
+						prop_obj.z_end = road.z;
+					}
+					prop_obj.init_vertex_buffer();
 				}
 				// create city trees
 				if ((i%4) == 0) {

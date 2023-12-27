@@ -31,7 +31,6 @@ function find_nearest_road(_x, _y, starting, offset=0) {
 	var ri_end = min(global.road_list_length, max(1, closest_cp) * obj_road_generator.road_segments);
 	for (var ri = ri_start; ri < ri_end; ri++ ) {
 		var road = obj_road_generator.road_list[ri];
-		// var d = point_distance(_x, _y, road.x, road.y);
 		var d = abs(_x - road.x) + abs(_y - road.y);
 		if (d < closest_road_dist) {
 			closest_road_dist = d;

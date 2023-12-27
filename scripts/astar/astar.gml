@@ -14,15 +14,15 @@ function a_star(_grid, _start, _end, width, _h) {
 	/// @param _end		end grid
 	/// @param _h		hueristic function pointer
 	/// @param width	width of grid
-	
+	var t = current_time;
 	var frontier = ds_priority_create();
 	var searched = ds_list_create();
 	var parent = ds_list_create();
 	var g = ds_list_create();
 	for (var i = 0; i < ds_list_size(_grid); i++) {
 		ds_list_add(searched, false);
-		ds_list_add(parent, -1);
-		ds_list_add(g, -1);
+		ds_list_add(parent, 0);
+		ds_list_add(g, 0);
 	}
 	ds_priority_add(frontier, _start, 0);
 
@@ -76,16 +76,18 @@ function a_star(_grid, _start, _end, width, _h) {
 				parent[|n] = current;
 			}
 		}
+		if (current_time - t > 5000) {
+			print("whoops");
+		}
 		// post process
 		ds_list_destroy(neighbors);
 	}
 	print("Retracing road");
 	var path = [];
 	var cur = parent[|_end];
-	while (true) {
+	while (cur != _start) {
 		path[array_length(path)] = cur;
 		cur = parent[|cur];
-		if (cur == _start) {break;}
 	}
 	path[array_length(path)] = _start;
 	path = array_reverse(path);
