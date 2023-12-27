@@ -1,9 +1,9 @@
 function dist_on_line(A, B, pos) {
 	/// @function			dist_on_line(a, b, pos)
 	/// @description		Get the scalar projection distance from point A on line AB
-	/// @param {Vec2}		a point a
-	/// @param {Vec2}		b point b
-	/// @param {Vec2}		pos	position to check
+	/// @param {Point}		a point a
+	/// @param {Point}		b point b
+	/// @param {Point}		pos	position to check
 	var a = new Point(
 		B.x - A.x,
 		B.y - A.y

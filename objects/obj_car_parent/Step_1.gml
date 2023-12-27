@@ -1,25 +1,24 @@
 var vel = (velocity * 0.75) * global.deltatime / global.WORLD_TO_REAL_SCALE;
-var nearest_road = find_nearest_road(
-	x,
-	y,
-	on_road_index
+var vec_to_road = point_to_line(
+	new Point(on_road_index.x, on_road_index.y),
+	new Point(on_road_index.next_road.x, on_road_index.next_road.y),
+	new Point(x, y)
 );
-var lerp_value = (dist_along_road - nearest_road.length_to_point) / nearest_road.length;
-zlerp = lerp(nearest_road.z, nearest_road.next_road.z, lerp_value);
-zlerp = max(zlerp, lerp(on_road_index.z, on_road_index.next_road.z, (dist_along_road - on_road_index.length_to_point) / nearest_road.length));
+var lerp_value = point_distance(on_road_index.x, on_road_index.y, vec_to_road.x, vec_to_road.y) / on_road_index.length;
+zlerp = lerp(on_road_index.z, on_road_index.next_road.z, lerp_value);
 vertical_on_road = (z+zspeed >= zlerp);
 if (vertical_on_road) {
-	drive_force -= sin(nearest_road.elevation) * global.gravity_3d * mass;
+	drive_force -= sin(on_road_index.elevation) * global.gravity_3d * mass;
 	z = zlerp;
 }
 else {
 	// FREE FALLING
-	zspeed += global.gravity_3d * global.deltatime;
+	zspeed += global.gravity_3d * mass * global.deltatime;
 }
 z += zspeed;
-z = clamp(z, -500, zlerp);
-// z -= sin(degtorad(nearest_road .next_road.elevation)) * velocity / 60;
-if (z > nearest_road.next_road.z + 100) {hp = 0;}
+z = zlerp;//clamp(z, -500, zlerp);
+// z -= sin(degtorad(nearest_road.next_road.elevation)) * velocity / 60;
+if (z > on_road_index.next_road.z + 100) {hp = 0;}
 
 // move car in direction
 if (!is_respawning) {

@@ -140,18 +140,40 @@ gear_shift = function() {
 
 is_on_road = function(_x, _y, road_id) {
 	/// @function			is_on_road(x, y, index)
-	var polygon_x = obj_road_generator.road_list[road_id].get_collision_x();
-	var polygon_y = obj_road_generator.road_list[road_id].get_collision_y();
+	var proj = point_to_line(
+		new Point(on_road_index.x, on_road_index.y),
+		new Point(on_road_index.next_road.x, on_road_index.next_road.y),
+		new Point(x, y)
+	);
+	var side = sign(dcos(point_direction(x, y, proj.x, proj.y) - on_road_index.direction + 90)); // sign to make sure that value is -1 or 1
+	var dist = point_distance(x, y, proj.x, proj.y);
+	var side_check = false;
+	if (side == -1) {
+		// right
+		side_check = (dist < (on_road_index.get_lanes_right()+1) * on_road_index.lane_width)
+	}
+	if (side == 1) {
+		// left
+		side_check = (dist < (on_road_index.get_lanes_left()+1) * on_road_index.lane_width)
+	}
 	
-	return pnpoly(4, polygon_x, polygon_y, _x, _y);
+	return side_check;
 }
 
 set_on_road = function() {
 	last_road_index = find_nearest_road(x, y, last_road_index)._id;
+	var polygon_x = obj_road_generator.road_list[last_road_index].get_collision_x();
+	var polygon_y = obj_road_generator.road_list[last_road_index].get_collision_y();
+	var on_segment = pnpoly(4, polygon_x, polygon_y, x, y);
 	on_road = is_on_road(x,y,last_road_index);
-	if (on_road) {
-		on_road_index = last_road_index;
+	if (!on_segment) {
+		if (last_road_index-1 > 0) {
+			last_road_index -= 1;
+			on_road = is_on_road(x,y,last_road_index);
+			return obj_road_generator.road_list[last_road_index];
+		}
 	}
+	
 	//var p_i = last_road_index-1;
 	//while(p_i++ < last_road_index + 100) {//global.road_list_length-1) {
 	//	var road = obj_road_generator.road_list[p_i];

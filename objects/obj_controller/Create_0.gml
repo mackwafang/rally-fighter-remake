@@ -6,7 +6,7 @@ z = -50;
 depth = -10000;
 
 participating_vehicles = [];
-global.total_participating_vehicles = 1;
+global.total_participating_vehicles = 12;
 global.difficulty = 2;
 global.gravity_3d = 9.8;
 global.race_completed = false;
@@ -24,13 +24,12 @@ if (global.CAMERA_MODE_3D) {
 	gpu_set_ztestenable(true);
 	gpu_set_alphatestenable(true);
 	gpu_set_alphatestref(64);
-	game_set_speed(global.display_freq, gamespeed_fps);
 	display_reset(0, true);
 	init_bike_shadow_buffer();
 	
 	audio_listener_orientation(0,-1,0,0,0,-1);
 }
-
+game_set_speed(global.display_freq, gamespeed_fps);
 
 instance_create_layer(0, 0, "Instances", obj_road_generator);
 
@@ -68,7 +67,7 @@ for (var i = 0; i < array_length(participating_vehicles); i++) {
 	car.horsepower = 35 * (global.difficulty * 0.75);
 	car.ai_behavior.part_of_race = true;	
 	car.ai_behavior.desired_lane = (i % 3);
-	car.on_road_index = car.set_on_road();
+	car.on_road_index = road;
 	//for (var g = 0; g < array_length(car.gear_shift_rpm); g++) {
 	//	car.gear_shift_rpm[g][1] += (500 * global.difficulty);
 	//}

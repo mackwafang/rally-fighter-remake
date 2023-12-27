@@ -12,8 +12,8 @@ function a_star(_grid, _start, _end, width, _h) {
 	/// @param _grid	graph (expects a ds_grid)
 	/// @param _start	start grid
 	/// @param _end		end grid
-	/// @param _h		hueristic function pointer
 	/// @param width	width of grid
+	/// @param _h		hueristic function pointer
 	var t = current_time;
 	var frontier = ds_priority_create();
 	var searched = ds_list_create();
@@ -77,7 +77,12 @@ function a_star(_grid, _start, _end, width, _h) {
 			}
 		}
 		if (current_time - t > 5000) {
-			print("whoops");
+			ds_priority_destroy(frontier);
+			ds_list_destroy(searched);
+			ds_list_destroy(parent);
+			ds_list_destroy(g);
+			randomize();
+			return a_star(_grid, _start, _end, width, _h);
 		}
 		// post process
 		ds_list_destroy(neighbors);

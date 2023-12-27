@@ -3,7 +3,7 @@
 //}
 if (global.CAMERA_MODE_3D) {
 	shader_set(shd_sprite_billboard);
-	matrix_set(matrix_world, matrix_build(x, y, z, 0, 0, 0, 0.5, 0.5, 0.5));
+	matrix_set(matrix_world, matrix_build(x+lengthdir_x(-4, image_angle), y+lengthdir_y(-4, image_angle), z, 0, 0, 0, 0.5, 0.5, 0.5));
 	switch (vehicle_type) {
 		case VEHICLE_TYPE.BIKE:
 			draw_sprite_ext(spr_bike_3d, 0, 0, 0, 0.25, 0.25, (turn_rate * 5), c_white, image_alpha);
@@ -32,10 +32,6 @@ if (global.CAMERA_MODE_3D) {
 	}
 	draw_set_alpha(1);
 	matrix_set(matrix_world, matrix_build_identity());
-}
-else {
-	var nearest_road = find_nearest_road(x, y, 0);
-	draw_line_width(x, y, nearest_road.x, nearest_road.y, 4);
 }
 //draw_sprite_ext(vehicle_detail_index, image_index, x, y, image_xscale, image_yscale, image_angle, c_white, image_alpha);
 

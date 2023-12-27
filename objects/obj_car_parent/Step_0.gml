@@ -115,10 +115,7 @@ if (can_move) {
 
 // surface friction	
 // first, location of cached index
-if (!is_on_road(x, y, last_road_index)) {
-	// probably not on that segment anymore, recheck
-	on_road_index = set_on_road();
-}
+on_road_index = set_on_road();
 
 // finish
 is_completed = dist_along_road >= global.race_length;
@@ -202,7 +199,7 @@ if (!boost_active) {
 	}
 	
 	if (boost_juice < 100 && global.race_started) {
-		boost_juice += (0.1 * global.difficulty) * (1 - (boost_juice_penalty / 100)) * global.deltatime * 100;
+		boost_juice += (0.05 * global.difficulty) * (1 - (boost_juice_penalty / 100)) * global.deltatime * 100;
 	}
 }
 else {
@@ -211,7 +208,7 @@ else {
 	}
 	else {
 		boost_active = false;
-		boost_juice_penalty = clamp(boost_juice_penalty + 10, 0, 100);
+		boost_juice_penalty = clamp(boost_juice_penalty + 10, 0, 90);
 		if (!is_player) {
 			boosting = false;
 		}
