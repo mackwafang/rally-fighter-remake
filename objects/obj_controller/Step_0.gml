@@ -29,7 +29,7 @@
 
 // play music
 if (alarm[0] == global.display_freq * 3) {
-	audio_play_sound(snd_race_1, 128, true);
+	audio_play_sound(snd_race_2, 128, true);
 }
 
 // other controls
@@ -92,9 +92,7 @@ if (global.GAMEPLAY_CARS) {
 			var spawn_lane = irandom_range(0, road_at_view_edge.get_lanes_right() - 1) + 0.5;
 			var spawn_x = road_at_view_edge.x + lengthdir_x(road_at_view_edge.lane_width * spawn_lane, road_at_view_edge.direction - 90);
 			var spawn_y = road_at_view_edge.y + lengthdir_y(road_at_view_edge.lane_width * spawn_lane, road_at_view_edge.direction - 90);
-			var car = instance_create_layer(spawn_x, spawn_y, "Instances", obj_car, {
-				image_angle: road_at_view_edge.direction,
-			});
+			var car = instance_create_layer(spawn_x, spawn_y, "Instances", obj_car);
 			car.rpm = 2000;
 			car.max_velocity = 600 + (global.difficulty * 200);
 			car.last_road_index = road_at_view_edge._id;

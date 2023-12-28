@@ -4,3 +4,4 @@ render_scale = {
 	y: 0.1,
 	z: 0.1
 }
+use_billboard = false;

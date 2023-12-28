@@ -20,7 +20,7 @@ grid = ds_list_create();
 // intialize random weights for grids
 print("Creating grid");
 perlin_config = {
-	inc: 0.5,
+	inc: 1,
 	X: random(1000),
 	Y: random(1000),
 }
@@ -46,7 +46,7 @@ primary_count = array_length(control_path);
 for (var s = 0; s < array_length(control_path); s++) {
 	var xx = ((control_path[s] % grid_width) * control_points_dist);// + (irandom(control_points_dist) * choose(-0.5, 0.5));
 	var yy = ((control_path[s] div grid_width) * control_points_dist);// + (irandom(control_points_dist) * choose(-0.5, 0.5));
-	var zz = grid[|s]*1024;
+	var zz = grid[|s]*256;
 	control_points[s] = new Point3D(xx, yy, zz);
 }
 
@@ -328,6 +328,21 @@ for (var i = 0; i < array_length(road_list) - 1; i++) {
 	var next_road = road_list[@i+1];
 	var left_lanes = road.get_lanes_left();
 	var right_lanes = road.get_lanes_right();
+	
+	// create traffic lights at intersections
+	if (road.transition_lane) {
+		if (!next_road.transition_lane) {
+			var traffic_light = instance_create_layer(
+				next_road.x + lengthdir_x((next_road.get_lanes_right() + 0.5) * lane_width, next_road.direction - 90),
+				next_road.y + lengthdir_y((next_road.get_lanes_right() + 0.5) * lane_width, next_road.direction - 90),
+				"Instances",
+				obj_traffic_light
+			);
+			traffic_light.image_index = 0;
+			traffic_light.z = next_road.z;
+		}
+	}
+	
 	switch(road.zone) {
 		// create building
 		case ZONE.CITY:	
@@ -354,7 +369,7 @@ for (var i = 0; i < array_length(road_list) - 1; i++) {
 					prop_obj.z = road.z;
 					prop_obj.direction = road.direction + (j == -1 ? 180 : 0);
 					prop_obj.building_width = road.length * 0.75;
-					prop_obj.building_height = 256;
+					prop_obj.building_height = 128;
 					prop_obj.z_start = road.z;
 					prop_obj.z_end = next_road.z;
 					if (j == -1) {
@@ -394,7 +409,7 @@ for (var i = 0; i < array_length(road_list) - 1; i++) {
 						"Instances",
 						obj_tree
 					);
-					tree_obj.z = road.z;
+					tree_obj.z = road.z + irandom(32);
 				}
 			}
 			break;

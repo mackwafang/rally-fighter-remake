@@ -53,7 +53,7 @@ for (var i = 0; i < array_length(participating_vehicles); i++) {
 	car.race_rank = (array_length(participating_vehicles) - i);
 	var road = obj_road_generator.road_list[(i div 3) + 1];
 	var lane_position_x = (((i % 3) / 3) * road.length) + (road.length * (i div 3));
-	var lane_position_y = ((i % road.get_lanes_right()) * road.lane_width) + (road.lane_width / 2) + (irandom(road.lane_width / 2) * choose(-1,1));
+	var lane_position_y = ((i % road.get_lanes_right()) * road.lane_width) + (road.lane_width / 2);
 	
 	var dist = point_distance(road.x, road.y, road.x + lane_position_x, road.y + lane_position_y);
 	var dir = point_direction(road.x, road.y, road.x + lane_position_x, road.y + lane_position_y) + road.direction;
@@ -61,10 +61,8 @@ for (var i = 0; i < array_length(participating_vehicles); i++) {
 	car.x = road.x + lengthdir_x(dist, dir);
 	car.y = road.y + lengthdir_y(dist, dir);
 	car.direction = road.direction;
-	if (!car.is_player) {
-		car.can_move = false;
-	}
-	car.horsepower = 35 * (global.difficulty * 0.75);
+	car.can_move = false;
+	car.horsepower = 40 * (global.difficulty * 0.75);
 	car.ai_behavior.part_of_race = true;	
 	car.ai_behavior.desired_lane = (i % 3);
 	car.on_road_index = road;
