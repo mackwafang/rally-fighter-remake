@@ -92,8 +92,20 @@ if (obj_controller.main_camera_target.id == id) {
 	draw_set_valign(fa_middle);
 	draw_set_halign(fa_left);
 	draw_text(bar_x + 100 + 2, bar_y, $"{boost_juice} {boost_active} {0.1 * global.difficulty * (1 - (boost_juice_penalty / 100)) * global.deltatime * 100}");
-	//draw_rectangle_color(bar_x, bar_y, bar_x + bar_width, bar_y - bar_height, 0, 0, 0, 0, false);
-	//draw_rectangle_color(bar_x + bar_border, bar_y - bar_border, bar_x + (boost_juice/100*(bar_width - bar_border)), bar_y - bar_height + bar_border, c_yellow, c_yellow, c_yellow, c_yellow, false);
+	
+	// health bar
+	bar_border = 2;
+	bar_x = (port_width / 2) - 50;
+	bar_y = port_height - 32;
+	bar_height = 16;
+	bar_width = 100;
+	var bar_color = c_green;
+	hp_display += ((hp / max_hp) - hp_display) * 0.05;
+	draw_bar_color_border(bar_x, bar_y, max(0, hp_display*max_hp), max_hp, bar_width, bar_height, bar_border, c_red, c_red, c_red, c_red, 0);
+	draw_bar_color_border_no_bkg(bar_x, bar_y, max(0, hp), max_hp, bar_width, bar_height, bar_border, bar_color, bar_color, bar_color, bar_color);
+	draw_set_valign(fa_top);
+	draw_set_halign(fa_center);
+	draw_text(bar_x + 50 + 2, bar_y, $"{hp}/{max_hp}");
 	
 	// rpm odometer
 	var odometer_x = 48;

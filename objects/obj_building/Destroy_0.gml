@@ -1,1 +1,0 @@
-vertex_delete_buffer(building_vertex_format);

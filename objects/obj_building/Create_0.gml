@@ -8,8 +8,9 @@ building_length = 512;
 building_color = make_color_rgb(irandom(255), irandom(255), irandom(255));
 z_start = 0;
 z_end = -32;
+image_alpha = 0;
 
-function init_vertex_buffer() {
+init_vertex_buffer = function() {
 	var x0 = x;
 	var y0 = y;
 	var x1 = x + lengthdir_x(building_width, direction);
@@ -19,6 +20,9 @@ function init_vertex_buffer() {
 	var x3 = x1 + lengthdir_x(building_length, direction-90);
 	var y3 = y1 + lengthdir_y(building_length, direction-90);
 	//matrix = matrix_build(x, y, z, 0, 0, direction, 1, 1, 1);
+	image_xscale = building_width;
+	image_yscale = building_length;
+	image_angle = direction;
 
 	var uv = sprite_get_uvs(spr_building_side, 0);
 	var building_uv = sprite_get_uvs(spr_building_front, image_index);

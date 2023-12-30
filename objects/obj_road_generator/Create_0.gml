@@ -20,7 +20,7 @@ grid = ds_list_create();
 // intialize random weights for grids
 print("Creating grid");
 perlin_config = {
-	inc: 1,
+	inc: global.difficulty,
 	X: random(1000),
 	Y: random(1000),
 }
@@ -46,7 +46,7 @@ primary_count = array_length(control_path);
 for (var s = 0; s < array_length(control_path); s++) {
 	var xx = ((control_path[s] % grid_width) * control_points_dist);// + (irandom(control_points_dist) * choose(-0.5, 0.5));
 	var yy = ((control_path[s] div grid_width) * control_points_dist);// + (irandom(control_points_dist) * choose(-0.5, 0.5));
-	var zz = grid[|s]*256;
+	var zz = grid[|s]*512;
 	control_points[s] = new Point3D(xx, yy, zz);
 }
 
@@ -65,8 +65,8 @@ global.building_vertex_buffer = vertex_create_buffer();
 
 
 // set up road node data
-var lane_change_duration = 100; //how many nodes until change to new lane
-var lane_change_to = 1+irandom(2); // change this side of road to this number of lanes
+var lane_change_duration = 50; //how many nodes until change to new lane
+var lane_change_to = 3;//1+irandom(2); // change this side of road to this number of lanes
 var cur_lane_change_to = lane_change_to; // current lane change for transition
 var prev_lane_lane_to = lane_change_to; // previous lane change
 var lane_side_affected = ROAD_LANE_CHANGE_AFFECT.BOTH; // which side of the road changes 

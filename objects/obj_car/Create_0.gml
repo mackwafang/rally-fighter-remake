@@ -1,8 +1,11 @@
 event_inherited();
 
-vehicle_type = choose(VEHICLE_TYPE.CAR, VEHICLE_TYPE.BIKE);
+if (!ai_behavior.part_of_race) {
+	vehicle_type = choose(VEHICLE_TYPE.CAR, VEHICLE_TYPE.BIKE);
+}
+
 if (vehicle_type == VEHICLE_TYPE.CAR) {
-	image_index = irandom(sprite_get_number(spr_car_3d));
+	vehicle_detail_subimage = irandom(sprite_get_number(spr_car_3d));
 	if (!ai_behavior.part_of_race) {
 		mass += 1000;
 		horsepower += 100;

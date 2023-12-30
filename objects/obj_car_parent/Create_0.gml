@@ -7,6 +7,8 @@ can_move = true;		// can car be affected by movement or collision?
 
 max_hp = 100;			// car max health
 hp = max_hp;			// car health
+hp_display = 1;			// smooth hp thingy
+hp_regen_delay = 0;		// delay for health regen
 
 engine_rpm_max = 10000;	// max rpm
 engine_rpm = 1000;		// engine rpm
@@ -94,6 +96,7 @@ nav_road = find_nearest_road(x, y, 0);	// keep track of which road segment to tr
 image_speed = 0;
 vehicle_type = 0;
 vehicle_detail_index = 0;
+vehicle_detail_subimage = 0;
 vehicle_color = {
 	primary: 0,
 	secondary: 0,
@@ -209,22 +212,22 @@ on_respawn = function() {
 on_death = function() {
 	if (!is_respawning) {
 		instance_create_layer(x, y, "Instances", obj_explosion);
-		velocity = 0;
-		gear = 1;
-		rpm = 1000;
-		boost_active = false;
-		engine_power = 0;
 		if (ai_behavior.part_of_race) {
 			image_alpha = 0;
 			is_respawning = true;
 			can_move = false;
-			alarm[2] = round(20000 * global.deltatime);
+			alarm[2] = max(1, round(velocity * 30 * global.deltatime));
 			//solid = false;
 			mask_index = spr_empty;
 		}
 		else {
 			instance_destroy();
 		}
+		velocity = 0;
+		gear = 1;
+		rpm = 1000;
+		boost_active = false;
+		engine_power = 0;
 	}
 }
 

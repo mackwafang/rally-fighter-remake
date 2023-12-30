@@ -46,8 +46,8 @@ if (can_move) {
 			var side = -(angle_difference(image_angle, point_direction(x, y, vec_to_road.x, vec_to_road.y)));
 		
 			// checking other cars
-			var look_ahead_threshold = 64; //max(32, velocity / 10);
-			var look_ahead_angle = 10;
+			var look_ahead_threshold = max(32, velocity / 20);
+			var look_ahead_angle = 20;
 			var car_look_ahead = instance_exists(collision_line(x, y, x+lengthdir_x(look_ahead_threshold, image_angle), y+lengthdir_y(look_ahead_threshold, image_angle), obj_car_parent, false, true));
 			var car_look_left = instance_exists(collision_line(x+lengthdir_x(8, image_angle+look_ahead_angle), y+lengthdir_y(8, image_angle+look_ahead_angle), x+lengthdir_x(look_ahead_threshold, image_angle+look_ahead_angle), y+lengthdir_y(look_ahead_threshold, image_angle+look_ahead_angle), obj_car_parent, false, true));
 			var car_look_right = instance_exists(collision_line(x+lengthdir_x(8, image_angle-look_ahead_angle), y+lengthdir_y(8, image_angle-look_ahead_angle), x+lengthdir_x(look_ahead_threshold, image_angle-look_ahead_angle), y+lengthdir_y(look_ahead_threshold, image_angle-look_ahead_angle), obj_car_parent, false, true));
@@ -59,6 +59,7 @@ if (can_move) {
 			if (car_look_right) {turn_rate += evade_turn_rate;}
 			if (car_look_ahead) {
 				accelerating = false;
+				braking = true;
 				if (!car_look_left) {turn_rate += evade_turn_rate;}
 				else if (!car_look_right) {turn_rate -= evade_turn_rate;}
 			}
@@ -137,7 +138,7 @@ var drive_torque = engine_torque * engine_to_wheel_ratio * transfer_eff;
 	
 var f_drag = -c_drag * velocity;
 var f_rr = -c_rr * velocity;
-var f_surface = -mass * global.gravity_3d * ((on_road) ? 0.2 : 4);
+var f_surface = -mass * global.gravity_3d * ((on_road) ? 0.2 : 20);
 var f_brake = (braking) ? -braking_power * 1000 : 0;
 var f_turn = -abs(turn_rate) * mass / 2;
 if (velocity <= 0) {
@@ -186,13 +187,14 @@ if (abs(obj_controller.main_camera_target.dist_along_road - dist_along_road) > 6
 		}
 	}
 	// randomly destroy car to simulate crashes
-	if (irandom(10000) < ((global.total_participating_vehicles - race_rank + 1))) {
+	if (irandom(30000) < ((global.total_participating_vehicles - race_rank + 1))) {
 		if (!is_player) {
 			hp = 0;
 		}
 	}
 }
 
+// boost
 if (!boost_active) {
 	if (boosting) {
 		boost_active = true;
@@ -218,5 +220,13 @@ else {
 //check alive
 if (hp <= 0) {
 	on_death();
+}
+else {
+	// health regen
+	hp_regen_delay += global.deltatime;
+	if (hp_regen_delay >= 0) {
+		hp = clamp(hp+(3 / global.difficulty), 0, max_hp);
+		hp_regen_delay = -1;
+	}
 }
 	

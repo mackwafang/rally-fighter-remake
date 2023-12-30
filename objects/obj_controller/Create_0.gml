@@ -35,7 +35,7 @@ instance_create_layer(0, 0, "Instances", obj_road_generator);
 
 // racing car
 for (var i = 0; i < global.total_participating_vehicles; i++) {
-	var car = instance_create_layer(0, 0, "Instances", obj_car);
+	var car = instance_create_layer(0, 0, "Instances", obj_racers);
 	if (i == 0) {
 		car.is_player = true;
 		player_obj = car;
@@ -45,6 +45,7 @@ for (var i = 0; i < global.total_participating_vehicles; i++) {
 	car.depth = 10;
 	car.z = -10;
 	car.vehicle_type = VEHICLE_TYPE.BIKE;
+	car.ai_behavior.part_of_race = true;
 	participating_vehicles[array_length(participating_vehicles)] = car;
 }
 
@@ -62,8 +63,8 @@ for (var i = 0; i < array_length(participating_vehicles); i++) {
 	car.y = road.y + lengthdir_y(dist, dir);
 	car.direction = road.direction;
 	car.can_move = false;
-	car.horsepower = 40 * (global.difficulty * 0.75);
-	car.ai_behavior.part_of_race = true;	
+	car.mass = 100;
+	car.horsepower = 35 * (global.difficulty * 0.75);
 	car.ai_behavior.desired_lane = (i % 3);
 	car.on_road_index = road;
 	//for (var g = 0; g < array_length(car.gear_shift_rpm); g++) {

@@ -14,7 +14,7 @@ if (global.CAMERA_MODE_3D) {
 			draw_sprite_ext(spr_bike_3d_detail, 4, 0, 0, 0.25, 0.25, (turn_rate * 5), c_white, image_alpha);
 			break;
 		case VEHICLE_TYPE.CAR:
-			draw_sprite_ext(spr_car_3d, image_index, 0, 0, 1, 1, 0, vehicle_color.primary, image_alpha);
+			draw_sprite_ext(spr_car_3d, vehicle_detail_subimage, 0, 0, 1, 1, 0, vehicle_color.primary, image_alpha);
 			break;
 	}
 	matrix_set(matrix_world, matrix_build_identity());
