@@ -78,7 +78,7 @@ for (var i = 0; i < array_length(road_list)-1; i++) {
 	road.direction = point_direction(road.x, road.y, next_road.x, next_road.y);
 	road.length = sqrt(sqr(road.x - next_road.x) + sqr(road.y - next_road.y) + sqr(road.z - next_road.z));// point_distance(road.x, road.y, next_road.x, next_road.y);
 	
-	road.ideal_throttle = (road.length / (control_points_dist / road_segments))*(global.difficulty < 1 ? 0.75 : 1);
+	road.ideal_throttle = (road.length / (control_points_dist / road_segments))*(global.difficulty < 1 ? 0.75 : 0.95);
 	road._id = i;
 	road.lane_width = lane_width;
 	road.zone = cur_zone;
@@ -305,23 +305,12 @@ for (var i = 0; i < array_length(road_list) - 1; i++) {
 		vertex_color(road_vertex_buffers, c_white, 1);
 		vertex_texcoord(road_vertex_buffers, uv.x, uv.y);
 	}
-	
-	// create speed limit sign
-	if ((i % 100) == 0) {
-		var prop_obj = instance_create_layer(
-			collision_points[0][2],
-			collision_points[1][2],
-			"Instances",
-			obj_traffic_prop
-		);
-		prop_obj.image_index = 0;
-		prop_obj.z = road.z;
-	}
 }
 vertex_end(road_vertex_buffers);
 vertex_freeze(road_vertex_buffers);
 
 // create props
+var prop_chain = 0;
 vertex_begin(global.building_vertex_buffer, building_vertex_format);
 for (var i = 0; i < array_length(road_list) - 1; i++) {
 	var road = road_list[@i];
@@ -343,40 +332,77 @@ for (var i = 0; i < array_length(road_list) - 1; i++) {
 		}
 	}
 	
+	// create speed limit sign
+	if ((i % 100) == 0) {
+		var prop_obj = instance_create_layer(
+			road.x + lengthdir_x((right_lanes+0.25) * road.lane_width, road.direction-90),
+			road.y + lengthdir_y((right_lanes+0.25) * road.lane_width, road.direction-90),
+			"Instances",
+			obj_traffic_prop
+		);
+		prop_obj.display_image_index = 0;
+		prop_obj.z = road.z;
+	}
+	
+	if (prop_chain > 0) {
+		var prop_obj = instance_create_layer(
+			road.x + lengthdir_x(right_lanes * road.lane_width, road.direction-90),
+			road.y + lengthdir_y(right_lanes * road.lane_width, road.direction-90),
+			"Instances",
+			obj_traffic_prop
+		);
+		prop_obj.display_image_index = 1;
+		prop_obj.z = road.z;
+		
+		prop_chain -= 1;
+		if (prop_chain == 0) {
+			prop_chain -= 15;
+		}
+	}
+	else {
+		prop_chain += 1;
+		if (prop_chain == 0) {
+			prop_chain = 3+irandom(3);
+		}
+	}
+	
+	// zone specific props
 	switch(road.zone) {
 		// create building
 		case ZONE.CITY:	
 			if (!road.transition_lane) {
-				// create buildings
-				for (var j = -1; j <= 1; j += 2) {
-					var func = undefined;
-					var pos = [road.x, road.y];
-					switch(j) {
-						case -1:
-							func = road.get_lanes_left;
-							pos = [next_road.x, next_road.y];
-							break;
-						case 1:
-							func = road.get_lanes_right;
-							break;
+				if (road.length * 0.75 > 32) {
+					// create buildings
+					for (var j = -1; j <= 1; j += 2) {
+						var func = undefined;
+						var pos = [road.x, road.y];
+						switch(j) {
+							case -1:
+								func = road.get_lanes_left;
+								pos = [next_road.x, next_road.y];
+								break;
+							case 1:
+								func = road.get_lanes_right;
+								break;
+						}
+						var prop_obj = instance_create_layer(
+							pos[0] + lengthdir_x((func() * lane_width + 256) * j , road.direction-90),
+							pos[1] + lengthdir_y((func() * lane_width + 256) * j, road.direction-90),
+							"Instances",
+							obj_building
+						);
+						prop_obj.z = road.z;
+						prop_obj.direction = road.direction + (j == -1 ? 180 : 0);
+						prop_obj.building_width = road.length * 0.75;
+						prop_obj.building_height = 128;
+						prop_obj.z_start = road.z;
+						prop_obj.z_end = next_road.z;
+						if (j == -1) {
+							prop_obj.z_start = next_road.z;
+							prop_obj.z_end = road.z;
+						}
+						prop_obj.init_vertex_buffer();
 					}
-					var prop_obj = instance_create_layer(
-						pos[0] + lengthdir_x((func() * lane_width + 256) * j , road.direction-90),
-						pos[1] + lengthdir_y((func() * lane_width + 256) * j, road.direction-90),
-						"Instances",
-						obj_building
-					);
-					prop_obj.z = road.z;
-					prop_obj.direction = road.direction + (j == -1 ? 180 : 0);
-					prop_obj.building_width = road.length * 0.75;
-					prop_obj.building_height = 128;
-					prop_obj.z_start = road.z;
-					prop_obj.z_end = next_road.z;
-					if (j == -1) {
-						prop_obj.z_start = next_road.z;
-						prop_obj.z_end = road.z;
-					}
-					prop_obj.init_vertex_buffer();
 				}
 				// create city trees
 				if ((i%4) == 0) {
@@ -390,7 +416,7 @@ for (var i = 0; i < array_length(road_list) - 1; i++) {
 						"Instances",
 						obj_tree
 					);
-					tree_obj.image_index = choose(1,2);
+					tree_obj.display_image_index = choose(1,2);
 					tree_obj.z = road.z;
 				}
 			}

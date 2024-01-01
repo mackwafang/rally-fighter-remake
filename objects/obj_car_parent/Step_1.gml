@@ -13,10 +13,10 @@ if (vertical_on_road) {
 }
 else {
 	// FREE FALLING
-	zspeed += global.gravity_3d * mass * global.deltatime;
+	zspeed += global.gravity_3d * global.deltatime;
 }
 z += zspeed;
-z = zlerp;//clamp(z, -500, zlerp);
+z = clamp(z, -500, zlerp);
 // z -= sin(degtorad(nearest_road.next_road.elevation)) * velocity / 60;
 if (z > on_road_index.next_road.z + 100) {hp = 0;}
 

@@ -16,7 +16,7 @@
     "path": "folders/Sounds.yy",
   },
   "preload": false,
-  "sampleRate": 11025,
+  "sampleRate": 44100,
   "soundFile": "snd_car.mp3",
   "type": 2,
   "volume": 0.03,

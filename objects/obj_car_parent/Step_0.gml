@@ -32,7 +32,7 @@ if (can_move) {
 		if (is_player) {
 			engine_power += 0.1;
 			if (global.GAMEPLAY_TURN_GUIDE) {
-				turn_rate += (angle_diff / 180); // moving along curved road
+				turn_rate += (angle_diff / 360); // moving along curved road
 			}
 		}
 		else {
@@ -44,7 +44,7 @@ if (can_move) {
 		
 			engine_power = nav_road.get_ideal_throttle();
 			var side = -(angle_difference(image_angle, point_direction(x, y, vec_to_road.x, vec_to_road.y)));
-		
+			var turn_adjustments = (ai_behavior.part_of_race) ? 1 : 2;
 			// checking other cars
 			var look_ahead_threshold = max(32, velocity / 20);
 			var look_ahead_angle = 20;
@@ -54,7 +54,7 @@ if (can_move) {
 			var is_off_road_left = !is_on_road(x+lengthdir_x(look_ahead_threshold/4, image_angle+90), y+lengthdir_y(look_ahead_threshold/4, image_angle+90), last_road_index) ? 1 : 0;
 			var is_off_road_right = !is_on_road(x+lengthdir_x(look_ahead_threshold/4, image_angle-90), y+lengthdir_y(look_ahead_threshold/4, image_angle-90), last_road_index) ? 1 : 0;
 			
-			var evade_turn_rate = 0.1;
+			var evade_turn_rate = 0.2;
 			if (car_look_left) {turn_rate -= evade_turn_rate;}
 			if (car_look_right) {turn_rate += evade_turn_rate;}
 			if (car_look_ahead) {
@@ -75,7 +75,7 @@ if (can_move) {
 			}
 			else {
 				// car turning on curved road and moving to its desired lane
-				var tr = (angle_diff / 60); // moving along curved road
+				var tr = (angle_diff / 60) * turn_adjustments; // moving along curved road
 				
 				// moving go desired lane
 				if (dist_to_road > 16) {
@@ -87,7 +87,7 @@ if (can_move) {
 			
 			// enables boost
 			if (boost_juice >= 100) {
-				if (irandom(10) < global.difficulty) {
+				if (irandom(20) < global.difficulty) {
 					boosting = true;
 				}
 			}
@@ -175,7 +175,7 @@ if (hp > 0) {
 	}
 	audio_emitter_pitch(engine_sound_emitter, engine_sound_pitch);
 	audio_emitter_position(engine_sound_emitter, x, y, z);
-	engine_sound_interval = (engine_sound_interval + 1) % (engine_rpm < 2000 ? 6 : 3);
+	engine_sound_interval = (engine_sound_interval + 1) % (engine_rpm < 2000 ? 16 : 8);
 }
 
 

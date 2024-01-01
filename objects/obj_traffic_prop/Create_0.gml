@@ -4,4 +4,7 @@ render_scale = {
 	y: 0.1,
 	z: 0.1
 }
-use_billboard = false;
+display_sprite_index = spr_prop;
+use_billboard = true;
+image_xscale = 8;
+image_yscale = 8;

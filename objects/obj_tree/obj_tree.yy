@@ -31,8 +31,8 @@
   "properties": [],
   "solid": false,
   "spriteId": {
-    "name": "spr_tree",
-    "path": "sprites/spr_tree/spr_tree.yy",
+    "name": "spr_1x1",
+    "path": "sprites/spr_1x1/spr_1x1.yy",
   },
   "spriteMaskId": null,
   "visible": true,

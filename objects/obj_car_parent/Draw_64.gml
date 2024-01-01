@@ -91,7 +91,6 @@ if (obj_controller.main_camera_target.id == id) {
 	draw_bar_color_border(bar_x, bar_y, boost_juice, 100, bar_width, bar_height, bar_border, c_yellow, c_yellow, c_yellow, c_yellow, 0);
 	draw_set_valign(fa_middle);
 	draw_set_halign(fa_left);
-	draw_text(bar_x + 100 + 2, bar_y, $"{boost_juice} {boost_active} {0.1 * global.difficulty * (1 - (boost_juice_penalty / 100)) * global.deltatime * 100}");
 	
 	// health bar
 	bar_border = 2;
