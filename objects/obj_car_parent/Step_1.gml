@@ -10,6 +10,9 @@ vertical_on_road = (z+zspeed >= zlerp);
 if (vertical_on_road) {
 	drive_force -= sin(on_road_index.elevation) * global.gravity_3d * mass;
 	z = zlerp;
+	if (zspeed > global.gravity_3d) {
+		zspeed *= -1/3;
+	}
 }
 else {
 	// FREE FALLING
@@ -24,11 +27,12 @@ if (z > on_road_index.next_road.z + 100) {hp = 0;}
 if (!is_respawning) {
 	turn_rate += -turn_rate * 0.1;
 	turn_rate = clamp(turn_rate, -6, 6);
-	
-	direction += turn_rate;
-	x += cos(degtorad(direction)) * vel;
-	y -= sin(degtorad(direction)) * vel;
-	image_angle = direction;
+	if (vertical_on_road) {
+		direction += turn_rate;
+	}
 }
+x += cos(degtorad(direction)) * vel;
+y -= sin(degtorad(direction)) * vel;
+image_angle = direction;
 
 velocity += acceleration * global.deltatime;// * gear_ratio[gear-1];

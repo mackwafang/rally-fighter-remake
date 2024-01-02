@@ -104,7 +104,7 @@ if (obj_controller.main_camera_target.id == id) {
 	draw_bar_color_border_no_bkg(bar_x, bar_y, max(0, hp), max_hp, bar_width, bar_height, bar_border, bar_color, bar_color, bar_color, bar_color);
 	draw_set_valign(fa_top);
 	draw_set_halign(fa_center);
-	draw_text(bar_x + 50 + 2, bar_y, $"{hp}/{max_hp}");
+	draw_text(bar_x + 50 + 2, bar_y, $"{hp}/{max_hp}\n{alarm[2]}");
 	
 	// rpm odometer
 	var odometer_x = 48;

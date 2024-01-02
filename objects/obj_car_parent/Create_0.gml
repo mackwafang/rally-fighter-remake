@@ -216,16 +216,15 @@ on_death = function() {
 			image_alpha = 0;
 			is_respawning = true;
 			can_move = false;
-			alarm[2] = max(1, round(velocity * 30 * global.deltatime));
 			//solid = false;
 			mask_index = spr_empty;
 		}
 		else {
 			instance_destroy();
 		}
-		velocity = 0;
-		gear = 1;
-		rpm = 1000;
+		//velocity = 0;
+		//gear = 1;
+		//rpm = 1000;
 		boost_active = false;
 		engine_power = 0;
 	}

@@ -346,8 +346,8 @@ for (var i = 0; i < array_length(road_list) - 1; i++) {
 	
 	if (prop_chain > 0) {
 		var prop_obj = instance_create_layer(
-			road.x + lengthdir_x(right_lanes * road.lane_width, road.direction-90),
-			road.y + lengthdir_y(right_lanes * road.lane_width, road.direction-90),
+			road.x + lengthdir_x(choose(-left_lanes, 0, right_lanes) * road.lane_width, road.direction-90),
+			road.y + lengthdir_y(choose(-left_lanes, 0, right_lanes) * road.lane_width, road.direction-90),
 			"Instances",
 			obj_traffic_prop
 		);

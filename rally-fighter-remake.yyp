@@ -102,6 +102,7 @@
     {"id":{"name":"spr_car_3d","path":"sprites/spr_car_3d/spr_car_3d.yy",},},
     {"id":{"name":"math","path":"scripts/math/math.yy",},},
     {"id":{"name":"obj_explosion","path":"objects/obj_explosion/obj_explosion.yy",},},
+    {"id":{"name":"spr_2x2","path":"sprites/spr_2x2/spr_2x2.yy",},},
     {"id":{"name":"obj_traffic_light","path":"objects/obj_traffic_light/obj_traffic_light.yy",},},
     {"id":{"name":"enums","path":"scripts/enums/enums.yy",},},
     {"id":{"name":"misc","path":"scripts/misc/misc.yy",},},

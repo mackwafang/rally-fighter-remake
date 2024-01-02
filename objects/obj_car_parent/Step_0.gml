@@ -44,7 +44,7 @@ if (can_move) {
 		
 			engine_power = nav_road.get_ideal_throttle();
 			var side = -(angle_difference(image_angle, point_direction(x, y, vec_to_road.x, vec_to_road.y)));
-			var turn_adjustments = (ai_behavior.part_of_race) ? 1 : 2;
+			var turn_adjustments = (ai_behavior.part_of_race) ? 1 : 1.5;
 			// checking other cars
 			var look_ahead_threshold = max(32, velocity / 20);
 			var look_ahead_angle = 20;
@@ -132,13 +132,13 @@ if (ai_behavior.part_of_race || is_player) {
 
 // calculate engine stuff for acceleration
 var engine_to_wheel_ratio = gear_ratio[gear-1] * diff_ratio;
-var engine_torque_max = (horsepower / engine_rpm * 5252) * 20;//torque_lookup(engine_rpm)
+var engine_torque_max = (horsepower / engine_rpm * 5252) * 20;
 var engine_torque = engine_torque_max * (boost_active ? 2 : engine_power);
 var drive_torque = engine_torque * engine_to_wheel_ratio * transfer_eff;
 	
 var f_drag = -c_drag * velocity;
 var f_rr = -c_rr * velocity;
-var f_surface = -mass * global.gravity_3d * ((on_road) ? 0.2 : 20);
+var f_surface = -mass * global.gravity_3d * ((on_road) ? 0.2 : 20) * (vertical_on_road ? 1 : 0);
 var f_brake = (braking) ? -braking_power * 1000 : 0;
 var f_turn = -abs(turn_rate) * mass / 2;
 if (velocity <= 0) {
@@ -153,12 +153,13 @@ push_vector.x = max(0, push_vector.x - abs(drive_force));
 push_vector.y = max(0, push_vector.y * 0.95);
 
 drive_torque = drive_force * wheel_radius;
-acceleration = (drive_torque / inertia);
 
-var wheel_rotation_rate = velocity * 100 / 3600 / wheel_radius;
-engine_rpm = (wheel_rotation_rate * engine_to_wheel_ratio * 60 / (2 * pi));
-
-velocity = clamp(velocity, 0, max_velocity);
+if (vertical_on_road) {
+	acceleration = (drive_torque / inertia);
+	var wheel_rotation_rate = velocity * 100 / 3600 / wheel_radius;
+	engine_rpm = (wheel_rotation_rate * engine_to_wheel_ratio * 60 / (2 * pi));
+	velocity = clamp(velocity, 0, max_velocity);
+}
 
 gear_shift(); // auto gear shift
 engine_rpm = clamp(engine_rpm, 1000, engine_rpm_max);
@@ -220,6 +221,11 @@ else {
 //check alive
 if (hp <= 0) {
 	on_death();
+	if (velocity <= 0) {
+		if (alarm[2] <= 0) {
+			alarm[2] = round(30000 * global.deltatime);
+		}
+	}
 }
 else {
 	// health regen

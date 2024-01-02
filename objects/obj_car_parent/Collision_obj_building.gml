@@ -10,4 +10,5 @@ var b = new Point(
 var _d = abs(dot_product(b.x, b.y, a.x, a.y));
 hp *= _d;
 turn_rate *= _d * 2;
+velocity *= _d;
 move_contact_solid(dist_to_building - 180, 6);
