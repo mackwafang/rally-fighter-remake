@@ -76,13 +76,12 @@ function a_star(_grid, _start, _end, width, _h) {
 				parent[|n] = current;
 			}
 		}
-		if (current_time - t > 5000) {
+		if (current_time - t > 3000) {
 			ds_priority_destroy(frontier);
 			ds_list_destroy(searched);
 			ds_list_destroy(parent);
 			ds_list_destroy(g);
-			randomize();
-			return a_star(_grid, _start, _end, width, _h);
+			return [];
 		}
 		// post process
 		ds_list_destroy(neighbors);

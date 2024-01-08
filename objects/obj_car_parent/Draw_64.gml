@@ -45,7 +45,7 @@ if (ai_behavior.part_of_race) {
 		#region draw data around driver on screen
 		if (obj_controller.main_camera_target.id != id) {
 			var screen_coord = world_to_screen(x, y, z-30, global.view_matrix, global.projection_matrix);
-			var dist_alpha = 1 - (abs(dist_along_road - obj_controller.main_camera_target.dist_along_road) / 512);
+			var dist_alpha = 1 - (abs(dist_along_road - obj_controller.main_camera_target.dist_along_road) / 1024);
 			// var bar_border = 2;
 			// var bar_height = 8;
 			// var bar_width = 30;
@@ -65,6 +65,7 @@ if (ai_behavior.part_of_race) {
 }
 #endregion
 
+#region Draw UI elements
 if (obj_controller.main_camera_target.id == id) {
 	//draw_text(16, 16, $"onroad: {on_road ? "true" : "false"}");
 	//draw_set_valign(fa_top);
@@ -177,3 +178,4 @@ if (obj_controller.main_camera_target.id == id) {
 	draw_text(port_width - 48, port_height - 32, $"{real_dist / scale} {unit}");
 	draw_text(port_width - 32, port_height - 16, closest_car_index);
 }
+#endregion

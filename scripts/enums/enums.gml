@@ -20,5 +20,5 @@ enum ZONE {
 
 enum MEASURE {
 	METRIC,
-	EMPERIAL
+	IMPERIAL
 }

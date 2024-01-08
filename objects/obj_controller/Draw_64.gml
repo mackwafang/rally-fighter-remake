@@ -35,15 +35,16 @@ for (var rank = 0; rank < array_length(global.car_ranking); rank++) {
 
 
 // starting timer
-if (alarm[0] > 0) {
+if (alarm[0] > 0 || global.game_state_paused) {
 	draw_set_alpha(0.6);
 	draw_rectangle_color(0, 0, main_camera_size.width, main_camera_size.height, 0, 0, 0, 0, false);
 	draw_set_alpha(1);
-	if (alarm[0] < 3 * global.display_freq) {
-		draw_set_valign(fa_middle);
-		draw_set_halign(fa_center);
-		draw_sprite_ext(spr_starting_number, (alarm[0] div global.display_freq), main_camera_size.width / 2, main_camera_size.height / 2, 1, 2, 0, c_white, 1);
-	}
+	
+}
+if (0 < alarm[0] && alarm[0] < 3 * global.display_freq) {
+	draw_set_valign(fa_middle);
+	draw_set_halign(fa_center);
+	draw_sprite_ext(spr_starting_number, (alarm[0] div global.display_freq), main_camera_size.width / 2, main_camera_size.height / 2, 1, 2, 0, c_white, 1);
 }
 if (global.DEBUG_DRAW_MINIMAP) {
 	if (!surface_exists(minimap_surface)) {

@@ -53,6 +53,7 @@
     {"name":"point_to_line","order":11,"path":"scripts/point_to_line/point_to_line.yy",},
     {"name":"spr_bike_3d","order":14,"path":"sprites/spr_bike_3d/spr_bike_3d.yy",},
     {"name":"init_bike_shadow_buffer","order":14,"path":"scripts/init_bike_shadow_buffer/init_bike_shadow_buffer.yy",},
+    {"name":"snd_car_2","order":4,"path":"sounds/snd_car_2/snd_car_2.yy",},
     {"name":"obj_car_parent","order":1,"path":"objects/obj_car_parent/obj_car_parent.yy",},
     {"name":"spr_health_bar_small","order":9,"path":"sprites/spr_health_bar_small/spr_health_bar_small.yy",},
     {"name":"spr_bike_3d_detail","order":16,"path":"sprites/spr_bike_3d_detail/spr_bike_3d_detail.yy",},

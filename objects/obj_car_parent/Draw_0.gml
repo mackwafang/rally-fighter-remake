@@ -6,12 +6,13 @@ if (global.CAMERA_MODE_3D) {
 	matrix_set(matrix_world, matrix_build(x+lengthdir_x(-4, image_angle), y+lengthdir_y(-4, image_angle), z, 0, 0, 0, 0.5, 0.5, 0.5));
 	switch (vehicle_type) {
 		case VEHICLE_TYPE.BIKE:
-			draw_sprite_ext(spr_bike_3d, 0, 0, 0, 0.25, 0.25, (turn_rate * 5), c_white, image_alpha);
-			draw_sprite_ext(spr_bike_3d_detail, 0, 0, 0, 0.25, 0.25, (turn_rate * 5), vehicle_color.tetriary, image_alpha);
-			draw_sprite_ext(spr_bike_3d_detail, 1, 0, 0, 0.25, 0.25, (turn_rate * 5), vehicle_color.primary, image_alpha);
-			draw_sprite_ext(spr_bike_3d_detail, 2, 0, 0, 0.25, 0.25, (turn_rate * 5), vehicle_color.secondary, image_alpha);
-			draw_sprite_ext(spr_bike_3d_detail, 3, 0, 0, 0.25, 0.25, (turn_rate * 5), vehicle_color.tetriary, image_alpha);
-			draw_sprite_ext(spr_bike_3d_detail, 4, 0, 0, 0.25, 0.25, (turn_rate * 5), c_white, image_alpha);
+			var turn_adjust = clamp(turn_rate * 15, -45, 45);
+			draw_sprite_ext(spr_bike_3d, 0, 0, 0, 0.25, 0.25, (turn_adjust), c_white, image_alpha);
+			draw_sprite_ext(spr_bike_3d_detail, 0, 0, 0, 0.25, 0.25, (turn_adjust), vehicle_color.tetriary, image_alpha);
+			draw_sprite_ext(spr_bike_3d_detail, 1, 0, 0, 0.25, 0.25, (turn_adjust), vehicle_color.primary, image_alpha);
+			draw_sprite_ext(spr_bike_3d_detail, 2, 0, 0, 0.25, 0.25, (turn_adjust), vehicle_color.secondary, image_alpha);
+			draw_sprite_ext(spr_bike_3d_detail, 3, 0, 0, 0.25, 0.25, (turn_adjust), vehicle_color.tetriary, image_alpha);
+			draw_sprite_ext(spr_bike_3d_detail, 4, 0, 0, 0.25, 0.25, (turn_adjust), c_white, image_alpha);
 			break;
 		case VEHICLE_TYPE.CAR:
 			draw_sprite_ext(spr_car_3d, vehicle_detail_subimage, 0, 0, 1, 1, 0, vehicle_color.primary, image_alpha);

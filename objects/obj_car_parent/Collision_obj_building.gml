@@ -7,8 +7,8 @@ var b = new Point(
 	(other.x - x) / dist_to_building,
 	(other.y - y) / dist_to_building
 );
-var _d = abs(dot_product(b.x, b.y, a.x, a.y));
-hp *= _d;
+var _d = clamp(abs(dot_product(b.x, b.y, a.x, a.y)), 0, 1);
+hp -= max_hp * _d * 2;
 turn_rate *= _d * 2;
 velocity *= _d;
 move_contact_solid(dist_to_building - 180, 6);

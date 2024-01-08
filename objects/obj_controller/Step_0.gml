@@ -33,7 +33,7 @@ if (alarm[0] == global.display_freq * 3) {
 }
 
 // other controls
-if (keyboard_check(vk_escape)) {
+if (keyboard_check_pressed(vk_escape)) {
 	global.game_state_paused = !global.game_state_paused;
 }
 
@@ -53,8 +53,8 @@ if (!global.DEBUG_FREE_CAMERA) {
 	else {
 		gpu_set_zwriteenable(false);
 		global.view_matrix = matrix_build_lookat(
-			main_camera_target.x+lengthdir_x(-30+cam_zoom, main_camera_target.image_angle), 
-			main_camera_target.y+lengthdir_y(-30+cam_zoom, main_camera_target.image_angle), 
+			main_camera_target.x+lengthdir_x(-60+cam_zoom, main_camera_target.image_angle), 
+			main_camera_target.y+lengthdir_y(-60+cam_zoom, main_camera_target.image_angle), 
 			main_camera_target.z + z, 
 			main_camera_target.x+lengthdir_x(500, main_camera_target.image_angle),
 			main_camera_target.y+lengthdir_y(500, main_camera_target.image_angle),
@@ -66,7 +66,16 @@ if (!global.DEBUG_FREE_CAMERA) {
 		camera_apply(main_camera);
 		gpu_set_zwriteenable(true);
 		
-		cam_zoom = clamp(cam_zoom, -100, 10);
+		// keep keep camera fixed or move away when finished
+		if (!main_camera_target.is_completed) {
+			cam_zoom = clamp(cam_zoom, -100, 10);
+		}
+		else {
+			cam_zoom -= 0.5;
+			z -= 0.25;
+			cam_zoom = clamp(cam_zoom, -500, 10);
+			z = clamp(z, -250, 10);
+		}
 	}
 }
 else {
