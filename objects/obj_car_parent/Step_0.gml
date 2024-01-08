@@ -139,8 +139,8 @@ var drive_torque = engine_torque * engine_to_wheel_ratio * transfer_eff;
 	
 var f_drag = -c_drag * velocity;
 var f_rr = -c_rr * velocity;
-var f_surface = -mass * global.gravity_3d * ((on_road) ? 0.2 : 20) * (vertical_on_road ? 1 : 0) * (hp < 0 ? 2 : 1);
-var f_brake = (braking) ? -braking_power * 1000 : 0;
+var f_surface = -mass * global.gravity_3d * ((on_road) ? 0.2 : 20) * (vertical_on_road ? 1 : 0);
+var f_brake = ((braking) ? -braking_power * 1000 : 0) * (hp < 0 ? 20 : 1);
 var f_turn = -abs(turn_rate) * mass / 2;
 if (velocity <= 0) {
 	f_brake = 0;

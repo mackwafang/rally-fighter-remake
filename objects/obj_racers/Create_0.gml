@@ -1,7 +1,7 @@
 event_inherited();
 
 vehicle_color = {
-	primary: make_color_hsv(irandom(255), 128 + irandom(128), 128 + irandom(128)),
-	secondary: make_color_hsv(irandom(255), 128 + irandom(128), 128 + irandom(128)),
-	tetriary: make_color_hsv(irandom(255), 128 + irandom(128), 128 + irandom(128))
+	primary: min($ffffff, make_color_rgb(irandom(32) * 8, irandom(32) * 8, irandom(32) * 8)),
+	secondary: min($ffffff, make_color_rgb(irandom(32) * 8, irandom(32) * 8, irandom(32) * 8)),
+	tetriary: min($ffffff, make_color_rgb(irandom(32) * 8, irandom(32) * 8, irandom(32) * 8))
 };

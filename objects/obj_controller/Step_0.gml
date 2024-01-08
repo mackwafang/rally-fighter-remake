@@ -103,10 +103,10 @@ if (global.GAMEPLAY_CARS) {
 			var spawn_y = road_at_view_edge.y + lengthdir_y(road_at_view_edge.lane_width * spawn_lane, road_at_view_edge.direction - 90);
 			var car = instance_create_layer(spawn_x, spawn_y, "Instances", obj_car);
 			car.rpm = 2000;
-			car.max_velocity = 600 + (global.difficulty * 200);
+			car.max_velocity = 400 + (global.difficulty * 200);
 			car.last_road_index = road_at_view_edge._id;
 			car.on_road_index = road_at_view_edge;
-			car.horsepower = 40;
+			car.horsepower = 30;
 			car.max_gear = 2;
 			car.z = road_at_view_edge.z;
 			car.ai_behavior.desired_lane = irandom(road_at_view_edge.get_lanes_right());

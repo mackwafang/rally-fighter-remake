@@ -48,12 +48,20 @@ c_rr = 20 * c_drag;										// constant value for car's drag
 //gear's ratio
 gear_ratio = [3, 2.5, 2, 5/3, 10/7, 11/9];
 diff_ratio = 3.5;
+//gear_shift_rpm = [
+//	[0, 8000],
+//	[4000, 8500],
+//	[4500, 8000],
+//	[4500, 7500],
+//	[4500, 7000],
+//	[3500, 5500],
+//];
 gear_shift_rpm = [
-	[0, 8000],
+	[0, 9000],
 	[4000, 8500],
 	[4500, 8000],
-	[4500, 7500],
-	[4500, 7000],
+	[4500, 8000],
+	[4500, 8000],
 	[3500, 5500],
 ];
 gear_shift_wait = 0;		//  time wait to change gear again
