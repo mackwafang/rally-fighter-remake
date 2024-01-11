@@ -1,5 +1,6 @@
 // road fidning
 nav_road = find_nearest_road(x + lengthdir_x(128, image_angle), y + lengthdir_y(128, image_angle), last_road_index);
+nav_road ??= last_road_index;
 var next_road = obj_road_generator.road_list[nav_road.get_id()+4];
 var vec_to_road = point_to_line(
 	new Point(nav_road.x, nav_road.y),
@@ -42,31 +43,12 @@ if (can_move) {
 				// desired lane doesn't exists, pick a new one
 				ai_behavior.change_lane(nav_road);
 			}
-		
 			engine_power = nav_road.get_ideal_throttle();
+			if (nav_road.get_ideal_throttle() < 0.6) {
+				engine_power = 0;
+			}
 			var side = -(angle_difference(image_angle, point_direction(x, y, vec_to_road.x, vec_to_road.y)));
-			var turn_adjustments = 0.55;
-			// checking other cars
-			var look_ahead_threshold = max(32, velocity / 20);
-			var look_ahead_angle = 20;
-			var car_look_ahead = instance_exists(collision_line(x, y, x+lengthdir_x(look_ahead_threshold, image_angle), y+lengthdir_y(look_ahead_threshold, image_angle), obj_car_parent, false, true));
-			var car_look_left = instance_exists(collision_line(x+lengthdir_x(8, image_angle+look_ahead_angle), y+lengthdir_y(8, image_angle+look_ahead_angle), x+lengthdir_x(look_ahead_threshold, image_angle+look_ahead_angle), y+lengthdir_y(look_ahead_threshold, image_angle+look_ahead_angle), obj_car_parent, false, true));
-			var car_look_right = instance_exists(collision_line(x+lengthdir_x(8, image_angle-look_ahead_angle), y+lengthdir_y(8, image_angle-look_ahead_angle), x+lengthdir_x(look_ahead_threshold, image_angle-look_ahead_angle), y+lengthdir_y(look_ahead_threshold, image_angle-look_ahead_angle), obj_car_parent, false, true));
-			var is_off_road_left = !is_on_road(x+lengthdir_x(look_ahead_threshold/4, image_angle+90), y+lengthdir_y(look_ahead_threshold/4, image_angle+90), last_road_index) ? 1 : 0;
-			var is_off_road_right = !is_on_road(x+lengthdir_x(look_ahead_threshold/4, image_angle-90), y+lengthdir_y(look_ahead_threshold/4, image_angle-90), last_road_index) ? 1 : 0;
-			
-			var evade_turn_rate = 0.2 * turn_adjustments;
-			if (car_look_left) {turn_rate -= evade_turn_rate;}
-			if (car_look_right) {turn_rate += evade_turn_rate;}
-			if (car_look_ahead) {
-				accelerating = false;
-				braking = true;
-				if (!car_look_left) {turn_rate += evade_turn_rate;}
-				else if (!car_look_right) {turn_rate -= evade_turn_rate;}
-			}
-			if (!is_off_road_left | !is_off_road_right) {
-				turn_rate += (-(is_off_road_left / 20) + (is_off_road_right / 20)) * turn_adjustments;
-			}
+			var turn_adjustments = 1;
 		
 			if (!on_road) {
 				// off road, trying to get back on it
@@ -76,7 +58,7 @@ if (can_move) {
 			}
 			else {
 				// car turning on curved road and moving to its desired lane
-				var tr = (angle_diff / 60) * turn_adjustments; // moving along curved road
+				var tr = (angle_diff / (ai_behavior.part_of_race ? 50 : 35)) * turn_adjustments; // moving along curved road
 				
 				// moving go desired lane
 				if (dist_to_road > 32) {
@@ -84,6 +66,27 @@ if (can_move) {
 				}
 				turn_rate += clamp(tr, -2, 2);
 				braking = (abs(tr) > 1) | ((nav_road.get_ideal_throttle() < 0.25) && (abs(angle_diff) > 15));
+			}
+			
+			// checking other cars
+			var look_ahead_threshold = 256;
+			var look_ahead_angle = 10;
+			var car_look_ahead = instance_exists(collision_line(x, y, x+lengthdir_x(look_ahead_threshold, direction), y+lengthdir_y(look_ahead_threshold, direction), obj_car_parent, false, true));
+			var car_look_left = instance_exists(collision_line(x, y, x+lengthdir_x(look_ahead_threshold, image_angle+look_ahead_angle), y+lengthdir_y(look_ahead_threshold, image_angle+look_ahead_angle), obj_car_parent, false, true));
+			var car_look_right = instance_exists(collision_line(x, y, x+lengthdir_x(look_ahead_threshold, image_angle-look_ahead_angle), y+lengthdir_y(look_ahead_threshold, image_angle-look_ahead_angle), obj_car_parent, false, true));
+			var is_off_road_left = !is_on_road(x+lengthdir_x(look_ahead_threshold/4, image_angle+90), y+lengthdir_y(look_ahead_threshold/4, image_angle+90), last_road_index) ? 1 : 0;
+			var is_off_road_right = !is_on_road(x+lengthdir_x(look_ahead_threshold/4, image_angle-90), y+lengthdir_y(look_ahead_threshold/4, image_angle-90), last_road_index) ? 1 : 0;
+			
+			var evade_turn_rate = 0.3;
+			if (car_look_ahead) {
+				accelerating = false;
+				braking = true;
+			}
+			if (car_look_left) {turn_rate -= evade_turn_rate;}
+			else if (car_look_right) {turn_rate += evade_turn_rate;}
+			
+			if (!is_off_road_left | !is_off_road_right) {
+				turn_rate += (-(is_off_road_left / 10) + (is_off_road_right / 10));
 			}
 			
 			// enables boost
@@ -140,8 +143,11 @@ var drive_torque = engine_torque * engine_to_wheel_ratio * transfer_eff;
 var f_drag = -c_drag * velocity;
 var f_rr = -c_rr * velocity;
 var f_surface = -mass * global.gravity_3d * ((on_road) ? 0.2 : 20) * (vertical_on_road ? 1 : 0);
-var f_brake = ((braking) ? -braking_power * 1000 : 0) * (hp < 0 ? 20 : 1);
-var f_turn = -abs(turn_rate) * mass / 2;
+if (hp <= 0) {
+	f_surface = -mass * global.gravity_3d * 15
+}
+var f_brake = ((braking) ? -braking_power * 1000 : 0);
+var f_turn = -abs(turn_rate) * mass;
 if (velocity <= 0) {
 	f_brake = 0;
 	f_surface = 0;
@@ -189,7 +195,7 @@ if (abs(obj_controller.main_camera_target.dist_along_road - dist_along_road) > 6
 		}
 	}
 	// randomly destroy car to simulate crashes
-	if (irandom(30000) < ((global.total_participating_vehicles - race_rank + 1))) {
+	if (irandom(100000) < ((global.total_participating_vehicles - race_rank + 1))) {
 		if (!is_player) {
 			hp = 0;
 		}
@@ -224,7 +230,7 @@ if (hp <= 0) {
 	on_death();
 	if (velocity <= 0) {
 		if (alarm[2] <= 0) {
-			alarm[2] = round(40000 * global.deltatime);
+			alarm[2] = round(4 / global.deltatime);
 		}
 	}
 }

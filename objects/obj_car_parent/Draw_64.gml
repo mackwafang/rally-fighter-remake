@@ -82,11 +82,12 @@ if (obj_controller.main_camera_target.id == id) {
 	//draw_text(16, 144, $"mass: {mass}");
 	//draw_text(16, 160, $"transfer eff.: {transfer_eff}");
 	//draw_text(16, 176, $"engine power: {engine_power}");
+	//draw_text(128, 176, $"{turn_rate * global.deltatime}");
 	
 	// boost bar 
 	var bar_border = 2;
 	var bar_x = 48;
-	var bar_y = port_height - 32;
+	var bar_y = port_height - 64;
 	var bar_height = 8;
 	var bar_width = 80;
 	draw_bar_color_border(bar_x, bar_y, boost_juice, 100, bar_width, bar_height, bar_border, c_yellow, c_yellow, c_yellow, c_yellow, 0);
@@ -96,7 +97,7 @@ if (obj_controller.main_camera_target.id == id) {
 	// health bar
 	bar_border = 2;
 	bar_x = (port_width / 2) - 50;
-	bar_y = port_height - 32;
+	bar_y = port_height - 64;
 	bar_height = 16;
 	bar_width = 100;
 	var bar_color = c_green;
@@ -109,7 +110,7 @@ if (obj_controller.main_camera_target.id == id) {
 	
 	// rpm odometer
 	var odometer_x = 48;
-	var odometer_y = port_height - 48;
+	var odometer_y = port_height - 80;
 	odometer_rpm += ((engine_rpm / engine_rpm_max) - odometer_rpm) * 0.2;
 	draw_line_width_color(
 		odometer_x,
@@ -126,7 +127,7 @@ if (obj_controller.main_camera_target.id == id) {
 	
 	// speed odometer
 	odometer_x = 128;
-	odometer_y = port_height - 48;
+	odometer_y = port_height - 80;
 	odometer_speed += ((velocity / 3000) - odometer_speed) * 0.2;
 	draw_line_width_color(
 		odometer_x,
@@ -147,11 +148,22 @@ if (obj_controller.main_camera_target.id == id) {
 	// gear
 	draw_set_valign(fa_top);
 	draw_set_halign(fa_center);
-	draw_text(64,port_height - 32,$"{gear} gear");
+	draw_text(64,port_height - 64,$"{gear} gear");
 	
 	draw_set_valign(fa_top);
 	draw_set_halign(fa_center);
-	draw_text(128,port_height - 32,$"{race_rank}");
+	draw_text(128,port_height - 64,$"{race_rank}");
+	
+	// odometer
+	draw_set_valign(fa_top);
+	draw_set_halign(fa_center);
+	var dist_scale = (global.GAMEPLAY_MEASURE_METRICS == MEASURE.METRIC ? 1 : KMH_TO_MPH);	
+	var distance_display = dist_along_road / global.WORLD_TO_REAL_SCALE * dist_scale / 10000;
+	var dist_unit = "km";
+	if (global.GAMEPLAY_MEASURE_METRICS == MEASURE.IMPERIAL) {
+		dist_unit = "mi";
+	}
+	draw_text(80, port_height - 32, $"{distance_display} {dist_unit}");
 	
 	// draw info to nearest vehicle
 	var dist_to_closest = infinity;
@@ -171,11 +183,11 @@ if (obj_controller.main_camera_target.id == id) {
 	
 	draw_set_valign(fa_bottom);
 	draw_set_halign(fa_right);
-	draw_sprite(spr_ui_ahead_behind, (ahead == -1) ? 0 : 1, port_width - 32, port_height - 34);
+	draw_sprite(spr_ui_ahead_behind, (ahead == -1) ? 0 : 1, port_width - 32, port_height - 66);
 	var real_dist = dist_to_closest / global.WORLD_TO_REAL_SCALE;
 	var scale = (real_dist < 10000) ? 10 : 10000;
 	var unit = (real_dist < 10000) ? "m" : "km";
-	draw_text(port_width - 48, port_height - 32, $"{real_dist / scale} {unit}");
-	draw_text(port_width - 32, port_height - 16, closest_car_index);
+	draw_text(port_width - 48, port_height - 64, $"{real_dist / scale} {unit}");
+	draw_text(port_width - 32, port_height - 48, closest_car_index);
 }
 #endregion

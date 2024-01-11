@@ -43,7 +43,7 @@ for (var i = 0; i < global.total_participating_vehicles; i++) {
 	}
 	car.car_id = i+1;
 	car.depth = 10;
-	car.z = -10;
+	car.z = -100;
 	car.vehicle_type = VEHICLE_TYPE.BIKE;
 	car.ai_behavior.part_of_race = true;
 	participating_vehicles[array_length(participating_vehicles)] = car;
@@ -52,7 +52,7 @@ for (var i = 0; i < global.total_participating_vehicles; i++) {
 for (var i = 0; i < array_length(participating_vehicles); i++) {
 	var car = participating_vehicles[i];
 	car.race_rank = (array_length(participating_vehicles) - i);
-	var road = obj_road_generator.road_list[(i div 3) + 1];
+	var road = obj_road_generator.road_list[i+1];//obj_road_generator.road_list[(i div 3) + 1];
 	var lane_position_x = (((i % 3) / 3) * road.length) + (road.length * (i div 3));
 	var lane_position_y = ((i % road.get_lanes_right()) * road.lane_width) + (road.lane_width / 2);
 	
@@ -118,7 +118,7 @@ minimap_config = {
 var num = audio_get_listener_count();
 for( var i = 0; i < num; i++;) {
     var info = audio_get_listener_info(i);
-    audio_set_master_gain(info[? "index"], 0);
+    audio_set_master_gain(info[? "index"], 0.5);
     ds_map_destroy(info);
 }
 

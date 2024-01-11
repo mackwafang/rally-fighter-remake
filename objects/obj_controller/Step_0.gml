@@ -3,27 +3,27 @@
 //if (keyboard_check(ord("S"))) {y += cam_move_speed;}
 //if (keyboard_check(ord("A"))) {x -= cam_move_speed;}
 //if (keyboard_check(ord("D"))) {x += cam_move_speed;}
-//if (keyboard_check(vk_space)) {z += 1;}
-//if (keyboard_check(vk_control)) {z -= 1;}
-//if (keyboard_check(ord("Q"))) {
-//	if (global.DEBUG_FREE_CAMERA) {
-//		cam_angle -= 5;
-//	}
-//}
-//if (keyboard_check_pressed(ord("Q"))) {
-//	if (!global.DEBUG_FREE_CAMERA) {
-//		participating_camera_index = (participating_camera_index + 1) % array_length(participating_vehicles);
-//	}
-//}
-//if (keyboard_check(ord("E"))) {
-//	if (global.DEBUG_FREE_CAMERA) {
-//		cam_angle += 5;
-//	}
-//}if (keyboard_check_pressed(ord("E"))) {
-//	if (!global.DEBUG_FREE_CAMERA) {
-//		participating_camera_index = (participating_camera_index - 1 < 0) ? array_length(participating_vehicles)-1 : participating_camera_index - 1;
-//	}
-//}
+if (keyboard_check(vk_space)) {z += 1;}
+if (keyboard_check(vk_control)) {z -= 1;}
+if (keyboard_check(ord("Q"))) {
+	if (global.DEBUG_FREE_CAMERA) {
+		cam_angle -= 5;
+	}
+}
+if (keyboard_check_pressed(ord("Q"))) {
+	if (!global.DEBUG_FREE_CAMERA) {
+		participating_camera_index = (participating_camera_index + 1) % array_length(participating_vehicles);
+	}
+}
+if (keyboard_check(ord("E"))) {
+	if (global.DEBUG_FREE_CAMERA) {
+		cam_angle += 5;
+	}
+}if (keyboard_check_pressed(ord("E"))) {
+	if (!global.DEBUG_FREE_CAMERA) {
+		participating_camera_index = (participating_camera_index - 1 < 0) ? array_length(participating_vehicles)-1 : participating_camera_index - 1;
+	}
+}
 //if (mouse_wheel_up()) {cam_zoom += 2;}
 //if (mouse_wheel_down()) {cam_zoom -= 2;}
 
@@ -89,6 +89,8 @@ else {
 	camera_set_view_angle(main_camera, cam_angle);
 	cam_zoom = clamp(cam_zoom, 0.1, 10);
 }
+
+if (global.game_state_paused) {exit;}
 // other car spawning
 if (global.GAMEPLAY_CARS) {
 	var road_at_view_edge = find_nearest_road(

@@ -12,16 +12,21 @@ function dist_on_line(A, B, pos) {
 		pos.x - A.x,
 		pos.y - A.y
 	);
-	var line_dir = point_direction(A.x, A.y, B.x, B.y);
-	var length_a = sqrt((a.x*a.x) + (a.y*a.y));
-	var length_b = sqrt((b.x*b.x) + (b.y*b.y));
-	var a_hat = new Point(
-		a.x / length_a,
-		a.y / length_a
-	);
-	var ba = dot_product(b.x, b.y, a_hat.x, a_hat.y);
-	if (is_nan(ba)) {
-		print("asdf");
+	try {
+		var line_dir = point_direction(A.x, A.y, B.x, B.y);
+		var length_a = sqrt((a.x*a.x) + (a.y*a.y));
+		var length_b = sqrt((b.x*b.x) + (b.y*b.y));
+		var a_hat = new Point(
+			a.x / length_a,
+			a.y / length_a
+		);
+		var ba = dot_product(b.x, b.y, a_hat.x, a_hat.y);
+		if (is_nan(ba)) {
+			print("asdf");
+		}
+		return ba;
 	}
-	return ba;
+	catch (_e) {
+		return 0;
+	}
 }

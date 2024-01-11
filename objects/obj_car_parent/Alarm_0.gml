@@ -1,12 +1,14 @@
 /// @description post creation "script"
 switch(vehicle_type) {
 	case VEHICLE_TYPE.CAR:
-		sprite_index = spr_car;
 		vehicle_detail_index = spr_car_detail;
+		image_xscale = 8;
+		image_yscale = 30;
 		break;
 	case VEHICLE_TYPE.BIKE:
-		sprite_index = spr_bike;
 		vehicle_detail_index = spr_bike_detail;
+		image_xscale = 8;
+		image_yscale = 6;
 		break;
 }
 z = on_road_index.z;

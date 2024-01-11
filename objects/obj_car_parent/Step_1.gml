@@ -7,18 +7,18 @@ var vec_to_road = point_to_line(
 );
 var lerp_value = point_distance(on_road_index.x, on_road_index.y, vec_to_road.x, vec_to_road.y) / on_road_index.length;
 zlerp = lerp(on_road_index.z, on_road_index.next_road.z, lerp_value);
-vertical_on_road = (z+(zspeed/2) >= zlerp);
+vertical_on_road = (z+zspeed >= zlerp);
 if (vertical_on_road) {
-	drive_force -= sin(on_road_index.elevation) * global.gravity_3d * mass;
+	drive_force *= cos(on_road_index.elevation) + (on_road_index.elevation < 0 ? 2 : 0);
 	z = zlerp;
-	if (zspeed > global.gravity_3d) {
+	if (zspeed > global.gravity_3d / global.WORLD_TO_REAL_SCALE) {
 		zspeed *= -1/3;
 		turn_rate *= 3;
 	}
 }
 else {
 	// FREE FALLING
-	zspeed += global.gravity_3d * global.deltatime;
+	zspeed += (global.gravity_3d / global.WORLD_TO_REAL_SCALE) * global.deltatime;
 }
 z += zspeed;
 z = clamp(z, -500, zlerp);
@@ -29,6 +29,27 @@ if (z > on_road_index.next_road.z + 100) {hp = 0;}
 if (!is_respawning) {
 	turn_rate += -turn_rate * 0.1;
 	turn_rate = clamp(turn_rate, -6, 6);
+	
+	if (vehicle_type == VEHICLE_TYPE.BIKE) {
+		if (abs(turn_rate) < 0.5) {vehicle_detail_subimage = 0;}
+		else if (abs(turn_rate) < 1) {vehicle_detail_subimage = 2 + (turn_rate < 0 ? 1 : 0);}
+		else if (abs(turn_rate) >= 1) {vehicle_detail_subimage = 4 + (turn_rate < 0 ? 1 : 0);}
+		
+		var length_to_cam = point_distance(obj_controller.main_camera_target.x, obj_controller.main_camera_target.y, x, y);
+		var a = new Point(
+			lengthdir_x(1, direction + 90),
+			lengthdir_y(1, direction + 90)
+		);
+		var b = new Point(
+			(obj_controller.main_camera_target.x - x) / length_to_cam,
+			(obj_controller.main_camera_target.y - y) / length_to_cam
+		);
+		var _d = dot_product(a.x, a.y, b.x, b.y);
+		if (abs(_d) > 0.25) {
+			vehicle_detail_subimage = 6 + (_d < 0 ? 1 : 0);
+		}
+	}
+	
 	if (vertical_on_road) {
 		direction += turn_rate;
 	}
