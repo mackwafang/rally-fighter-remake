@@ -6,7 +6,7 @@ switch(vehicle_type) {
 		image_yscale = 30;
 		break;
 	case VEHICLE_TYPE.BIKE:
-		vehicle_detail_index = spr_bike_detail;
+		vehicle_detail_index = spr_bike_3d_detail_2;
 		image_xscale = 8;
 		image_yscale = 6;
 		break;

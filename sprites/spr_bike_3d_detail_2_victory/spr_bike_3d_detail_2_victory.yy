@@ -1,7 +1,7 @@
 {
   "resourceType": "GMSprite",
   "resourceVersion": "1.0",
-  "name": "spr_bike_3d_detail_2",
+  "name": "spr_bike_3d_detail_2_victory",
   "bbox_bottom": 63,
   "bbox_left": 9,
   "bbox_right": 43,
@@ -33,7 +33,7 @@
   "sequence": {
     "resourceType": "GMSequence",
     "resourceVersion": "1.4",
-    "name": "spr_bike_3d_detail_2",
+    "name": "spr_bike_3d_detail_2_victory",
     "autoRecord": true,
     "backdropHeight": 768,
     "backdropImageOpacity": 0.5,
@@ -55,8 +55,8 @@
     "timeUnits": 1,
     "tracks": [
       {"resourceType":"GMSpriteFramesTrack","resourceVersion":"1.0","name":"frames","builtinName":0,"events":[],"inheritsTrackColour":true,"interpolation":1,"isCreationTrack":false,"keyframes":{"resourceType":"KeyframeStore<SpriteFrameKeyframe>","resourceVersion":"1.0","Keyframes":[
-            {"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"1.0","Channels":{"0":{"resourceType":"SpriteFrameKeyframe","resourceVersion":"1.0","Id":{"name":"98358294-b552-41f8-a91c-32e2e2847b57","path":"sprites/spr_bike_3d_detail_2/spr_bike_3d_detail_2.yy",},},},"Disabled":false,"id":"55877634-ccab-4be0-920b-de19f84b3604","IsCreationKey":false,"Key":0.0,"Length":1.0,"Stretch":false,},
-            {"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"1.0","Channels":{"0":{"resourceType":"SpriteFrameKeyframe","resourceVersion":"1.0","Id":{"name":"95fc2051-c870-4230-b79a-20bce3412c6b","path":"sprites/spr_bike_3d_detail_2/spr_bike_3d_detail_2.yy",},},},"Disabled":false,"id":"3ee8b1f5-cc1d-41c7-8e38-0a0ddd43744e","IsCreationKey":false,"Key":1.0,"Length":1.0,"Stretch":false,},
+            {"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"1.0","Channels":{"0":{"resourceType":"SpriteFrameKeyframe","resourceVersion":"1.0","Id":{"name":"98358294-b552-41f8-a91c-32e2e2847b57","path":"sprites/spr_bike_3d_detail_2_victory/spr_bike_3d_detail_2_victory.yy",},},},"Disabled":false,"id":"d9e279bf-6a63-4aaf-a994-c141e661b657","IsCreationKey":false,"Key":0.0,"Length":1.0,"Stretch":false,},
+            {"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"1.0","Channels":{"0":{"resourceType":"SpriteFrameKeyframe","resourceVersion":"1.0","Id":{"name":"95fc2051-c870-4230-b79a-20bce3412c6b","path":"sprites/spr_bike_3d_detail_2_victory/spr_bike_3d_detail_2_victory.yy",},},},"Disabled":false,"id":"cf893635-8cc0-4881-ad4b-de3377dd45e4","IsCreationKey":false,"Key":1.0,"Length":1.0,"Stretch":false,},
           ],},"modifiers":[],"spriteId":null,"trackColour":0,"tracks":[],"traits":0,},
     ],
     "visibleRange": null,

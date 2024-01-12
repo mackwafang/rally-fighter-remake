@@ -30,7 +30,7 @@ for (var rank = 0; rank < array_length(global.car_ranking); rank++) {
 		draw_sprite_ext(spr_cross, 0, main_camera_size.width - 16, 24 + (rank * ranking_verticle_cap), 1, 1, 90, c_white, 1);
 	}
 	vehicle.ai_behavior.race_rank = rank + 1;
-	draw_sprite_ext(vehicle.vehicle_detail_index, vehicle.image_index, main_camera_size.width - 16, 24 + (rank * ranking_verticle_cap), 1, 1, 90, c_white, 1);
+	draw_sprite_ext(spr_bike, vehicle.image_index, main_camera_size.width - 16, 24 + (rank * ranking_verticle_cap), 1, 1, 90, c_white, 1);
 }
 
 

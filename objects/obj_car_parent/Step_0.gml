@@ -1,6 +1,6 @@
 // road fidning
 nav_road = find_nearest_road(x + lengthdir_x(128, image_angle), y + lengthdir_y(128, image_angle), last_road_index);
-nav_road ??= last_road_index;
+nav_road ??= obj_road_generator.road_list[last_road_index];
 var next_road = obj_road_generator.road_list[nav_road.get_id()+4];
 var vec_to_road = point_to_line(
 	new Point(nav_road.x, nav_road.y),

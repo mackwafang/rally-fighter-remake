@@ -35,7 +35,7 @@ instance_create_layer(0, 0, "Instances", obj_road_generator);
 
 // racing car
 for (var i = 0; i < global.total_participating_vehicles; i++) {
-	var car = instance_create_layer(0, 0, "Instances", obj_racers);
+	var car = instance_create_layer(0, 0, "Instances", obj_car);
 	if (i == 0) {
 		car.is_player = true;
 		player_obj = car;
@@ -126,6 +126,21 @@ for( var i = 0; i < num; i++;) {
 global.outline_shader_pixel_w = shader_get_uniform(shd_outline, "pixel_w");
 global.outline_shader_pixel_h = shader_get_uniform(shd_outline, "pixel_h");
 global.outline_shader_alpha_override = shader_get_uniform(shd_outline, "alpha_override");
+
+// color replace shader setting
+global.color_replace_replace_color = shader_get_uniform(shd_sprite_billboard, "replace_color");
+global.color_replace_src_color = shader_get_uniform(shd_sprite_billboard, "src_color");
+global.color_replace_dst_color = shader_get_uniform(shd_sprite_billboard, "dst_color");
+global.racer_color_replace_src = [
+	1,			0,			33/255,
+	148/255,	0,			0,
+	74/255,		0,			0,
+	1,			36/255,		107/255,
+	1,			1,			1,
+	181/255,	182/255,	222/255,
+	148/255,	146/255,	181/255,
+	74/255,		73/255,		171/255
+];
 
 if (global.DEBUG_DRAW_MINIMAP) {
 	minimap_config.surface_width = minimap_config.border * obj_road_generator.grid_width;

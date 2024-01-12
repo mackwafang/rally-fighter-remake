@@ -31,9 +31,14 @@ if (!is_respawning) {
 	turn_rate = clamp(turn_rate, -6, 6);
 	
 	if (vehicle_type == VEHICLE_TYPE.BIKE) {
-		if (abs(turn_rate) < 0.5) {vehicle_detail_subimage = 0;}
-		else if (abs(turn_rate) < 1) {vehicle_detail_subimage = 2 + (turn_rate < 0 ? 1 : 0);}
-		else if (abs(turn_rate) >= 1) {vehicle_detail_subimage = 4 + (turn_rate < 0 ? 1 : 0);}
+		vehicle_detail_index = spr_bike_3d_detail_2_turn;
+		vehicle_detail_subimage = min(1, abs(turn_rate) / 2) * sprite_get_number(spr_bike_3d_detail_2_turn);
+		if (velocity <= 0) {
+			// stopped sprite
+			vehicle_detail_index = spr_bike_3d_detail_2;
+			vehicle_detail_subimage = 0;
+		}
+		image_xscale = -(turn_rate == 0 ? 1 : sign(turn_rate));
 		
 		var length_to_cam = point_distance(obj_controller.main_camera_target.x, obj_controller.main_camera_target.y, x, y);
 		var a = new Point(
@@ -45,9 +50,14 @@ if (!is_respawning) {
 			(obj_controller.main_camera_target.y - y) / length_to_cam
 		);
 		var _d = dot_product(a.x, a.y, b.x, b.y);
-		if (abs(_d) > 0.25) {
-			vehicle_detail_subimage = 6 + (_d < 0 ? 1 : 0);
+		
+		if (velocity > 0 && abs(_d) > 0.25) {
+			// angled sprite
+			vehicle_detail_index = spr_bike_3d_detail_2;
+			vehicle_detail_subimage = 1;
+			image_xscale = -(_d == 0 ? 1 : sign(_d));
 		}
+		
 	}
 	
 	if (vertical_on_road) {

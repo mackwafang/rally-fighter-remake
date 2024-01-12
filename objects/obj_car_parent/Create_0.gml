@@ -110,6 +110,7 @@ vehicle_color = {
 	secondary: 0,
 	tetriary: 0,
 };
+racer_color_replace_dst = [];
 dist_along_road = 0;							// how far along the road it is
 
 // functions
