@@ -5,8 +5,8 @@ varying vec2 v_vTexcoord;
 varying vec4 v_vColour;
 
 uniform bool replace_color;
-uniform vec3 src_color[9];
-uniform vec3 dst_color[9];
+uniform vec3 src_color[10];
+uniform vec3 dst_color[10];
 
 void main()
 {
@@ -14,7 +14,7 @@ void main()
 	gl_FragColor = v_vColour * texColor;
 	
 	if (replace_color) {
-		for (int i = 0; i < 9; i++) {
+		for (int i = 0; i < 10; i++) {
 			if (texColor.rgb == src_color[i].rgb) {
 				gl_FragColor = vec4(dst_color[i].rgb, texColor.a);
 			}

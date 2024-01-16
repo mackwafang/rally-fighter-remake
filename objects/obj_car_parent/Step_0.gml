@@ -1,7 +1,7 @@
 // road fidning
 nav_road = find_nearest_road(x + lengthdir_x(128, image_angle), y + lengthdir_y(128, image_angle), last_road_index);
 nav_road ??= obj_road_generator.road_list[last_road_index];
-var next_road = obj_road_generator.road_list[nav_road.get_id()+4];
+var next_road = obj_road_generator.road_list[max(0, nav_road.get_id() + (ai_behavior.reversed_direction ? -4 : 4))];
 var vec_to_road = point_to_line(
 	new Point(nav_road.x, nav_road.y),
 	new Point(next_road.x, next_road.y),
@@ -19,18 +19,23 @@ if (global.game_state_paused) {exit;}
 if (can_move) {
 	// player moving
 	if (is_player) {
-		accelerating = keyboard_check(global.player_input.accelerate);
-		braking = keyboard_check(global.player_input.brake);
-		boosting = keyboard_check_pressed(global.player_input.boost);
-	
+		if (!is_completed) {
+			accelerating = keyboard_check(global.player_input.accelerate);
+			braking = keyboard_check(global.player_input.brake);
+			boosting = keyboard_check_pressed(global.player_input.boost);
+		}
 		turning = (keyboard_check(global.player_input.turn.right) << 1) | (keyboard_check(global.player_input.turn.left));
 	}
 	else {
-		accelerating = true;
+		accelerating = !is_completed;
 	}
 
 	if (accelerating) {
 		var angle_diff = angle_difference(on_road_index.direction, image_angle);
+		if (ai_behavior.reversed_direction) {
+			angle_diff = angle_difference(image_angle, on_road_index.direction)
+		}
+		
 		if (is_player) {
 			engine_power += 0.1;
 			if (global.GAMEPLAY_TURN_GUIDE) {
@@ -39,7 +44,7 @@ if (can_move) {
 		}
 		else {
 			#region Non-Player Car Movement
-			if (ai_behavior.desired_lane > next_road.get_lanes_right()-1) {
+			if (ai_behavior.desired_lane > (ai_behavior.reversed_direction ? next_road.get_lanes_left() : next_road.get_lanes_right())-1 || ai_behavior.desired_lane < 0) {
 				// desired lane doesn't exists, pick a new one
 				ai_behavior.change_lane(nav_road);
 			}
@@ -48,6 +53,9 @@ if (can_move) {
 				engine_power = 0;
 			}
 			var side = -(angle_difference(image_angle, point_direction(x, y, vec_to_road.x, vec_to_road.y)));
+			if (ai_behavior.reversed_direction) {
+				side = -(angle_difference(point_direction(x, y, vec_to_road.x, vec_to_road.y), image_angle));
+			}
 			var turn_adjustments = 1;
 		
 			if (!on_road) {
@@ -58,7 +66,7 @@ if (can_move) {
 			}
 			else {
 				// car turning on curved road and moving to its desired lane
-				var tr = (angle_diff / (ai_behavior.part_of_race ? 50 : 35)) * turn_adjustments; // moving along curved road
+				var tr = (angle_diff / (ai_behavior.part_of_race ? 50 : 20)) * turn_adjustments; // moving along curved road
 				
 				// moving go desired lane
 				if (dist_to_road > 32) {
@@ -69,15 +77,15 @@ if (can_move) {
 			}
 			
 			// checking other cars
-			var look_ahead_threshold = 256;
-			var look_ahead_angle = 10;
+			var look_ahead_threshold = 512;
+			var look_ahead_angle = 7;
 			var car_look_ahead = instance_exists(collision_line(x, y, x+lengthdir_x(look_ahead_threshold, direction), y+lengthdir_y(look_ahead_threshold, direction), obj_car_parent, false, true));
 			var car_look_left = instance_exists(collision_line(x, y, x+lengthdir_x(look_ahead_threshold, image_angle+look_ahead_angle), y+lengthdir_y(look_ahead_threshold, image_angle+look_ahead_angle), obj_car_parent, false, true));
 			var car_look_right = instance_exists(collision_line(x, y, x+lengthdir_x(look_ahead_threshold, image_angle-look_ahead_angle), y+lengthdir_y(look_ahead_threshold, image_angle-look_ahead_angle), obj_car_parent, false, true));
 			var is_off_road_left = !is_on_road(x+lengthdir_x(look_ahead_threshold/4, image_angle+90), y+lengthdir_y(look_ahead_threshold/4, image_angle+90), last_road_index) ? 1 : 0;
 			var is_off_road_right = !is_on_road(x+lengthdir_x(look_ahead_threshold/4, image_angle-90), y+lengthdir_y(look_ahead_threshold/4, image_angle-90), last_road_index) ? 1 : 0;
 			
-			var evade_turn_rate = 0.3;
+			var evade_turn_rate = 0.2;
 			if (car_look_ahead) {
 				accelerating = false;
 				braking = true;
@@ -123,15 +131,19 @@ if (can_move) {
 on_road_index = set_on_road();
 
 // finish
-is_completed = dist_along_road >= global.race_length;
-if (ai_behavior.part_of_race || is_player) {
+if (!is_completed) {
+	is_completed = (dist_along_road >= global.race_length) && (ai_behavior.part_of_race);
 	if (is_completed) {
-		braking = true;
-		accelerating = false;
-		boosting = false;
-		boost_active = false;
-		engine_power = 0;
+		completed_race_rank = race_rank;
 	}
+}
+
+
+if (is_completed) {
+	braking = true;
+	accelerating = false;
+	boosting = false;
+	boost_active = false;
 }
 
 // calculate engine stuff for acceleration
@@ -165,14 +177,15 @@ if (vertical_on_road) {
 	acceleration = (drive_torque / inertia);
 	var wheel_rotation_rate = velocity * 100 / 3600 / wheel_radius;
 	engine_rpm = (wheel_rotation_rate * engine_to_wheel_ratio * 60 / (2 * pi));
-	velocity = clamp(velocity, 0, max_velocity);
 }
+velocity = clamp(velocity, 0, max_velocity);
 
 gear_shift(); // auto gear shift
 engine_rpm = clamp(engine_rpm, 1000, engine_rpm_max);
 engine_power = clamp(engine_power, 0, 1);
 gear_shift_wait = clamp(gear_shift_wait-1, 0, 60);
-	
+
+// play engine audio
 if (hp > 0) {
 	var engine_sound_pitch = ((engine_rpm / engine_rpm_max)+1.0);// - (gear / 12);
 	if (obj_controller.main_camera_target.id == id) {
@@ -243,3 +256,4 @@ else {
 	}
 }
 	
+counter = (counter + 1) % 1000;

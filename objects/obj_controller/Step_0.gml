@@ -94,15 +94,19 @@ if (global.game_state_paused) {exit;}
 // other car spawning
 if (global.GAMEPLAY_CARS) {
 	var road_at_view_edge = find_nearest_road(
-		main_camera_target.x + lengthdir_x(5000, main_camera_target.image_angle),
-		main_camera_target.y + lengthdir_y(5000, main_camera_target.image_angle),
+		main_camera_target.x + lengthdir_x(5000 + choose(-1,1), main_camera_target.image_angle),
+		main_camera_target.y + lengthdir_y(5000 + choose(-1,1), main_camera_target.image_angle),
 		main_camera_target.on_road_index
 	)
 	if (alarm[0] == -1) {
 		if (irandom(200) == 1) {
-			var spawn_lane = irandom_range(0, road_at_view_edge.get_lanes_right() - 1) + 0.5;
+			var side = choose(-1, 1);
+			var road_function = (side == -1 ? road_at_view_edge.get_lanes_left: road_at_view_edge.get_lanes_right);
+			
+			var spawn_lane = (irandom_range(0, road_function()) + 0.5) * side;
 			var spawn_x = road_at_view_edge.x + lengthdir_x(road_at_view_edge.lane_width * spawn_lane, road_at_view_edge.direction - 90);
 			var spawn_y = road_at_view_edge.y + lengthdir_y(road_at_view_edge.lane_width * spawn_lane, road_at_view_edge.direction - 90);
+			
 			var car = instance_create_layer(spawn_x, spawn_y, "Instances", obj_car);
 			car.rpm = 2000;
 			car.max_velocity = 400 + (global.difficulty * 200);
@@ -111,8 +115,11 @@ if (global.GAMEPLAY_CARS) {
 			car.horsepower = 30;
 			car.max_gear = 2;
 			car.z = road_at_view_edge.z;
-			car.ai_behavior.desired_lane = irandom(road_at_view_edge.get_lanes_right());
-			car.direction = road_at_view_edge.direction;
+			if (side == -1) {
+				car.ai_behavior.reversed_direction = true;
+			}
+			car.ai_behavior.desired_lane = irandom(road_function() - 1) * side;
+			car.direction = road_at_view_edge.direction + (side == -1 ? -180 : 0);
 		}
 	}
 }

@@ -56,7 +56,7 @@ for (var s = 0; s < array_length(control_path); s++) {
 
 print("Rendering Road")
 road_list = generate_roads(control_points, road_segments);
-global.destination_road_index = array_length(road_list) - (road_segments * 6);
+global.destination_road_index = array_length(road_list) - (road_segments * 10);
 global.race_length = 0;
 
 //set up building vertex buffer

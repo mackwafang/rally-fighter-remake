@@ -89,10 +89,11 @@ ai_behavior = {
 	part_of_race: false,			// part of the ranking race
 	change_lane: function(road_index) {
 		/// @function	change_lane(road);
-		self.desired_lane = irandom(road_index.get_lanes_right()-1);
+		self.desired_lane = (self.reversed_direction ? -irandom(road_index.get_lanes_left()-1): irandom(road_index.get_lanes_right()-1));
 	},
 }
 race_rank = 0;
+completed_race_rank = 0;
 // audio emitter for engine
 engine_sound_emitter = audio_emitter_create();
 audio_falloff_set_model(audio_falloff_exponent_distance);
@@ -112,6 +113,8 @@ vehicle_color = {
 };
 racer_color_replace_dst = [];
 dist_along_road = 0;							// how far along the road it is
+
+counter = 0;						// counter for various things
 
 // functions
 gear_shift_up = function() {
@@ -142,7 +145,7 @@ gear_shift = function() {
 				gear_shift_up();
 			}
 		}
-		if (!accelerating or braking) {
+		if (!accelerating or braking or !on_road) {
 			if ((engine_rpm < gear_shift_rpm_lower)) {
 				gear_shift_down();
 			}
@@ -203,8 +206,9 @@ set_on_road = function() {
 
 on_respawn = function() {
 	if (is_respawning) {
-		x = on_road_index.x + lengthdir_x((on_road_index.get_lanes_right()) * on_road_index.lane_width, on_road_index.direction - 90);
-		y = on_road_index.y + lengthdir_y((on_road_index.get_lanes_right()) * on_road_index.lane_width, on_road_index.direction - 90);
+		func = choose(on_road_index.get_lanes_left, on_road_index.get_lanes_right)
+		x = on_road_index.x + lengthdir_x((func()) * on_road_index.lane_width, on_road_index.direction - 90);
+		y = on_road_index.y + lengthdir_y((func()) * on_road_index.lane_width, on_road_index.direction - 90);
 		image_alpha = 1;
 		//solid = true;
 		mask_index = sprite_index;
@@ -236,6 +240,7 @@ on_death = function() {
 		//velocity = 0;
 		//gear = 1;
 		//rpm = 1000;
+		turn_rate = 0;
 		boost_active = false;
 		engine_power = 0;
 	}

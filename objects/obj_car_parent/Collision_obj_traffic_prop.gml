@@ -18,5 +18,5 @@ if (abs(z-other.z) < 8) {
 			zspeed -= velocity / mass / 30;
 			break;
 	}
-	move_contact_all(dir - 180, 6);
+	move_contact_all(dir, 6);
 }

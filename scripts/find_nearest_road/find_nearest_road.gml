@@ -37,5 +37,8 @@ function find_nearest_road(_x, _y, starting, offset=0) {
 			closest_road = road;
 		}
 	}
+	if (is_undefined(closest_road)) {
+		
+	}
 	return closest_road;
 }
