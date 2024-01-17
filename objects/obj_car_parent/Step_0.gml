@@ -66,7 +66,7 @@ if (can_move) {
 			}
 			else {
 				// car turning on curved road and moving to its desired lane
-				var tr = (angle_diff / (ai_behavior.part_of_race ? 50 : 20)) * turn_adjustments; // moving along curved road
+				var tr = (angle_diff / (ai_behavior.part_of_race ? 50 : 35)) * turn_adjustments; // moving along curved road
 				
 				// moving go desired lane
 				if (dist_to_road > 32) {

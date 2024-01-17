@@ -71,8 +71,8 @@ if (!global.DEBUG_FREE_CAMERA) {
 			cam_zoom = clamp(cam_zoom, -100, 10);
 		}
 		else {
-			cam_zoom -= 0.5;
-			z -= 0.25;
+			cam_zoom -= 0.25;
+			z -= 0.125;
 			cam_zoom = clamp(cam_zoom, -500, 10);
 			z = clamp(z, -250, 10);
 		}

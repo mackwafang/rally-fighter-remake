@@ -5,7 +5,7 @@
   "bbox_bottom": 63,
   "bbox_left": 1,
   "bbox_right": 62,
-  "bbox_top": 44,
+  "bbox_top": 30,
   "bboxMode": 0,
   "collisionKind": 1,
   "collisionTolerance": 0,
@@ -25,8 +25,8 @@
   "nineSlice": null,
   "origin": 7,
   "parent": {
-    "name": "Sprites",
-    "path": "folders/Sprites.yy",
+    "name": "Vehicles",
+    "path": "folders/Sprites/Vehicles.yy",
   },
   "preMultiplyAlpha": false,
   "sequence": {

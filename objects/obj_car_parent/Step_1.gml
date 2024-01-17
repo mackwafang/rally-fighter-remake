@@ -7,7 +7,7 @@ var vec_to_road = point_to_line(
 );
 var lerp_value = point_distance(on_road_index.x, on_road_index.y, vec_to_road.x, vec_to_road.y) / on_road_index.length;
 zlerp = lerp(on_road_index.z, on_road_index.next_road.z, lerp_value);
-vertical_on_road = (z+(zspeed*0.5) >= zlerp);
+vertical_on_road = (z+zspeed >= zlerp);
 if (vertical_on_road) {
 	drive_force *= cos(on_road_index.elevation) + (on_road_index.elevation < 0 ? 2 : 0);
 	z = zlerp;

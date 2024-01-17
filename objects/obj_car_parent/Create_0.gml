@@ -176,7 +176,8 @@ is_on_road = function(_x, _y, road_id) {
 }
 
 set_on_road = function() {
-	last_road_index = find_nearest_road(x, y, last_road_index)._id;
+	var nearest_road = find_nearest_road(x, y, last_road_index);
+	last_road_index = nearest_road._id;
 	var polygon_x = obj_road_generator.road_list[last_road_index].get_collision_x();
 	var polygon_y = obj_road_generator.road_list[last_road_index].get_collision_y();
 	var on_segment = pnpoly(4, polygon_x, polygon_y, x, y);

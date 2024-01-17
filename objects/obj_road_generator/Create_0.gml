@@ -13,8 +13,8 @@ beyond_shoulder_range = 2500;
 var t = current_time;
 
 // initialize control points using path finding via a-star
-grid_width = 48 * global.difficulty * 1.5;
-grid_height = 48 * global.difficulty * 1.5;
+grid_width = round(24 * sqr(global.difficulty * 1.25));
+grid_height = round(24 * sqr(global.difficulty * 1.25));
 grid = ds_list_create();
 // intialize random weights for grids
 for (var i = 0; i < grid_height*grid_width; i++) {ds_list_add(grid, 0);}
@@ -100,7 +100,7 @@ for (var i = 0; i < array_length(road_list)-1; i++) {
 		lane_side_affected = choose(ROAD_LANE_CHANGE_AFFECT.LEFT, ROAD_LANE_CHANGE_AFFECT.RIGHT, ROAD_LANE_CHANGE_AFFECT.BOTH);
 		lane_change_duration = 30+irandom(10);
 		lane_change_to = 1+irandom(2);
-		cur_zone = choose(ZONE.SUBURBAN, ZONE.CITY);
+		cur_zone = choose(ZONE.SUBURBAN, ZONE.CITY, ZONE.DESERT);	// change zone
 	}
 	switch(lane_side_affected) {
 		case ROAD_LANE_CHANGE_AFFECT.LEFT:
@@ -187,29 +187,35 @@ for (var i = 0; i < array_length(road_list) - 1; i++) {
 	var shoulder_uv = sprite_get_uvs(spr_road_shoulder, 0);
 	var grass_uv = sprite_get_uvs(spr_grass, 0);
 	switch(road.zone) {
+		case ZONE.DESERT:
+			shoulder_uv = sprite_get_uvs(spr_road_shoulder, 1);
+			grass_uv = sprite_get_uvs(spr_grass, 2);
+			break;
 		case ZONE.CITY:
 			shoulder_uv = sprite_get_uvs(spr_road_shoulder, 1);
 			grass_uv = sprite_get_uvs(spr_grass, 1);
 			break;
 	}
-	
-	if (road.transition_lane) {
-		// create lane intersection
-		shoulder_uv = sprite_get_uvs(spr_road_shoulder, 2);
-		grass_uv = sprite_get_uvs(spr_road_side, 0);
-		left_subimage = 0;
-		right_subimage = 0;
-		if (!next_road.transition_lane) {
-			// far end
-			grass_uv = sprite_get_uvs(spr_road_side, 2);
-			left_subimage = 1;
-			right_subimage = 1;
+	if (irandom(10) < 4 && road.zone != ZONE.DESERT) {
+		if (road.transition_lane) {
+			// create lane intersection
+			shoulder_uv = sprite_get_uvs(spr_road_shoulder, 2);
+			grass_uv = sprite_get_uvs(spr_road_side, 0);
+			left_subimage = 0;
+			right_subimage = 0;
+			if (!next_road.transition_lane) {
+				// far end
+				grass_uv = sprite_get_uvs(spr_road_side, 2);
+				left_subimage = 1;
+				right_subimage = 1;
+			}
+			road.intersection = true;
 		}
-	}
-	else {
-		if (next_road.transition_lane) {
-			left_subimage = 1;
-			right_subimage = 1;
+		else {
+			if (next_road.transition_lane) {
+				left_subimage = 1;
+				right_subimage = 1;
+			}
 		}
 	}
 	
@@ -323,7 +329,7 @@ for (var i = 0; i < array_length(road_list) - 1; i++) {
 	var right_lanes = road.get_lanes_right();
 	
 	// create traffic lights at intersections
-	if (road.transition_lane) {
+	if (road.transition_lane && road.intersection) {
 		if (!next_road.transition_lane) {
 			var traffic_light = instance_create_layer(
 				next_road.x + lengthdir_x((next_road.get_lanes_right() + 0.5) * lane_width, next_road.direction - 90),
@@ -428,6 +434,25 @@ for (var i = 0; i < array_length(road_list) - 1; i++) {
 				}
 			}
 			break;
+		case ZONE.DESERT:
+			//create trees
+			if (global.GAMEPLAY_TREES) {
+				for (var tid = 0; tid < irandom(3); tid++) {
+					var begin_length = choose(
+						lane_width*(left_lanes+1) + irandom(beyond_shoulder_range),
+						-lane_width*(right_lanes+1) - irandom(beyond_shoulder_range),
+					);
+					var tree_obj = instance_create_layer(
+						road.x + lengthdir_x(begin_length, road.direction + 90),
+						road.y + lengthdir_y(begin_length, road.direction + 90),
+						"Instances",
+						obj_tree
+					);
+					tree_obj.display_image_index = choose(3,4,5,6);
+					tree_obj.z = road.z + irandom(32);
+				}
+			}
+			break;
 		default:
 			//create trees
 			if (global.GAMEPLAY_TREES) {
@@ -442,6 +467,7 @@ for (var i = 0; i < array_length(road_list) - 1; i++) {
 						"Instances",
 						obj_tree
 					);
+					tree_obj.display_image_index = choose(0,1,2,3,4);
 					tree_obj.z = road.z + irandom(32);
 				}
 			}

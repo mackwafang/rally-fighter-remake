@@ -12,4 +12,5 @@ render_scale = {
 display_sprite_index = 0;
 display_image_index = 0;
 matrix = matrix_build(0,0,0,0,0,0,0,0,0);
+identity_matrix = matrix_build_identity();
 alarm[0] = 1;

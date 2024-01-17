@@ -110,9 +110,10 @@ if (obj_controller.main_camera_target.id == id) {
 	draw_text(bar_x + 50 + 2, bar_y, $"{hp}/{max_hp}\n{alarm[2]}");
 	
 	// rpm odometer
-	var odometer_x = 48;
+	var odometer_x = 64;
 	var odometer_y = port_height - 80;
 	odometer_rpm += ((engine_rpm / engine_rpm_max) - odometer_rpm) * 0.2;
+	draw_sprite(spr_odometer_bkg, 0, odometer_x, odometer_y);
 	draw_line_width_color(
 		odometer_x,
 		odometer_y,
@@ -127,7 +128,7 @@ if (obj_controller.main_camera_target.id == id) {
 	draw_text(odometer_x, odometer_y - 32, $"{round(engine_rpm)} RPM");
 	
 	// speed odometer
-	odometer_x = 128;
+	odometer_x = 192;
 	odometer_y = port_height - 80;
 	odometer_speed += ((velocity / 3000) - odometer_speed) * 0.2;
 	draw_line_width_color(
@@ -142,7 +143,7 @@ if (obj_controller.main_camera_target.id == id) {
 	draw_set_valign(fa_bottom);
 	draw_set_halign(fa_center);
 	var speed_unit = (global.GAMEPLAY_MEASURE_METRICS == MEASURE.METRIC ? "KMH" : "MPH");
-	var speed_scale = (global.GAMEPLAY_MEASURE_METRICS == MEASURE.METRIC ? 1 : KMH_TO_MPH);	
+	var speed_scale = (global.GAMEPLAY_MEASURE_METRICS == MEASURE.METRIC ? 1 : KMH_TO_MPH);
 	draw_text(odometer_x, odometer_y - 48, $"{round(acceleration * speed_scale * global.WORLD_TO_REAL_SCALE / 10)} {speed_unit}");
 	draw_text(odometer_x, odometer_y - 32, $"{round(velocity * speed_scale * global.WORLD_TO_REAL_SCALE / 10)} {speed_unit}");
 	

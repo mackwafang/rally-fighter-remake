@@ -38,7 +38,7 @@ function find_nearest_road(_x, _y, starting, offset=0) {
 		}
 	}
 	if (is_undefined(closest_road)) {
-		
+		return obj_road_generator.road_list[0];
 	}
 	return closest_road;
 }
