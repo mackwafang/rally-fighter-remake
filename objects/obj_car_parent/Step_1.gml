@@ -81,7 +81,6 @@ else {
 		vehicle_detail_index = spr_bike_3d_detail_2_crashed;
 	}
 }
-
 x += dcos(direction) * vel;
 y -= dsin(direction) * vel;
 image_angle = direction;

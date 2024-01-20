@@ -3,8 +3,8 @@
 //if (keyboard_check(ord("S"))) {y += cam_move_speed;}
 //if (keyboard_check(ord("A"))) {x -= cam_move_speed;}
 //if (keyboard_check(ord("D"))) {x += cam_move_speed;}
-if (keyboard_check(vk_space)) {z += 1;}
-if (keyboard_check(vk_control)) {z -= 1;}
+//if (keyboard_check(vk_space)) {z += 1;}
+//if (keyboard_check(vk_control)) {z -= 1;}
 if (keyboard_check(ord("Q"))) {
 	if (global.DEBUG_FREE_CAMERA) {
 		cam_angle -= 5;

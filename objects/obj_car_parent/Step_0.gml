@@ -82,6 +82,8 @@ if (can_move) {
 			var car_look_ahead = instance_exists(collision_line(x, y, x+lengthdir_x(look_ahead_threshold, direction), y+lengthdir_y(look_ahead_threshold, direction), obj_car_parent, false, true));
 			var car_look_left = instance_exists(collision_line(x, y, x+lengthdir_x(look_ahead_threshold, image_angle+look_ahead_angle), y+lengthdir_y(look_ahead_threshold, image_angle+look_ahead_angle), obj_car_parent, false, true));
 			var car_look_right = instance_exists(collision_line(x, y, x+lengthdir_x(look_ahead_threshold, image_angle-look_ahead_angle), y+lengthdir_y(look_ahead_threshold, image_angle-look_ahead_angle), obj_car_parent, false, true));
+			var rail_look_left = instance_exists(collision_line(x, y, x+lengthdir_x(look_ahead_threshold, image_angle+look_ahead_angle), y+lengthdir_y(look_ahead_threshold, image_angle+look_ahead_angle), obj_railing, false, true));
+			var rail_look_right = instance_exists(collision_line(x, y, x+lengthdir_x(look_ahead_threshold, image_angle-look_ahead_angle), y+lengthdir_y(look_ahead_threshold, image_angle-look_ahead_angle), obj_railing, false, true));
 			var is_off_road_left = !is_on_road(x+lengthdir_x(look_ahead_threshold/4, image_angle+90), y+lengthdir_y(look_ahead_threshold/4, image_angle+90), last_road_index) ? 1 : 0;
 			var is_off_road_right = !is_on_road(x+lengthdir_x(look_ahead_threshold/4, image_angle-90), y+lengthdir_y(look_ahead_threshold/4, image_angle-90), last_road_index) ? 1 : 0;
 			
@@ -92,6 +94,9 @@ if (can_move) {
 			}
 			if (car_look_left) {turn_rate -= evade_turn_rate;}
 			else if (car_look_right) {turn_rate += evade_turn_rate;}
+			
+			if (rail_look_left) {turn_rate -= evade_turn_rate;}
+			else if (rail_look_left) {turn_rate += evade_turn_rate;}
 			
 			if (!is_off_road_left | !is_off_road_right) {
 				turn_rate += (-(is_off_road_left / 10) + (is_off_road_right / 10));

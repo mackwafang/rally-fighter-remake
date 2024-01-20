@@ -25,8 +25,8 @@
     "inheritPhysicsSettings": false,
     "PhysicsWorld": false,
     "PhysicsWorldGravityX": 0.0,
-    "PhysicsWorldGravityY": 10.0,
-    "PhysicsWorldPixToMetres": 0.1,
+    "PhysicsWorldGravityY": 0.0,
+    "PhysicsWorldPixToMetres": 1.5,
   },
   "roomSettings": {
     "Height": 2048,

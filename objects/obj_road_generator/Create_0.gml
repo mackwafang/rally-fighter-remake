@@ -345,7 +345,7 @@ for (var i = 0; i < array_length(road_list) - 1; i++) {
 vertex_end(road_vertex_buffers);
 vertex_freeze(road_vertex_buffers);
 
-// create props
+// create props, building
 var prop_chain = 0;
 vertex_begin(global.building_vertex_buffer, building_vertex_format);
 for (var i = 0; i < array_length(road_list) - 1; i++) {
@@ -499,21 +499,55 @@ for (var i = 0; i < array_length(road_list) - 1; i++) {
 			}
 			break;
 	}
-			
+}
+vertex_end(global.building_vertex_buffer);
+vertex_freeze(global.building_vertex_buffer);
+vertex_begin(global.railing_vertex_buffer, building_vertex_format);
+for (var i = 0; i < array_length(road_list) - 1; i++) {
+	var road = road_list[@i];
+	var next_road = road_list[@i+1];
+	var left_lanes = road.get_lanes_left();
+	var right_lanes = road.get_lanes_right();
+	var next_left_lanes = next_road.get_lanes_left();
+	var next_right_lanes = next_road.get_lanes_right();
 	// create railing
-	if (i < 100) {
-		var begin_length = choose(
+	var choose_side = [];
+	var angle_diff = angle_difference(road.direction, next_road.direction);
+	if (abs(angle_diff) > 10) {
+		var s = sign(angle_diff);
+		switch(s) {
+			case -1:
+				choose_side = [1];
+				break;
+			case 1:
+				choose_side = [0];
+				break;
+		}
+	}
+	if (road.intersection) {
+		choose_side = [];
+	}
+	
+	for (var j = 0; j < array_length(choose_side); j++) {
+		var s = choose_side[j];
+		var begin_length = [
 			-lane_width*(left_lanes),
 			lane_width*(right_lanes),
-		);
+		];
+		var next_length = [
+			-lane_width*(next_left_lanes),
+			lane_width*(next_right_lanes),
+		];
 		var railing_obj = instance_create_layer(
-			road.x,// + lengthdir_x(begin_length, road.direction - 90),
-			road.y,// + lengthdir_y(begin_length, road.direction - 90),
+			road.x + lengthdir_x(begin_length[s], road.direction - 90),
+			road.y + lengthdir_y(begin_length[s], road.direction - 90),
 			"Instances",
 			obj_railing
 		);
-		print(road.length);
-		railing_obj.length = sqrt(sqr(road.x - next_road.x) + sqr(road.y - next_road.y));
+		railing_obj.length = sqrt(
+			sqr((road.x + lengthdir_x(begin_length[s], road.direction - 90)) - (next_road.x + lengthdir_x(next_length[s], next_road.direction - 90))) + 
+			sqr((road.y + lengthdir_y(begin_length[s], road.direction - 90)) - (next_road.y + lengthdir_y(next_length[s], next_road.direction - 90)))
+		);
 		railing_obj.image_xscale = railing_obj.length;
 		railing_obj.direction = road.direction;
 		railing_obj.image_angle = road.direction;
@@ -522,8 +556,8 @@ for (var i = 0; i < array_length(road_list) - 1; i++) {
 		railing_obj.init_vertex_buffer();
 	}
 }
-vertex_end(global.building_vertex_buffer);
-vertex_freeze(global.building_vertex_buffer);
+vertex_end(global.railing_vertex_buffer);
+vertex_freeze(global.railing_vertex_buffer);
 
 global.road_list_length = array_length(road_list);
 
