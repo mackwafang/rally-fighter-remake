@@ -1,3 +1,4 @@
+
 //if (vehicle_type == VEHICLE_TYPE.BIKE) {
 //	draw_sprite_ext(spr_vehicle_shadow, 0, x, y, image_xscale, image_yscale, image_angle, c_white, 0.5);
 //}
@@ -7,10 +8,9 @@ if (global.CAMERA_MODE_3D) {
 	//matrix_set(matrix_world, matrix_build_identity());
 	//var look_ahead_threshold = 256;
 	//var look_ahead_angle = 10;
-	//matrix_set(matrix_world, matrix_build(0, 0, z-20, 0, 0, 0, 1, 1, 1));
-	//draw_line_width_color(x, y, x+lengthdir_x(look_ahead_threshold, image_angle+look_ahead_angle), y+lengthdir_y(look_ahead_threshold, image_angle+look_ahead_angle), 2, c_green, c_green);
-	//draw_line_width_color(x, y, x+lengthdir_x(look_ahead_threshold, image_angle-look_ahead_angle), y+lengthdir_y(look_ahead_threshold, image_angle-look_ahead_angle), 2, c_green, c_green);
-	//matrix_set(matrix_world, matrix_build_identity());
+	matrix_set(matrix_world, matrix_build(0, 0, z-20, 0, 0, 0, 1, 1, 1));
+	draw_sprite_ext(sprite_index, 0, x, y, image_xscale, image_yscale, image_angle, c_white, 1);
+	matrix_set(matrix_world, matrix_build_identity());
 	
 	shader_set(shd_sprite_billboard);
 	shader_set_uniform_f(global.color_replace_replace_color, false);
@@ -51,6 +51,9 @@ if (global.CAMERA_MODE_3D) {
 	}
 	draw_set_alpha(1);
 	matrix_set(matrix_world, matrix_build_identity());
+}
+else {
+	draw_self();
 }
 //draw_sprite_ext(vehicle_detail_index, image_index, x, y, image_xscale, image_yscale, image_angle, c_white, image_alpha);
 

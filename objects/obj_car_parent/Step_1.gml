@@ -82,8 +82,8 @@ else {
 	}
 }
 
-x += cos(degtorad(direction)) * vel;
-y -= sin(degtorad(direction)) * vel;
+x += dcos(direction) * vel;
+y -= dsin(direction) * vel;
 image_angle = direction;
 
 velocity += acceleration * global.deltatime;// * gear_ratio[gear-1];

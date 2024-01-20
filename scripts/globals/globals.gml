@@ -8,7 +8,7 @@ global.DEBUG_CAR = false;
 global.DEBUG_FREE_CAMERA = false;
 
 global.GAMEPLAY_TURN_GUIDE = true;
-global.GAMEPLAY_CARS = true;
+global.GAMEPLAY_CARS = false;
 global.GAMEPLAY_TREES = true;
 global.GAMEPLAY_MEASURE_METRICS = MEASURE.METRIC;
 

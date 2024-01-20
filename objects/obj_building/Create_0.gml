@@ -1,6 +1,7 @@
 z = 0;
 image_speed = 0;
 image_index = irandom(image_number);
+image_alpha = 0;
 
 building_height = 256;
 building_width = 32;
@@ -8,7 +9,6 @@ building_length = 512;
 building_color = make_color_rgb(irandom(255), irandom(255), irandom(255));
 z_start = 0;
 z_end = -32;
-image_alpha = 0;
 
 init_vertex_buffer = function() {
 	var x0 = x;
