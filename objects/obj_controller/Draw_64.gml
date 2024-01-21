@@ -4,6 +4,8 @@ var port_height = view_hport[obj_controller.main_camera];
 var dist_unit = (global.GAMEPLAY_MEASURE_METRICS == MEASURE.METRIC ? "km" : "mi");
 var dist_scale = (global.GAMEPLAY_MEASURE_METRICS == MEASURE.METRIC ? 1 : KMH_TO_MPH);	
 
+draw_set_font(fnt_game);
+
 draw_set_valign(fa_top);
 draw_set_halign(fa_left);
 draw_text(0, 0, fps);

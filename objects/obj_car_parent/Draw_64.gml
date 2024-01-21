@@ -141,26 +141,30 @@ if (obj_controller.main_camera_target.id == id) {
 		c_red
 	)
 	draw_set_valign(fa_bottom);
-	draw_set_halign(fa_center);
+	draw_set_halign(fa_right);
 	var speed_unit = (global.GAMEPLAY_MEASURE_METRICS == MEASURE.METRIC ? "KMH" : "MPH");
 	var speed_scale = (global.GAMEPLAY_MEASURE_METRICS == MEASURE.METRIC ? 1 : KMH_TO_MPH);
-	draw_text(odometer_x, odometer_y - 48, $"{round(acceleration * speed_scale * global.WORLD_TO_REAL_SCALE / 10)} {speed_unit}");
-	draw_text(odometer_x, odometer_y - 32, $"{round(velocity * speed_scale * global.WORLD_TO_REAL_SCALE / 10)} {speed_unit}");
+	draw_text(odometer_x, odometer_y - 32, $"{round(velocity * speed_scale * global.WORLD_TO_REAL_SCALE / 10)} ");
+	
+	draw_set_valign(fa_bottom);
+	draw_set_halign(fa_left);
+	draw_text(odometer_x, odometer_y - 32, $"{speed_unit}");
 	
 	// gear
 	draw_set_valign(fa_top);
 	draw_set_halign(fa_center);
 	draw_text(64,port_height - 64,$"{gear} gear");
 	
-	draw_set_valign(fa_top);
+	// race rank
+	draw_set_valign(fa_bottom);
 	draw_set_halign(fa_center);
-	draw_text(128,port_height - 64,$"{race_rank}");
+	draw_text(port_width / 2, port_height - 80, $"{race_rank}");
 	
 	// odometer
 	draw_set_valign(fa_top);
 	draw_set_halign(fa_center);
 	var dist_scale = (global.GAMEPLAY_MEASURE_METRICS == MEASURE.METRIC ? 1 : KMH_TO_MPH);	
-	var distance_display = dist_along_road / global.WORLD_TO_REAL_SCALE * dist_scale / 10000;
+	var distance_display = string_format(dist_along_road / global.WORLD_TO_REAL_SCALE * dist_scale / 10000, 2, 1);
 	var dist_unit = "km";
 	if (global.GAMEPLAY_MEASURE_METRICS == MEASURE.IMPERIAL) {
 		dist_unit = "mi";

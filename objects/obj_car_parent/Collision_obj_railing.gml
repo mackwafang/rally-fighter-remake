@@ -9,6 +9,8 @@ if (abs(z-other.z) < other.height) {
 		lengthdir_y(1, other.direction - 90)
 	);
 	var _d = dot_product(a.x, a.y, b.x, b.y);
+	if (a.x == b.x and a.y == b.y) {_d = 0;}
+	
 	var angle = other.direction + (90 * sign(-darccos(_d)+90));
 	hp -= max_hp * power(abs(_d), 5);
 	//move_outside_solid(angle, 6);
