@@ -3,7 +3,7 @@ randomize();
 depth = 1000;
 
 // primary_count = 80 * global.difficulty;
-road_segments = 10;
+road_segments = 20;
 control_points = [];
 control_points_dist = 2048;
 lane_width = 80;
@@ -109,13 +109,21 @@ for (var i = 0; i < array_length(road_list)-1; i++) {
 		road.transition_lane = true;
 	}
 	
+	if (road.zone != ZONE.DESERT or road.zone != ZONE.RIVER) {
+		if (irandom(10) < 4) {
+			if (road.transition_lane) {
+				road.intersection = true;
+			}
+		}
+	}
+	
 	// road changes lane count
 	if (lane_change_duration == 0) {
 		prev_lane_lane_to = lane_change_to;
 		lane_side_affected = choose(ROAD_LANE_CHANGE_AFFECT.LEFT, ROAD_LANE_CHANGE_AFFECT.RIGHT, ROAD_LANE_CHANGE_AFFECT.BOTH);
 		lane_change_duration = 30+irandom(10);
 		lane_change_to = 1+irandom(2);
-		cur_zone = choose(ZONE.SUBURBAN, ZONE.CITY, ZONE.DESERT);	// change zone
+		cur_zone = choose(ZONE.SUBURBAN, ZONE.CITY, ZONE.DESERT, ZONE.RIVER);	// change zone
 	}
 	
 	switch(lane_side_affected) {
@@ -214,6 +222,9 @@ function render_control_point(cp, range=0) {
 		var right_lane_sprite = (right_lanes != next_right_lanes) ? spr_road : spr_road;
 		var shoulder_uv = sprite_get_uvs(spr_road_shoulder, 0);
 		var grass_uv = sprite_get_uvs(spr_grass, 0);
+		var off_shoulder_z = road.z;
+		var next_off_shoulder_z = next_road.z;
+		
 		switch(road.zone) {
 			case ZONE.DESERT:
 				shoulder_uv = sprite_get_uvs(spr_road_shoulder, 1);
@@ -223,8 +234,21 @@ function render_control_point(cp, range=0) {
 				shoulder_uv = sprite_get_uvs(spr_road_shoulder, 1);
 				grass_uv = sprite_get_uvs(spr_grass, 1);
 				break;
+			case ZONE.RIVER:
+				shoulder_uv = sprite_get_uvs(spr_road_shoulder, 1);
+				grass_uv = sprite_get_uvs(spr_grass, 3);
+				off_shoulder_z += 200;
+				next_off_shoulder_z += 200;
+				break;
 		}
-		if (irandom(10) < 4 && road.zone != ZONE.DESERT) {
+		if (i > 0) {
+			if (road.zone != ZONE.RIVER && road_list[@ i-1].zone == ZONE.RIVER) {
+				off_shoulder_z += 200;
+			}
+		}
+		
+		
+		if (road.zone != ZONE.DESERT or road.zone != ZONE.RIVER) {
 			if (road.transition_lane) {
 				// create lane intersection
 				shoulder_uv = sprite_get_uvs(spr_road_shoulder, 2);
@@ -237,7 +261,6 @@ function render_control_point(cp, range=0) {
 					left_subimage = 1;
 					right_subimage = 1;
 				}
-				road.intersection = true;
 			}
 			else {
 				if (next_road.transition_lane) {
@@ -282,13 +305,13 @@ function render_control_point(cp, range=0) {
 			[new Point3D(next_road.x+lengthdir_x(beyond_shoulder_range + 200, next_road.direction+90), next_road.y+lengthdir_y(beyond_shoulder_range + 200, next_road.direction+90), next_road.z + 100), new Point(grass_uv[2], grass_uv[3])],
 		
 			//left grass
-			[new Point3D(road_render_points[0][0], road_render_points[1][0], road.z+5), new Point(grass_uv[0], grass_uv[1])],
-			[new Point3D(road.x+lengthdir_x(beyond_shoulder_range, road.direction+90), road.y+lengthdir_y(beyond_shoulder_range, road.direction+90), road.z), new Point(grass_uv[0], grass_uv[3])],
-			[new Point3D(road_render_points[0][1], road_render_points[1][1], next_road.z+5), new Point(grass_uv[2], grass_uv[1])],
+			[new Point3D(road_render_points[0][0], road_render_points[1][0], off_shoulder_z+5), new Point(grass_uv[0], grass_uv[1])],
+			[new Point3D(road.x+lengthdir_x(beyond_shoulder_range, road.direction+90), road.y+lengthdir_y(beyond_shoulder_range, road.direction+90), off_shoulder_z), new Point(grass_uv[0], grass_uv[3])],
+			[new Point3D(road_render_points[0][1], road_render_points[1][1], next_off_shoulder_z+5), new Point(grass_uv[2], grass_uv[1])],
 		
-			[new Point3D(road_render_points[0][1], road_render_points[1][1], next_road.z+5), new Point(grass_uv[2], grass_uv[1])],
-			[new Point3D(road.x+lengthdir_x(beyond_shoulder_range, road.direction+90), road.y+lengthdir_y(beyond_shoulder_range, road.direction+90), road.z), new Point(grass_uv[0], grass_uv[3])],
-			[new Point3D(next_road.x+lengthdir_x(beyond_shoulder_range, next_road.direction+90), next_road.y+lengthdir_y(beyond_shoulder_range, next_road.direction+90), next_road.z), new Point(grass_uv[2], grass_uv[3])],
+			[new Point3D(road_render_points[0][1], road_render_points[1][1], next_off_shoulder_z+5), new Point(grass_uv[2], grass_uv[1])],
+			[new Point3D(road.x+lengthdir_x(beyond_shoulder_range, road.direction+90), road.y+lengthdir_y(beyond_shoulder_range, road.direction+90), off_shoulder_z), new Point(grass_uv[0], grass_uv[3])],
+			[new Point3D(next_road.x+lengthdir_x(beyond_shoulder_range, next_road.direction+90), next_road.y+lengthdir_y(beyond_shoulder_range, next_road.direction+90), next_off_shoulder_z), new Point(grass_uv[2], grass_uv[3])],
 	
 			//left shoulder 
 			[new Point3D(road_render_points[0][0], road_render_points[1][0], road.z), new Point(shoulder_uv[0], shoulder_uv[1])],
@@ -328,13 +351,13 @@ function render_control_point(cp, range=0) {
 			[new Point3D(next_road.x+lengthdir_x(road.lane_width*(next_right_lanes+1), next_road.direction-90), next_road.y+lengthdir_y(road.lane_width*(next_right_lanes+1), next_road.direction-90), next_road.z), new Point(shoulder_uv[2], shoulder_uv[3])],
 		
 			// right grass
-			[new Point3D(road_render_points[0][2], road_render_points[1][2], next_road.z+5), new Point(grass_uv[0], grass_uv[1])],
-			[new Point3D(road.x+lengthdir_x(beyond_shoulder_range, road.direction-90), road.y+lengthdir_y(beyond_shoulder_range, road.direction-90), road.z), new Point(grass_uv[0], grass_uv[3])],
-			[new Point3D(road_render_points[0][3], road_render_points[1][3], road.z+5), new Point(grass_uv[2], grass_uv[1])],
+			[new Point3D(road_render_points[0][2], road_render_points[1][2], next_off_shoulder_z+5), new Point(grass_uv[0], grass_uv[1])],
+			[new Point3D(road.x+lengthdir_x(beyond_shoulder_range, road.direction-90), road.y+lengthdir_y(beyond_shoulder_range, road.direction-90), off_shoulder_z), new Point(grass_uv[0], grass_uv[3])],
+			[new Point3D(road_render_points[0][3], road_render_points[1][3], off_shoulder_z+5), new Point(grass_uv[2], grass_uv[1])],
 		
-			[new Point3D(road_render_points[0][2], road_render_points[1][2], next_road.z+5), new Point(grass_uv[2], grass_uv[1])],
-			[new Point3D(next_road.x+lengthdir_x(beyond_shoulder_range, next_road.direction-90), next_road.y+lengthdir_y(beyond_shoulder_range, next_road.direction-90), next_road.z), new Point(grass_uv[2], grass_uv[3])],
-			[new Point3D(road.x+lengthdir_x(beyond_shoulder_range, road.direction-90), road.y+lengthdir_y(beyond_shoulder_range, road.direction-90), road.z), new Point(grass_uv[0], grass_uv[3])],
+			[new Point3D(road_render_points[0][2], road_render_points[1][2], next_off_shoulder_z+5), new Point(grass_uv[2], grass_uv[1])],
+			[new Point3D(next_road.x+lengthdir_x(beyond_shoulder_range, next_road.direction-90), next_road.y+lengthdir_y(beyond_shoulder_range, next_road.direction-90), next_off_shoulder_z), new Point(grass_uv[2], grass_uv[3])],
+			[new Point3D(road.x+lengthdir_x(beyond_shoulder_range, road.direction-90), road.y+lengthdir_y(beyond_shoulder_range, road.direction-90), off_shoulder_z), new Point(grass_uv[0], grass_uv[3])],
 		
 			// right grass ext
 			[new Point3D(next_road.x+lengthdir_x(beyond_shoulder_range, next_road.direction-90), next_road.y+lengthdir_y(beyond_shoulder_range, next_road.direction-90), next_road.z), new Point(grass_uv[0], grass_uv[3])],
@@ -496,19 +519,21 @@ for (var i = 0; i < array_length(road_list) - 1; i++) {
 		default:
 			//create trees
 			if (global.GAMEPLAY_TREES) {
-				for (var tid = 0; tid < irandom(3); tid++) {
-					var begin_length = choose(
-						lane_width*(left_lanes+1) + irandom(beyond_shoulder_range),
-						-lane_width*(right_lanes+1) - irandom(beyond_shoulder_range),
-					);
-					var tree_obj = instance_create_layer(
-						road.x + lengthdir_x(begin_length, road.direction + 90),
-						road.y + lengthdir_y(begin_length, road.direction + 90),
-						"Instances",
-						obj_tree
-					);
-					tree_obj.display_image_index = choose(0,1,2,3,4);
-					tree_obj.z = road.z + irandom(32);
+				if (road.zone != ZONE.RIVER) {
+					for (var tid = 0; tid < irandom(3); tid++) {
+						var begin_length = choose(
+							lane_width*(left_lanes+1) + irandom(beyond_shoulder_range),
+							-lane_width*(right_lanes+1) - irandom(beyond_shoulder_range),
+						);
+						var tree_obj = instance_create_layer(
+							road.x + lengthdir_x(begin_length, road.direction + 90),
+							road.y + lengthdir_y(begin_length, road.direction + 90),
+							"Instances",
+							obj_tree
+						);
+						tree_obj.display_image_index = choose(0,1,2,3,4);
+						tree_obj.z = road.z + irandom(32);
+					}
 				}
 			}
 			break;
@@ -529,19 +554,24 @@ for (var i = 0; i < array_length(road_list) - 1; i++) {
 	// create railing
 	var choose_side = [];
 	var angle_diff = angle_difference(road.direction, next_road.direction);
-	if (abs(angle_diff) > 10) {
-		var s = sign(angle_diff);
-		switch(s) {
-			case -1:
-				choose_side = [1];
-				break;
-			case 1:
-				choose_side = [0];
-				break;
+	if (road.zone != ZONE.RIVER) {
+		if (abs(angle_diff) > 10) {
+			var s = sign(angle_diff);
+			switch(s) {
+				case -1:
+					choose_side = [1];
+					break;
+				case 1:
+					choose_side = [0];
+					break;
+			}
+		}
+		if (road.intersection) {
+			choose_side = [];
 		}
 	}
-	if (road.intersection) {
-		choose_side = [];
+	else {
+		choose_side = [0,1];
 	}
 	
 	for (var j = 0; j < array_length(choose_side); j++) {

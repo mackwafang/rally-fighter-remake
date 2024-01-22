@@ -1,6 +1,5 @@
 // draw roads
 if (global.CAMERA_MODE_3D) {
-	gpu_set_alphatestenable(true);
 	
 	var tex = sprite_get_texture(spr_road, 0);
 	vertex_submit(road_vertex_buffers, pr_trianglelist, tex);
@@ -8,8 +7,6 @@ if (global.CAMERA_MODE_3D) {
 	vertex_submit(global.building_vertex_buffer, pr_trianglelist, tex);
 	tex = sprite_get_texture(spr_railing, 0);
 	vertex_submit(global.railing_vertex_buffer, pr_trianglelist, tex);
-	
-	gpu_set_alphatestenable(false);
 }
 
 if (global.DEBUG_ROAD_DRAW_CONTROL_POINTS) {

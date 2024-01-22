@@ -16,6 +16,8 @@ enum ZONE {
 	SUBURBAN,
 	DESERT,
 	BEACH,
+	RIVER,
+	
 }
 
 enum MEASURE {
