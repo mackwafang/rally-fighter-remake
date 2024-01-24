@@ -19,6 +19,8 @@ function RoadNode(_Point) constructor {
 	zone = ZONE.SUBURBAN		// road's current zone to render surrounding enviornment
 	transition_lane	= false;	// is road is transitioning to new lane count
 	intersection = false;		// is segment an intersection?
+	beyond_range = [0, 0]		// off road area range
+	sea_level = 0;				// level for water
 	
 	toString = function() {
 		return $"({x}, {y}, {z}), direction: {direction}, Lanes: {lanes}\n";

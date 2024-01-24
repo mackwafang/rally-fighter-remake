@@ -46,7 +46,6 @@ for (var i = 0; i < global.total_participating_vehicles; i++) {
 	car.z = -100;
 	car.vehicle_type = VEHICLE_TYPE.BIKE;
 	car.ai_behavior.part_of_race = true;
-	car.ai_behavior.part_of_race = true;
 	participating_vehicles[array_length(participating_vehicles)] = car;
 }
 
@@ -119,7 +118,7 @@ minimap_config = {
 var num = audio_get_listener_count();
 for( var i = 0; i < num; i++;) {
     var info = audio_get_listener_info(i);
-    audio_set_master_gain(info[? "index"], 0.5);
+    audio_set_master_gain(info[? "index"], 0.25);
     ds_map_destroy(info);
 }
 

@@ -10,7 +10,7 @@ building_color = make_color_rgb(irandom(255), irandom(255), irandom(255));
 z_start = 0;
 z_end = -32;
 
-init_vertex_buffer = function() {
+function init_vertex_buffer() {
 	var x0 = x;
 	var y0 = y;
 	var x1 = x + lengthdir_x(building_width, direction);

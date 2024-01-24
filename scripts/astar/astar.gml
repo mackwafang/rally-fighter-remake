@@ -25,6 +25,7 @@ function a_star(_grid, _start, _end, width, _h) {
 		ds_list_add(g, 0);
 	}
 	ds_priority_add(frontier, _start, 0);
+	var last_dir = 0;
 
 	
 	while (ds_priority_find_min(frontier) != _end) {
@@ -61,6 +62,10 @@ function a_star(_grid, _start, _end, width, _h) {
 			var n = neighbors[|ni];
 			var cost = g[|current] + abs(_grid[|n] - _grid[|current]);
 			
+			// skips sharp turns
+			var dir = point_direction(current % width, current div width, n % width, n div width);
+			if (abs(angle_difference(dir, last_dir)) > 90) {continue;}
+			
 			if ((ds_priority_find_priority(frontier, n) != undefined) && (cost < g[|n])) {
 				// new path is better
 				ds_priority_delete_value(frontier, n);
@@ -71,9 +76,11 @@ function a_star(_grid, _start, _end, width, _h) {
 			}
 			
 			if ((ds_priority_find_priority(frontier, n) == undefined) && !searched[|n]) {
+				// add new
 				g[|n] = cost;
 				ds_priority_add(frontier, n, g[|n] + _h(n, _end, width));
 				parent[|n] = current;
+				last_dir = dir;
 			}
 		}
 		if (current_time - t > 3000) {

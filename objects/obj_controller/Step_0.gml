@@ -29,7 +29,7 @@ if (keyboard_check(ord("E"))) {
 
 // play music
 if (alarm[0] == global.display_freq * 3) {
-	audio_play_sound(snd_race_2, 128, true);
+	audio_play_sound(snd_race_1, 128, true);
 }
 
 // other controls
@@ -99,7 +99,7 @@ if (global.GAMEPLAY_CARS) {
 		main_camera_target.on_road_index
 	)
 	if (alarm[0] == -1) {
-		if (irandom(200) == 1) {
+		if (irandom(100) == 1) {
 			var side = choose(-1, 1);
 			var road_function = (side == -1 ? road_at_view_edge.get_lanes_left: road_at_view_edge.get_lanes_right);
 			

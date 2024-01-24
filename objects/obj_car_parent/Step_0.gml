@@ -134,6 +134,9 @@ if (can_move) {
 // surface friction	
 // first, location of cached index
 on_road_index = set_on_road();
+if (!on_road && on_road_index.zone == ZONE.RIVER) {
+	hp = 0;
+}
 
 // finish
 if (!is_completed) {
@@ -161,7 +164,7 @@ var f_drag = -c_drag * velocity;
 var f_rr = -c_rr * velocity;
 var f_surface = -mass * global.gravity_3d * ((on_road) ? 0.2 : 20) * (vertical_on_road ? 1 : 0);
 if (hp <= 0) {
-	f_surface = -mass * global.gravity_3d * 15
+	f_surface = -mass * global.gravity_3d * (vertical_on_road ? 30 : 0);
 }
 var f_brake = ((braking) ? -braking_power * 1000 : 0);
 var f_turn = -abs(turn_rate) * mass;
