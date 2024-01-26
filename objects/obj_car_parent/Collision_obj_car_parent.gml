@@ -2,6 +2,7 @@ if (other != self) {
 	if (abs(other.z - z) < 16) {
 		if (!other.is_respawning) {
 			var deg = angle_difference(image_angle, point_direction(x,y,other.x,other.y));
+			
 			if (!is_completed) {hp -= max_hp * abs(dsin(deg));}
 			if (hp <= 0) {
 				zspeed -= velocity / 1000;

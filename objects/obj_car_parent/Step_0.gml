@@ -1,12 +1,15 @@
 // road fidning
-nav_road = find_nearest_road(x + lengthdir_x(128, image_angle), y + lengthdir_y(128, image_angle), last_road_index);
+nav_road = nearest_road;//find_nearest_road(x + lengthdir_x(128, image_angle), y + lengthdir_y(128, image_angle), last_road_index);
 nav_road ??= obj_road_generator.road_list[last_road_index];
 var next_road = obj_road_generator.road_list[max(0, nav_road.get_id() + (ai_behavior.reversed_direction ? -4 : 4))];
-var vec_to_road = point_to_line(
-	new Point(nav_road.x, nav_road.y),
-	new Point(next_road.x, next_road.y),
-	new Point(x, y)
-);
+var vec_to_road = new Vec2(0, 0);
+if (nav_road._id != next_road._id) {
+	vec_to_road = point_to_line(
+		new Point(nav_road.x, nav_road.y),
+		new Point(next_road.x, next_road.y),
+		new Point(x, y)
+	);
+}
 dist_along_road = on_road_index.length_to_point + point_distance(on_road_index.x, on_road_index.y, vec_to_road.x, vec_to_road.y);
 vec_to_road.x += lengthdir_x(((ai_behavior.desired_lane + 0.5) * on_road_index.lane_width), on_road_index.direction-90);
 vec_to_road.y += lengthdir_y(((ai_behavior.desired_lane + 0.5) * on_road_index.lane_width), on_road_index.direction-90);
@@ -62,11 +65,11 @@ if (can_move) {
 				// off road, trying to get back on it
 				// find the nearest road
 				//var side = angle_difference(image_angle, point_direction(x,y,road.x,road.y));
-				turn_rate += side / 800;
+				turn_rate += side / 600;
 			}
 			else {
 				// car turning on curved road and moving to its desired lane
-				var tr = (angle_diff / (ai_behavior.part_of_race ? 50 : 35)) * turn_adjustments; // moving along curved road
+				var tr = (angle_diff / (ai_behavior.part_of_race ? 40 : 35)) * turn_adjustments; // moving along curved road
 				
 				// moving go desired lane
 				if (dist_to_road > 32) {
@@ -87,7 +90,7 @@ if (can_move) {
 			var is_off_road_left = !is_on_road(x+lengthdir_x(look_ahead_threshold/4, image_angle+90), y+lengthdir_y(look_ahead_threshold/4, image_angle+90), last_road_index) ? 1 : 0;
 			var is_off_road_right = !is_on_road(x+lengthdir_x(look_ahead_threshold/4, image_angle-90), y+lengthdir_y(look_ahead_threshold/4, image_angle-90), last_road_index) ? 1 : 0;
 			
-			var evade_turn_rate = 0.2;
+			var evade_turn_rate = 0.25;
 			if (car_look_ahead) {
 				accelerating = false;
 				braking = true;
@@ -134,8 +137,30 @@ if (can_move) {
 // surface friction	
 // first, location of cached index
 on_road_index = set_on_road();
+// "crash" on river
 if (!on_road && on_road_index.zone == ZONE.RIVER) {
 	hp = 0;
+	if (vertical_on_road) {
+		velocity = 0;
+		image_alpha = 0;
+	}	
+}
+// create dust particle
+if (!on_road) {
+	if (velocity > 0) {
+		if (!on_road_index.zone == ZONE.CITY) {
+			var dust_part = instance_create_layer(x, y, "Instances", obj_dust_particle);
+			dust_part.z = z;
+			switch(on_road_index.zone) {
+				case ZONE.SUBURBAN:
+					dust_part.color = $0A62A3;
+					break;
+				case ZONE.DESERT:
+					dust_part.color = $B2D9F8;
+					break;
+			}
+		}
+	}
 }
 
 // finish
@@ -261,6 +286,19 @@ else {
 	if (hp_regen_delay >= 0) {
 		hp = clamp(hp+(3 / global.difficulty), 0, max_hp);
 		hp_regen_delay = -1;
+	}
+}
+
+if (obj_controller.alarm[0] < 0) {
+	if (is_nan(x) || is_nan(y)) {
+		print("derp");
+		acceleration = 0;
+		velocity = 0;
+		turn_rate = 0;
+		z = 0;
+	
+		drive_force = 0;
+		hp = 0;
 	}
 }
 	

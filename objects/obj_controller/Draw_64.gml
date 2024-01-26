@@ -15,7 +15,6 @@ draw_set_valign(fa_top);
 draw_set_halign(fa_right);
 draw_text(main_camera_size.width, 0, $"{global.race_length / global.WORLD_TO_REAL_SCALE * dist_scale / 10000} {dist_unit}");
 
-
 var ranking_verticle_cap = 20;
 for (var rank = 0; rank < array_length(global.car_ranking); rank++) {
 	var vehicle = global.car_ranking[rank];

@@ -1,4 +1,4 @@
-var dist_to_building = point_distance(x, y, other.x, other.y);
+var dist_to_building = max(1, point_distance(x, y, other.x, other.y));
 var a = new Point(
 	lengthdir_x(1, direction),
 	lengthdir_y(1, direction)

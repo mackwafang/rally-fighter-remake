@@ -9,7 +9,6 @@ if (abs(z-other.z) < other.height) {
 		lengthdir_y(1, other.direction - 90)
 	);
 	var _d = dot_product(a.x, a.y, b.x, b.y);
-	if (is_nan(_d)) {_d = 0;}
 	
 	var angle = other.direction + (90 * sign(-darccos(_d)+90));
 	hp -= max_hp * power(abs(_d), 5);

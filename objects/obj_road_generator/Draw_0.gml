@@ -1,8 +1,8 @@
 // draw roads
 if (global.CAMERA_MODE_3D) {
-	gpu_set_cullmode(cull_clockwise);
 	var tex = sprite_get_texture(spr_road, 0);
 	vertex_submit(road_vertex_buffers, pr_trianglelist, tex);
+	
 	tex = sprite_get_texture(spr_building_side, 0);
 	vertex_submit(global.building_vertex_buffer, pr_trianglelist, tex);
 	gpu_set_cullmode(cull_noculling);

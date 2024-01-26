@@ -39,7 +39,6 @@ if (keyboard_check_pressed(vk_escape)) {
 
 main_camera_target = participating_vehicles[participating_camera_index];
 
-
 if (!global.DEBUG_FREE_CAMERA) {
 	// normal game camera
 	if (!global.CAMERA_MODE_3D) {
@@ -51,11 +50,15 @@ if (!global.DEBUG_FREE_CAMERA) {
 		camera_set_view_angle(main_camera, -main_camera_target.image_angle+90);
 	}
 	else {
+		main_camera_pos.x = main_camera_target.x+lengthdir_x(-60+cam_zoom, main_camera_target.image_angle);
+		main_camera_pos.y = main_camera_target.y+lengthdir_y(-60+cam_zoom, main_camera_target.image_angle);
+		main_camera_pos.z = main_camera_target.z + z;
+		
 		gpu_set_zwriteenable(false);
 		global.view_matrix = matrix_build_lookat(
-			main_camera_target.x+lengthdir_x(-60+cam_zoom, main_camera_target.image_angle), 
-			main_camera_target.y+lengthdir_y(-60+cam_zoom, main_camera_target.image_angle), 
-			main_camera_target.z + z, 
+			main_camera_pos.x,
+			main_camera_pos.y,
+			main_camera_pos.z,
 			main_camera_target.x+lengthdir_x(500, main_camera_target.image_angle),
 			main_camera_target.y+lengthdir_y(500, main_camera_target.image_angle),
 			main_camera_target.z+z+120, 0, 0, 1
@@ -93,11 +96,7 @@ else {
 if (global.game_state_paused) {exit;}
 // other car spawning
 if (global.GAMEPLAY_CARS) {
-	var road_at_view_edge = find_nearest_road(
-		main_camera_target.x + lengthdir_x(5000 + choose(-1,1), main_camera_target.image_angle),
-		main_camera_target.y + lengthdir_y(5000 + choose(-1,1), main_camera_target.image_angle),
-		main_camera_target.on_road_index
-	)
+	var road_at_view_edge = obj_road_generator.road_list[max(0, main_camera_target.nav_road._id + choose(-20,20))];
 	if (alarm[0] == -1) {
 		if (irandom(100) == 1) {
 			var side = choose(-1, 1);
@@ -111,10 +110,11 @@ if (global.GAMEPLAY_CARS) {
 			car.rpm = 2000;
 			car.max_velocity = 400 + (global.difficulty * 200);
 			car.last_road_index = road_at_view_edge._id;
+			car.nearest_road = road_at_view_edge;
 			car.on_road_index = road_at_view_edge;
 			car.horsepower = 30;
 			car.max_gear = 2;
-			car.z = road_at_view_edge.z;
+			car.z = road_at_view_edge.z - 10;
 			if (side == -1) {
 				car.ai_behavior.reversed_direction = true;
 			}

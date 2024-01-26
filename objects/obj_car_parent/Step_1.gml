@@ -86,3 +86,4 @@ y -= dsin(direction) * vel;
 image_angle = direction;
 
 velocity += acceleration * global.deltatime;// * gear_ratio[gear-1];
+hp = clamp(hp, 0, max_hp);

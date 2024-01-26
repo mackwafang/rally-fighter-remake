@@ -93,6 +93,8 @@ vehicle_current_pos_ping = 0;
 // set camera size
 participating_camera_index = 0;
 main_camera = view_camera[view_current];
+main_camera_pos = new Point3D(0, 0, 0);
+main_camera_pos_smooth = 0.25;
 
 view_set_wport(0, main_camera_size.width);
 view_set_hport(0, main_camera_size.height);
@@ -118,7 +120,7 @@ minimap_config = {
 var num = audio_get_listener_count();
 for( var i = 0; i < num; i++;) {
     var info = audio_get_listener_info(i);
-    audio_set_master_gain(info[? "index"], 0.25);
+    audio_set_master_gain(info[? "index"], 0);
     ds_map_destroy(info);
 }
 

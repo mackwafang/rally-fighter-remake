@@ -1,13 +1,14 @@
-var dir = point_distance(x, y, other.x, other.y);
+var dist = max(1, point_distance(x, y, other.x, other.y));
 var a = new Point(
 	lengthdir_x(1, direction),
 	lengthdir_y(1, direction)
 );
 var b = new Point(
-	(other.x - x) / dir,
-	(other.y - y) / dir
+	(other.x - x) / dist,
+	(other.y - y) / dist
 );
 var _d = abs(dot_product(b.x, b.y, a.x, a.y));
+
 if (abs(z-other.z) < 8) {
 	switch(other.display_image_index) {
 		case 0:
