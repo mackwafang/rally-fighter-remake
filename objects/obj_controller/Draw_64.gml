@@ -80,16 +80,16 @@ if (global.DEBUG_DRAW_MINIMAP) {
 		}
 	}
 
-	for (var i = 0; i < ds_list_size(obj_road_generator.grid)-1; i++) {
-		var grid = obj_road_generator.grid[|i];
-		var x1 = (i % obj_road_generator.grid_width) * minimap_config.border;
-		var y1 = ((i div obj_road_generator.grid_width)-top_cp) * minimap_config.border;
-		var x2 = ((i % obj_road_generator.grid_width)+1) * minimap_config.border;
-		var y2 = ((i div obj_road_generator.grid_width)+1-top_cp) * minimap_config.border;
-		var color = (grid+1)*128;
-		color = make_color_rgb(grid / 2, grid / 2, grid / 2);
-		draw_rectangle_color(x1, y1, x2, y2, color, color, color, color, false);
-	}
+	//for (var i = 0; i < ds_list_size(obj_road_generator.grid)-1; i++) {
+	//	var grid = obj_road_generator.grid[|i];
+	//	var x1 = (i % obj_road_generator.grid_width) * minimap_config.border;
+	//	var y1 = ((i div obj_road_generator.grid_width)-top_cp) * minimap_config.border;
+	//	var x2 = ((i % obj_road_generator.grid_width)+1) * minimap_config.border;
+	//	var y2 = ((i div obj_road_generator.grid_width)+1-top_cp) * minimap_config.border;
+	//	var color = (grid+1)*128;
+	//	color = make_color_rgb(grid / 2, grid / 2, grid / 2);
+	//	draw_rectangle_color(x1, y1, x2, y2, color, color, color, color, false);
+	//}
 
 	for (var i = 0; i < array_length(obj_road_generator.control_path)-1; i++) {
 		var x1 = (((obj_road_generator.control_path[i] % obj_road_generator.grid_width))*minimap_config.border) + 32;
@@ -104,6 +104,7 @@ if (global.DEBUG_DRAW_MINIMAP) {
 			2, c_red, c_red
 		);
 	}
+	
 	vehicle_current_pos_ping = (vehicle_current_pos_ping+1) % 100;
 	for (var i = 0; i < global.total_participating_vehicles; i++) {
 		var vehicle = participating_vehicles[i];

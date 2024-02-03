@@ -3,8 +3,8 @@
 //if (keyboard_check(ord("S"))) {y += cam_move_speed;}
 //if (keyboard_check(ord("A"))) {x -= cam_move_speed;}
 //if (keyboard_check(ord("D"))) {x += cam_move_speed;}
-if (keyboard_check(vk_space)) {z += 1;}
-if (keyboard_check(vk_control)) {z -= 1;}
+//if (keyboard_check(vk_space)) {z += 1;}
+//if (keyboard_check(vk_control)) {z -= 1;}
 if (keyboard_check(ord("Q"))) {
 	if (global.DEBUG_FREE_CAMERA) {
 		cam_angle -= 5;
@@ -50,6 +50,11 @@ if (!global.DEBUG_FREE_CAMERA) {
 		camera_set_view_angle(main_camera, -main_camera_target.image_angle+90);
 	}
 	else {
+		//cam_zoom = (main_camera_target.velocity / main_camera_target.max_velocity) * 280;
+		
+		//main_camera_pos.x += (main_camera_target.x+lengthdir_x(-60+cam_zoom, main_camera_target.image_angle) - main_camera_pos.x) * main_camera_pos_smooth;
+		//main_camera_pos.y += (main_camera_target.y+lengthdir_y(-60+cam_zoom, main_camera_target.image_angle) - main_camera_pos.y) * main_camera_pos_smooth;
+		//main_camera_pos.z = main_camera_target.z + z;
 		main_camera_pos.x = main_camera_target.x+lengthdir_x(-60+cam_zoom, main_camera_target.image_angle);
 		main_camera_pos.y = main_camera_target.y+lengthdir_y(-60+cam_zoom, main_camera_target.image_angle);
 		main_camera_pos.z = main_camera_target.z + z;
@@ -70,10 +75,7 @@ if (!global.DEBUG_FREE_CAMERA) {
 		gpu_set_zwriteenable(true);
 		
 		// keep keep camera fixed or move away when finished
-		if (!main_camera_target.is_completed) {
-			cam_zoom = clamp(cam_zoom, -100, 10);
-		}
-		else {
+		if (main_camera_target.is_completed) {
 			cam_zoom -= 0.25;
 			z -= 0.125;
 			cam_zoom = clamp(cam_zoom, -500, 10);

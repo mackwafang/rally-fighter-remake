@@ -1,7 +1,5 @@
 // road fidning
-nav_road = nearest_road;//find_nearest_road(x + lengthdir_x(128, image_angle), y + lengthdir_y(128, image_angle), last_road_index);
-nav_road ??= obj_road_generator.road_list[last_road_index];
-var next_road = obj_road_generator.road_list[max(0, nav_road.get_id() + (ai_behavior.reversed_direction ? -4 : 4))];
+var next_road = obj_road_generator.road_list[max(0, nav_road.get_id() + (ai_behavior.reversed_direction ? -6 : 6))];
 var vec_to_road = new Vec2(0, 0);
 if (nav_road._id != next_road._id) {
 	vec_to_road = point_to_line(
@@ -28,15 +26,26 @@ if (can_move) {
 			boosting = keyboard_check_pressed(global.player_input.boost);
 		}
 		turning = (keyboard_check(global.player_input.turn.right) << 1) | (keyboard_check(global.player_input.turn.left));
+		if (turning != 0) {
+			// checking turning
+			if (turning & 1 == 0) {
+				// checking left turn
+				turn_rate -= 10 * global.deltatime;
+			}
+			else if (turning & 2 == 0) {
+				// checking right turn
+				turn_rate += 10 * global.deltatime;
+			}
+		}
 	}
 	else {
 		accelerating = !is_completed;
 	}
 
 	if (accelerating) {
-		var angle_diff = angle_difference(on_road_index.direction, image_angle);
+		var angle_diff = angle_difference(nav_road.direction, direction);
 		if (ai_behavior.reversed_direction) {
-			angle_diff = angle_difference(image_angle, on_road_index.direction)
+			angle_diff = angle_difference(direction, nav_road.direction)
 		}
 		
 		if (is_player) {
@@ -69,13 +78,15 @@ if (can_move) {
 			}
 			else {
 				// car turning on curved road and moving to its desired lane
-				var tr = (angle_diff / (ai_behavior.part_of_race ? 40 : 35)) * turn_adjustments; // moving along curved road
+				var tr = (angle_diff / 35) * turn_adjustments; // moving along curved road
 				
 				// moving go desired lane
 				if (dist_to_road > 32) {
-					tr += (sign(side) / 20);
+					tr += (sign(side) / 10);
 				}
-				turn_rate += clamp(tr, -2, 2);
+				
+				turn_rate += clamp(tr, -1, 1);
+				
 				braking = (abs(tr) > 1) | ((nav_road.get_ideal_throttle() < 0.25) && (abs(angle_diff) > 15));
 			}
 			
@@ -90,7 +101,7 @@ if (can_move) {
 			var is_off_road_left = !is_on_road(x+lengthdir_x(look_ahead_threshold/4, image_angle+90), y+lengthdir_y(look_ahead_threshold/4, image_angle+90), last_road_index) ? 1 : 0;
 			var is_off_road_right = !is_on_road(x+lengthdir_x(look_ahead_threshold/4, image_angle-90), y+lengthdir_y(look_ahead_threshold/4, image_angle-90), last_road_index) ? 1 : 0;
 			
-			var evade_turn_rate = 0.25;
+			var evade_turn_rate = 0.1;
 			if (car_look_ahead) {
 				accelerating = false;
 				braking = true;
@@ -102,9 +113,13 @@ if (can_move) {
 			else if (rail_look_left) {turn_rate += evade_turn_rate;}
 			
 			if (!is_off_road_left | !is_off_road_right) {
-				turn_rate += (-(is_off_road_left / 10) + (is_off_road_right / 10));
+				turn_rate += (-(is_off_road_left/10) + (is_off_road_right/10));
+			}
+			if (ai_behavior.part_of_race) {
+				turn_rate *= max(1 - (velocity / max_velocity), (velocity / max_velocity)) * 1.2;
 			}
 			
+			turning = (turn_rate < 0.1 ? 2 : (turn_rate > 0.1 ? 1 : 0));
 			// enables boost
 			if (boost_juice >= 100) {
 				if (irandom(20) < global.difficulty) {
@@ -118,27 +133,12 @@ if (can_move) {
 		engine_power -= 0.1;
 	}
 
-	if (turning != 0) {
-		// checking turning
-		if (turning & 1 == 0) {
-			// checking left turn
-			turn_rate -= 10 * global.deltatime;
-		}
-		else if (turning & 2 == 0) {
-			// checking right turn
-			turn_rate += 10 * global.deltatime;
-		}
-	}
-
 	if (keyboard_check_pressed(vk_up)) {gear_shift_up();}
 	if (keyboard_check_pressed(vk_down)) {gear_shift_down();}
 }
 
-// surface friction	
-// first, location of cached index
-on_road_index = set_on_road();
 // "crash" on river
-if (!on_road && on_road_index.zone == ZONE.RIVER) {
+if (!on_road && vertical_on_road && on_road_index.zone == ZONE.RIVER) {
 	hp = 0;
 	if (vertical_on_road) {
 		velocity = 0;
@@ -146,7 +146,7 @@ if (!on_road && on_road_index.zone == ZONE.RIVER) {
 	}	
 }
 // create dust particle
-if (!on_road) {
+if (!on_road && vertical_on_road) {
 	if (velocity > 0) {
 		if (!on_road_index.zone == ZONE.CITY) {
 			var dust_part = instance_create_layer(x, y, "Instances", obj_dust_particle);

@@ -52,8 +52,8 @@ for (var i = 0; i < global.total_participating_vehicles; i++) {
 for (var i = 0; i < array_length(participating_vehicles); i++) {
 	var car = participating_vehicles[i];
 	car.race_rank = (array_length(participating_vehicles) - i);
-	var road = obj_road_generator.road_list[i+1];//obj_road_generator.road_list[(i div 3) + 1];
-	var lane_position_x = (((i % 3) / 3) * road.length) + (road.length * (i div 3));
+	var road = obj_road_generator.road_list[(i*2) + 5];//obj_road_generator.road_list[(i div 3) + 1];
+	var lane_position_x = 0;//(((i % 3) / 3) * road.length) + (road.length * (i div 3));
 	var lane_position_y = ((i % road.get_lanes_right()) * road.lane_width) + (road.lane_width / 2);
 	
 	var dist = point_distance(road.x, road.y, road.x + lane_position_x, road.y + lane_position_y);
@@ -63,8 +63,8 @@ for (var i = 0; i < array_length(participating_vehicles); i++) {
 	car.y = road.y + lengthdir_y(dist, dir);
 	car.direction = road.direction;
 	car.can_move = false;
-	car.mass = 100;
-	car.horsepower = 35 * (global.difficulty * 0.75);
+	car.mass = 200;
+	car.horsepower = 40 * (global.difficulty * 0.75);
 	car.ai_behavior.desired_lane = (i % 3);
 	car.on_road_index = road;
 	//for (var g = 0; g < array_length(car.gear_shift_rpm); g++) {
@@ -94,7 +94,7 @@ vehicle_current_pos_ping = 0;
 participating_camera_index = 0;
 main_camera = view_camera[view_current];
 main_camera_pos = new Point3D(0, 0, 0);
-main_camera_pos_smooth = 0.25;
+main_camera_pos_smooth = 0.05;
 
 view_set_wport(0, main_camera_size.width);
 view_set_hport(0, main_camera_size.height);
@@ -118,9 +118,9 @@ minimap_config = {
 
 // sounds
 var num = audio_get_listener_count();
-for( var i = 0; i < num; i++;) {
+for( var i = 0; i < num; i++) {
     var info = audio_get_listener_info(i);
-    audio_set_master_gain(info[? "index"], 0);
+    audio_set_master_gain(info[? "index"], 0.25);
     ds_map_destroy(info);
 }
 

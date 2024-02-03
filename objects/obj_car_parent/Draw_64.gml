@@ -74,7 +74,7 @@ if (obj_controller.main_camera_target.id == id) {
 	//draw_text(port_width - 196, 32, $"boost: {boosting}");
 	//draw_text(port_width - 196, 48, $"brake: {braking}");
 	//draw_text(port_width - 196, 64, $"finish: {is_completed}");
-	//draw_text(port_width - 196, 80, $"force: {drive_force}");
+	draw_text(port_width - 196, 80, $"turn: {turn_rate}");
 	//draw_text(16, 16, $"{x}, {y}, {z}");
 	//draw_text(16, 32, $"hp {horsepower}");
 	//for (var i = 0; i < max_gear; i++) {

@@ -46,16 +46,8 @@ c_drag = 0.5 * air_drag_coef * drag_area * AIR_DENSITY;	// constant value for ca
 c_rr = 20 * c_drag;										// constant value for car's drag
 
 //gear's ratio
-gear_ratio = [3, 2.2, 1.8, 5/3, 10/7, 11/9];
-diff_ratio = 3.5;
-//gear_shift_rpm = [
-//	[0, 8000],
-//	[4000, 8500],
-//	[4500, 8000],
-//	[4500, 7500],
-//	[4500, 7000],
-//	[3500, 5500],
-//];
+// gear_ratio = [3, 2.5, 2, 5/3, 10/7, 11/9];
+gear_ratio = [3, 2.25, 1.8, 5/3, 10/7, 11/9];
 gear_shift_rpm = [
 	[0, 9000],
 	[4000, 8500],
@@ -64,6 +56,17 @@ gear_shift_rpm = [
 	[5500, 8000],
 	[5500, 5500],
 ];
+//gear_ratio = [2.66, 1.78, 1.3, 1, 0.74, 0.5];
+//gear_shift_rpm = [
+//	[0, 8000],
+//	[4000, 8500],
+//	[4500, 7000],
+//	[4500, 5500],
+//	[4500, 5000],
+//	[3500, 5500],
+//];
+
+diff_ratio = 3.5;
 gear_shift_wait = 0;		//  time wait to change gear again
 
 accelerating = false;		// flag to check if car is accelerating
@@ -209,9 +212,9 @@ set_on_road = function() {
 
 on_respawn = function() {
 	if (is_respawning) {
-		func = choose(on_road_index.get_lanes_left, on_road_index.get_lanes_right)
-		x = on_road_index.x + lengthdir_x((func()) * on_road_index.lane_width, on_road_index.direction - 90);
-		y = on_road_index.y + lengthdir_y((func()) * on_road_index.lane_width, on_road_index.direction - 90);
+		func = choose(-on_road_index.get_lanes_left(), on_road_index.get_lanes_right());
+		x = on_road_index.x + lengthdir_x(func * on_road_index.lane_width, on_road_index.direction - 90);
+		y = on_road_index.y + lengthdir_y(func * on_road_index.lane_width, on_road_index.direction - 90);
 		image_alpha = 1;
 		//solid = true;
 		mask_index = sprite_index;

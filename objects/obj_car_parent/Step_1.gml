@@ -1,3 +1,7 @@
+nav_road = nearest_road;//find_nearest_road(x + lengthdir_x(128, image_angle), y + lengthdir_y(128, image_angle), last_road_index);
+nav_road ??= obj_road_generator.road_list[last_road_index];
+on_road_index = set_on_road();
+
 if (global.game_state_paused) {exit;}
 var vel = (velocity) * global.deltatime / global.WORLD_TO_REAL_SCALE;
 var vec_to_road = point_to_line(
@@ -7,18 +11,22 @@ var vec_to_road = point_to_line(
 );
 var lerp_value = point_distance(on_road_index.x, on_road_index.y, vec_to_road.x, vec_to_road.y) / on_road_index.length;
 zlerp = lerp(on_road_index.z, on_road_index.next_road.z, lerp_value);
+if (on_road_index.zone == ZONE.RIVER and !on_road) {
+	zlerp = on_road_index.sea_level;
+}
+
 vertical_on_road = (z+zspeed >= zlerp);
 if (vertical_on_road) {
 	drive_force *= cos(on_road_index.elevation) + (on_road_index.elevation < 0 ? 2 : 0);
 	z = zlerp;
-	if (zspeed > global.gravity_3d / global.WORLD_TO_REAL_SCALE) {
+	if (zspeed > global.gravity_3d) {
 		zspeed *= -1/3;
 		turn_rate *= 3;
 	}
 }
 else {
 	// FREE FALLING
-	zspeed += (global.gravity_3d / global.WORLD_TO_REAL_SCALE) * global.deltatime;
+	zspeed += (global.gravity_3d) * global.deltatime;
 }
 z += zspeed;
 z = clamp(z, -500, zlerp);
@@ -27,7 +35,7 @@ if (z > on_road_index.next_road.z + 100) {hp = 0;}
 
 // move car in direction
 if (!is_respawning) {
-	turn_rate += -turn_rate * 0.1;
+	turn_rate += -turn_rate * (is_player ? 0.1 : (turning ? 0.05 : 0));
 	turn_rate = clamp(turn_rate, -6, 6);
 	
 	if (vehicle_type == VEHICLE_TYPE.BIKE) {
@@ -38,7 +46,7 @@ if (!is_respawning) {
 		}
 		else {
 			vehicle_detail_index = spr_bike_3d_detail_2_turn;
-			vehicle_detail_subimage = min(1, abs(turn_rate) / 2) * sprite_get_number(spr_bike_3d_detail_2_turn);
+			vehicle_detail_subimage = min(1, abs(turn_rate) * 0.5) * sprite_get_number(spr_bike_3d_detail_2_turn);
 		}
 		image_xscale = -(turn_rate == 0 ? 1 : sign(turn_rate));
 		if (!is_completed) {

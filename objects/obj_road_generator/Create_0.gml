@@ -98,7 +98,7 @@ for (var i = 0; i < array_length(road_list)-1; i++) {
 	road.direction = point_direction(road.x, road.y, next_road.x, next_road.y);
 	road.length = sqrt(sqr(road.x - next_road.x) + sqr(road.y - next_road.y) + sqr(road.z - next_road.z));// point_distance(road.x, road.y, next_road.x, next_road.y);
 	
-	road.ideal_throttle = min(1.1, road.length / (control_points_dist / road_segments)) * (global.difficulty < 1.5 ? 0.75 : 1.05);
+	road.ideal_throttle = min(1.1, road.length / (control_points_dist / road_segments)) * (global.difficulty < 1.5 ? 0.9 : 1.05);
 	road._id = i;
 	road.lane_width = lane_width;
 	road.zone = cur_zone;
@@ -319,11 +319,11 @@ function render_control_point(cp, range=0) {
 			[new Point3D(next_road.x+lengthdir_x(adjust_beyond_shoulder_range + 500, next_road.direction+90), next_road.y+lengthdir_y(adjust_beyond_shoulder_range + 500, next_road.direction+90), next_off_shoulder_z + 100), new Point(grass_uv[2], grass_uv[1])],
 		
 			//left grass
-			[new Point3D(road.x, road.y, off_shoulder_z+15), new Point(grass_uv[0], grass_uv[1])],
-			[new Point3D(next_road.x, next_road.y, next_off_shoulder_z+15), new Point(grass_uv[2], grass_uv[1])],
+			[new Point3D(road.x, road.y, off_shoulder_z+5), new Point(grass_uv[0], grass_uv[1])],
+			[new Point3D(next_road.x, next_road.y, next_off_shoulder_z+5), new Point(grass_uv[2], grass_uv[1])],
 			[new Point3D(road.x+lengthdir_x(adjust_beyond_shoulder_range, road.direction+90), road.y+lengthdir_y(adjust_beyond_shoulder_range, road.direction+90), off_shoulder_z), new Point(grass_uv[0], grass_uv[3])],
 		
-			[new Point3D(next_road.x, next_road.y, next_off_shoulder_z+15), new Point(grass_uv[2], grass_uv[1])],
+			[new Point3D(next_road.x, next_road.y, next_off_shoulder_z+5), new Point(grass_uv[2], grass_uv[1])],
 			[new Point3D(next_road.x+lengthdir_x(adjust_beyond_shoulder_range, next_road.direction+90), next_road.y+lengthdir_y(adjust_beyond_shoulder_range, next_road.direction+90), next_off_shoulder_z), new Point(grass_uv[2], grass_uv[3])],
 			[new Point3D(road.x+lengthdir_x(adjust_beyond_shoulder_range, road.direction+90), road.y+lengthdir_y(adjust_beyond_shoulder_range, road.direction+90), off_shoulder_z), new Point(grass_uv[0], grass_uv[3])],
 	
@@ -364,11 +364,11 @@ function render_control_point(cp, range=0) {
 			[new Point3D(next_road.x+lengthdir_x(road.lane_width*(next_right_lanes+1), next_road.direction-90), next_road.y+lengthdir_y(next_road.lane_width*(next_right_lanes+1), next_road.direction-90), next_road.z), new Point(shoulder_uv[2], shoulder_uv[3])],
 		
 			// right grass
-			[new Point3D(next_road.x, next_road.y, next_off_shoulder_z+15), new Point(grass_uv[0], grass_uv[1])],
-			[new Point3D(road.x, road.y, off_shoulder_z+15), new Point(grass_uv[2], grass_uv[1])],
+			[new Point3D(next_road.x, next_road.y, next_off_shoulder_z+5), new Point(grass_uv[0], grass_uv[1])],
+			[new Point3D(road.x, road.y, off_shoulder_z+5), new Point(grass_uv[2], grass_uv[1])],
 			[new Point3D(road.x+lengthdir_x(adjust_beyond_shoulder_range, road.direction-90), road.y+lengthdir_y(adjust_beyond_shoulder_range, road.direction-90), off_shoulder_z), new Point(grass_uv[0], grass_uv[3])],
 		
-			[new Point3D(next_road.x, next_road.y, next_off_shoulder_z+15), new Point(grass_uv[2], grass_uv[1])],
+			[new Point3D(next_road.x, next_road.y, next_off_shoulder_z+5), new Point(grass_uv[2], grass_uv[1])],
 			[new Point3D(road.x+lengthdir_x(adjust_beyond_shoulder_range, road.direction-90), road.y+lengthdir_y(adjust_beyond_shoulder_range, road.direction-90), off_shoulder_z), new Point(grass_uv[0], grass_uv[3])],
 			[new Point3D(next_road.x+lengthdir_x(adjust_beyond_shoulder_range, next_road.direction-90), next_road.y+lengthdir_y(adjust_beyond_shoulder_range, next_road.direction-90), next_off_shoulder_z), new Point(grass_uv[2], grass_uv[3])],
 			
@@ -637,7 +637,7 @@ for (var i = 0; i < array_length(road_list) - 1; i++) {
 			sqr((road.x + lengthdir_x(begin_length[s], road.direction - 90)) - (next_road.x + lengthdir_x(next_length[s], next_road.direction - 90))) + 
 			sqr((road.y + lengthdir_y(begin_length[s], road.direction - 90)) - (next_road.y + lengthdir_y(next_length[s], next_road.direction - 90)))
 		);
-		if (next_road.transition_lane) {
+		if (abs(begin_length[s]) != abs(next_length[s])) {
 			railing_obj.direction = road.direction - darctan((next_length[s] - begin_length[s]) / railing_obj.length);
 		}
 		else {
