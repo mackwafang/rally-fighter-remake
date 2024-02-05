@@ -105,22 +105,11 @@ surface_resize(application_surface, main_camera_size.width, main_camera_size.hei
 global.view_matrix = undefined;
 global.projection_matrix = matrix_build_projection_perspective_fov(100, 4/3, 1, 4000);
 
-// minimap
-minimap_config = {
-	border: 6,
-	surface_width: 0,
-	surface_height: 0,
-	width: 100,
-	height: 100,
-	x: 32,
-	y: 32
-}
-
 // sounds
 var num = audio_get_listener_count();
 for( var i = 0; i < num; i++) {
     var info = audio_get_listener_info(i);
-    audio_set_master_gain(info[? "index"], 0.25);
+    audio_set_master_gain(info[? "index"], 0.5);
     ds_map_destroy(info);
 }
 
@@ -146,10 +135,22 @@ global.racer_color_replace_src = [
 	74/255,		73/255,		171/255
 ];
 
+// minimap
+minimap_config = {
+	border: 32,
+	surface_width: 0,
+	surface_height: 0,
+	width: 200,
+	height: 200,
+	x: 256,
+	y: 256,
+	cache_created: false
+}
+
 if (global.DEBUG_DRAW_MINIMAP) {
 	minimap_config.surface_width = minimap_config.border * obj_road_generator.grid_width;
 	minimap_config.surface_height = minimap_config.border * obj_road_generator.grid_height;
-	minimap_surface = surface_create(minimap_config.width, minimap_config.height);
+	minimap_surface = surface_create(minimap_config.surface_width, minimap_config.surface_height);
 	
 	surface_set_target(minimap_surface);
 	draw_clear_alpha(c_white, 0);

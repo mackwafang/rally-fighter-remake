@@ -29,7 +29,7 @@ if (keyboard_check(ord("E"))) {
 
 // play music
 if (alarm[0] == global.display_freq * 3) {
-	audio_play_sound(snd_race_1, 128, true);
+	audio_play_sound(snd_race_4, 128, true);
 }
 
 // other controls
