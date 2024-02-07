@@ -67,9 +67,6 @@ for (var i = 0; i < array_length(participating_vehicles); i++) {
 	car.horsepower = 40 * (global.difficulty * 0.75);
 	car.ai_behavior.desired_lane = (i % 3);
 	car.on_road_index = road;
-	//for (var g = 0; g < array_length(car.gear_shift_rpm); g++) {
-	//	car.gear_shift_rpm[g][1] += (500 * global.difficulty);
-	//}
 }
 global.car_ranking = [];
 array_copy(global.car_ranking, 0, participating_vehicles, 0, array_length(participating_vehicles));
@@ -109,7 +106,7 @@ global.projection_matrix = matrix_build_projection_perspective_fov(100, 4/3, 1, 
 var num = audio_get_listener_count();
 for( var i = 0; i < num; i++) {
     var info = audio_get_listener_info(i);
-    audio_set_master_gain(info[? "index"], 0.5);
+    audio_set_master_gain(info[? "index"], 0.25);
     ds_map_destroy(info);
 }
 

@@ -9,8 +9,8 @@ if (vehicle_type == VEHICLE_TYPE.CAR) {
 	if (!ai_behavior.part_of_race) {
 		mass += 1000;
 		horsepower += 100;
-		max_hp += 300;
-		hp += 300;
+		max_hp += 3000;
+		hp += 3000;
 	}
 }
 vehicle_color = {

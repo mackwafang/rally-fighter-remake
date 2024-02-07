@@ -2,7 +2,7 @@ global.DEBUG_ROAD_DRAW_CONTROL_POINTS = false;
 global.DEBUG_ROAD_DRAW_ROAD_POINTS = false;
 global.DEBUG_ROAD_DRAW_ROAD_LANES_POINTS = false;
 global.DEBUG_ROAD_DRAW_COLLISION_POINTS = false;
-global.DEBUG_DRAW_MINIMAP = true;
+global.DEBUG_DRAW_MINIMAP = false;
 global.DEBUG_CAR = false;
 
 global.DEBUG_FREE_CAMERA = false;

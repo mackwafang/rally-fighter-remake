@@ -102,10 +102,6 @@ if (can_move) {
 			var is_off_road_right = !is_on_road(x+lengthdir_x(look_ahead_threshold/4, image_angle-90), y+lengthdir_y(look_ahead_threshold/4, image_angle-90), last_road_index) ? 1 : 0;
 			
 			var evade_turn_rate = 0.1;
-			if (car_look_ahead) {
-				accelerating = false;
-				braking = true;
-			}
 			if (car_look_left) {turn_rate -= evade_turn_rate;}
 			else if (car_look_right) {turn_rate += evade_turn_rate;}
 			

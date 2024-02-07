@@ -319,11 +319,11 @@ function render_control_point(cp, range=0) {
 			[new Point3D(next_road.x+lengthdir_x(adjust_beyond_shoulder_range + 500, next_road.direction+90), next_road.y+lengthdir_y(adjust_beyond_shoulder_range + 500, next_road.direction+90), next_off_shoulder_z + 100), new Point(grass_uv[2], grass_uv[1])],
 		
 			//left grass
-			[new Point3D(road.x, road.y, off_shoulder_z+5), new Point(grass_uv[0], grass_uv[1])],
-			[new Point3D(next_road.x, next_road.y, next_off_shoulder_z+5), new Point(grass_uv[2], grass_uv[1])],
+			[new Point3D(road_render_points[0][0], road_render_points[1][0], off_shoulder_z+5), new Point(grass_uv[0], grass_uv[1])],
+			[new Point3D(road_render_points[0][1], road_render_points[1][1], next_off_shoulder_z+5), new Point(grass_uv[2], grass_uv[1])],
 			[new Point3D(road.x+lengthdir_x(adjust_beyond_shoulder_range, road.direction+90), road.y+lengthdir_y(adjust_beyond_shoulder_range, road.direction+90), off_shoulder_z), new Point(grass_uv[0], grass_uv[3])],
 		
-			[new Point3D(next_road.x, next_road.y, next_off_shoulder_z+5), new Point(grass_uv[2], grass_uv[1])],
+			[new Point3D(road_render_points[0][1], road_render_points[1][1], next_off_shoulder_z+5), new Point(grass_uv[2], grass_uv[1])],
 			[new Point3D(next_road.x+lengthdir_x(adjust_beyond_shoulder_range, next_road.direction+90), next_road.y+lengthdir_y(adjust_beyond_shoulder_range, next_road.direction+90), next_off_shoulder_z), new Point(grass_uv[2], grass_uv[3])],
 			[new Point3D(road.x+lengthdir_x(adjust_beyond_shoulder_range, road.direction+90), road.y+lengthdir_y(adjust_beyond_shoulder_range, road.direction+90), off_shoulder_z), new Point(grass_uv[0], grass_uv[3])],
 	
@@ -364,11 +364,11 @@ function render_control_point(cp, range=0) {
 			[new Point3D(next_road.x+lengthdir_x(road.lane_width*(next_right_lanes+1), next_road.direction-90), next_road.y+lengthdir_y(next_road.lane_width*(next_right_lanes+1), next_road.direction-90), next_road.z), new Point(shoulder_uv[2], shoulder_uv[3])],
 		
 			// right grass
-			[new Point3D(next_road.x, next_road.y, next_off_shoulder_z+5), new Point(grass_uv[0], grass_uv[1])],
-			[new Point3D(road.x, road.y, off_shoulder_z+5), new Point(grass_uv[2], grass_uv[1])],
+			[new Point3D(road_render_points[0][2], road_render_points[1][2], next_off_shoulder_z+5), new Point(grass_uv[0], grass_uv[1])],
+			[new Point3D(road_render_points[0][3], road_render_points[1][3], off_shoulder_z+5), new Point(grass_uv[2], grass_uv[1])],
 			[new Point3D(road.x+lengthdir_x(adjust_beyond_shoulder_range, road.direction-90), road.y+lengthdir_y(adjust_beyond_shoulder_range, road.direction-90), off_shoulder_z), new Point(grass_uv[0], grass_uv[3])],
 		
-			[new Point3D(next_road.x, next_road.y, next_off_shoulder_z+5), new Point(grass_uv[2], grass_uv[1])],
+			[new Point3D(road_render_points[0][2], road_render_points[1][2], next_off_shoulder_z+5), new Point(grass_uv[2], grass_uv[1])],
 			[new Point3D(road.x+lengthdir_x(adjust_beyond_shoulder_range, road.direction-90), road.y+lengthdir_y(adjust_beyond_shoulder_range, road.direction-90), off_shoulder_z), new Point(grass_uv[0], grass_uv[3])],
 			[new Point3D(next_road.x+lengthdir_x(adjust_beyond_shoulder_range, next_road.direction-90), next_road.y+lengthdir_y(adjust_beyond_shoulder_range, next_road.direction-90), next_off_shoulder_z), new Point(grass_uv[2], grass_uv[3])],
 			
@@ -382,9 +382,23 @@ function render_control_point(cp, range=0) {
 			[new Point3D(road.x+lengthdir_x(adjust_beyond_shoulder_range + 500, road.direction-90), road.y+lengthdir_y(adjust_beyond_shoulder_range + 500, road.direction-90), off_shoulder_z + 100), new Point(grass_uv[2], grass_uv[1])],
 		];
 		if (i > 0) {
+			if (road.zone == ZONE.RIVER) {
+				road_seg_data = array_concat(road_seg_data,[
+					// missing grass floor on the center
+					[new Point3D(road_render_points[0][1], road_render_points[1][1], next_road.sea_level+5), new Point(grass_uv[0], grass_uv[1])],
+					[new Point3D(road_render_points[0][0], road_render_points[1][0], road.sea_level+5), new Point(grass_uv[0], grass_uv[3])],
+					[new Point3D(road_render_points[0][2], road_render_points[1][2], next_road.sea_level+5), new Point(grass_uv[2], grass_uv[1])],
+					
+					[new Point3D(road_render_points[0][2], road_render_points[1][2], next_road.sea_level+5), new Point(grass_uv[2], grass_uv[1])],
+					[new Point3D(road_render_points[0][0], road_render_points[1][0], road.sea_level+5), new Point(grass_uv[0], grass_uv[1])],
+					[new Point3D(road_render_points[0][3], road_render_points[1][3], road.sea_level+5), new Point(grass_uv[2], grass_uv[3])],
+				]);
+			}
+			
 			if (road.zone != ZONE.RIVER && road_list[@ i-1].zone == ZONE.RIVER) {
 				var prev_road = road_list[@ i-1];
 				road_seg_data = array_concat(road_seg_data,[
+					// wall
 					[new Point3D(road.x, road.y, road.z), new Point(grass_uv[0], grass_uv[1])],
 					[new Point3D(road.x, road.y, prev_road.sea_level), new Point(grass_uv[0], grass_uv[3])],
 					[new Point3D(road.x+lengthdir_x(adjust_beyond_shoulder_range, road.direction-90), road.y+lengthdir_y(adjust_beyond_shoulder_range, road.direction-90), road.z), new Point(grass_uv[2], grass_uv[1])],

@@ -49,13 +49,25 @@ c_rr = 20 * c_drag;										// constant value for car's drag
 // gear_ratio = [3, 2.5, 2, 5/3, 10/7, 11/9];
 gear_ratio = [3, 2.25, 1.8, 5/3, 10/7, 11/9];
 gear_shift_rpm = [
-	[0, 9000],
-	[4000, 8500],
-	[5500, 8000],
-	[5500, 8000],
-	[5500, 8000],
-	[5500, 5500],
+	[0, 4500],
+	[2000, 4250],
+	[2750, 4000],
+	[2750, 4000],
+	[2750, 4000],
+	[2750, 2750],
 ];
+for (var g = 0; g < array_length(gear_shift_rpm); g++) {
+	gear_shift_rpm[g][0] *= global.difficulty;
+	gear_shift_rpm[g][1] *= global.difficulty;
+}
+//gear_shift_rpm = [
+//	[0, 9000],
+//	[4000, 8500],
+//	[5500, 8000],
+//	[5500, 8000],
+//	[5500, 8000],
+//	[5500, 5500],
+//];
 //gear_ratio = [2.66, 1.78, 1.3, 1, 0.74, 0.5];
 //gear_shift_rpm = [
 //	[0, 8000],
