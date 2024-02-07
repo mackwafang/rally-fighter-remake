@@ -4,7 +4,7 @@ if (nearest_cp != current_cp) {
 	vertex_delete_buffer(road_vertex_buffers);
 	road_vertex_buffers = -1;
 	
-	render_control_point(nearest_cp-2, 6);
+	render_control_point(nearest_cp-2, 4);
 	
 	current_cp = nearest_cp;
 }

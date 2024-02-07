@@ -3,8 +3,8 @@
 //if (keyboard_check(ord("S"))) {y += cam_move_speed;}
 //if (keyboard_check(ord("A"))) {x -= cam_move_speed;}
 //if (keyboard_check(ord("D"))) {x += cam_move_speed;}
-if (keyboard_check(vk_space)) {z += 1;}
-if (keyboard_check(vk_control)) {z -= 1;}
+//if (keyboard_check(vk_space)) {z += 1;}
+//if (keyboard_check(vk_control)) {z -= 1;}
 if (keyboard_check(ord("Q"))) {
 	if (global.DEBUG_FREE_CAMERA) {
 		cam_angle -= 5;
@@ -29,7 +29,19 @@ if (keyboard_check(ord("E"))) {
 
 // play music
 if (alarm[0] == global.display_freq * 3) {
-	audio_play_sound(snd_race_4, 128, true);
+	audio_play_sound(global.bkg_soundtrack, 128, false);
+}
+if (global.race_started) {
+	if (!audio_is_playing(global.bkg_soundtrack)) {
+		global.bkg_soundtrack = choose(
+			snd_race_1,
+			snd_race_2,
+			snd_race_3,
+			snd_race_4,
+			snd_race_5
+		)
+		audio_play_sound(global.bkg_soundtrack, 128, false);
+	}
 }
 
 // other controls

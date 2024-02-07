@@ -8,7 +8,7 @@ control_points = [];
 control_points_dist = 2048;
 lane_width = 80;
 track_length = 0;
-beyond_shoulder_range = 2000;
+beyond_shoulder_range = 3000;
 current_cp = 0; // current control point that is visible
 
 var t = current_time;
@@ -65,6 +65,7 @@ vertex_format_begin();
 vertex_format_add_position_3d();
 vertex_format_add_color();
 vertex_format_add_texcoord();
+vertex_format_add_normal();
 building_vertex_format = vertex_format_end();
 global.building_vertex_buffer = vertex_create_buffer();
 
@@ -72,6 +73,7 @@ vertex_format_begin();
 vertex_format_add_position_3d();
 vertex_format_add_color();
 vertex_format_add_texcoord();
+vertex_format_add_normal();
 railing_vertex_format = vertex_format_end();
 global.railing_vertex_buffer = vertex_create_buffer();
 
@@ -79,6 +81,7 @@ vertex_format_begin();
 if (global.CAMERA_MODE_3D) {vertex_format_add_position_3d();} else {vertex_format_add_position();}
 vertex_format_add_color();
 vertex_format_add_texcoord();
+vertex_format_add_normal();
 road_vertex_format = vertex_format_end();
 road_vertex_buffers = vertex_create_buffer();
 
@@ -98,7 +101,7 @@ for (var i = 0; i < array_length(road_list)-1; i++) {
 	road.direction = point_direction(road.x, road.y, next_road.x, next_road.y);
 	road.length = sqrt(sqr(road.x - next_road.x) + sqr(road.y - next_road.y) + sqr(road.z - next_road.z));// point_distance(road.x, road.y, next_road.x, next_road.y);
 	
-	road.ideal_throttle = min(1.1, road.length / (control_points_dist / road_segments)) * (global.difficulty < 1.5 ? 0.9 : 1.05);
+	road.ideal_throttle = min(1.1, road.length / (control_points_dist / road_segments)) * (global.difficulty < 1.5 ? 0.9 : 1.01);
 	road._id = i;
 	road.lane_width = lane_width;
 	road.zone = cur_zone;
@@ -426,10 +429,12 @@ function render_control_point(cp, range=0) {
 			if (global.CAMERA_MODE_3D) {vertex_position_3d(road_vertex_buffers, pos.x, pos.y, pos.z + 3);} else {vertex_position(road_vertex_buffers, pos.x, pos.y);}
 			vertex_color(road_vertex_buffers, c_white, 1);
 			vertex_texcoord(road_vertex_buffers, uv.x, uv.y);
+			vertex_normal(road_vertex_buffers, 0, 0, 0);
 		}
 		#endregion
 	}
 	vertex_end(road_vertex_buffers);
+	road_vertex_buffers = calc_vertex_normal(road_vertex_buffers);
 	vertex_freeze(road_vertex_buffers);	
 }
 
@@ -591,6 +596,7 @@ for (var i = 0; i < array_length(road_list) - 1; i++) {
 	}
 }
 vertex_end(global.building_vertex_buffer);
+global.building_vertex_buffer = calc_vertex_normal(global.building_vertex_buffer);
 vertex_freeze(global.building_vertex_buffer);
 
 // railing buffer
@@ -647,16 +653,18 @@ for (var i = 0; i < array_length(road_list) - 1; i++) {
 			"Instances",
 			obj_railing
 		);
-		railing_obj.length = sqrt(
-			sqr((road.x + lengthdir_x(begin_length[s], road.direction - 90)) - (next_road.x + lengthdir_x(next_length[s], next_road.direction - 90))) + 
-			sqr((road.y + lengthdir_y(begin_length[s], road.direction - 90)) - (next_road.y + lengthdir_y(next_length[s], next_road.direction - 90)))
+		railing_obj.length = point_distance(
+			road.x + lengthdir_x(begin_length[s], road.direction - 90),
+			road.y + lengthdir_y(begin_length[s], road.direction - 90),
+			next_road.x + lengthdir_x(next_length[s], next_road.direction - 90),
+			next_road.y + lengthdir_y(next_length[s], next_road.direction - 90)
 		);
-		if (abs(begin_length[s]) != abs(next_length[s])) {
-			railing_obj.direction = road.direction - darctan((next_length[s] - begin_length[s]) / railing_obj.length);
-		}
-		else {
-			railing_obj.direction = road.direction;
-		}
+		railing_obj.direction = point_direction(
+			road.x + lengthdir_x(begin_length[s], road.direction - 90),
+			road.y + lengthdir_y(begin_length[s], road.direction - 90),
+			next_road.x + lengthdir_x(next_length[s], next_road.direction - 90),
+			next_road.y + lengthdir_y(next_length[s], next_road.direction - 90)
+		);
 		railing_obj.image_xscale = railing_obj.length;
 		railing_obj.image_angle = road.direction;
 		railing_obj.z = road.z + 5;
@@ -666,6 +674,7 @@ for (var i = 0; i < array_length(road_list) - 1; i++) {
 	}
 }
 vertex_end(global.railing_vertex_buffer);
+global.railing_vertex_buffer = calc_vertex_normal(global.railing_vertex_buffer);
 vertex_freeze(global.railing_vertex_buffer);
 
 global.road_list_length = array_length(road_list);

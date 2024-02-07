@@ -8,6 +8,6 @@ identity_matrix = matrix_build_identity();
 
 image_index = irandom(image_number);
 image_angle = irandom(360);
-image_xscale = 0
-image_yscale = 0;
+image_xscale = 0.5;
+image_yscale = 0.5;
 alarm[0] = 1;

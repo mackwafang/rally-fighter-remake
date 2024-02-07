@@ -109,6 +109,13 @@ for( var i = 0; i < num; i++) {
     audio_set_master_gain(info[? "index"], 0.25);
     ds_map_destroy(info);
 }
+global.bkg_soundtrack = choose(
+	snd_race_1,
+	snd_race_2,
+	snd_race_3,
+	snd_race_4,
+	snd_race_5
+)
 
 // outline shader setting
 global.outline_shader_pixel_w = shader_get_uniform(shd_outline, "pixel_w");
@@ -160,6 +167,7 @@ vertex_format_begin();
 vertex_format_add_position_3d();
 vertex_format_add_color();
 vertex_format_add_texcoord();
+vertex_format_add_normal();
 skybox_vertex_format = vertex_format_end();
 skybox_vertex_buffer = vertex_create_buffer();
 vertex_begin(skybox_vertex_buffer, skybox_vertex_format);
@@ -200,7 +208,9 @@ vertex_position_3d_uv(skybox_vertex_buffer, 1000, 1000, -1000, 0.5, 0.25);
 vertex_position_3d_uv(skybox_vertex_buffer, 1000, -1000, -1000, 0.75, 0.25);
 vertex_position_3d_uv(skybox_vertex_buffer, 1000, -1000, 1000, 0.75, 0.5);
 vertex_end(skybox_vertex_buffer);
+skybox_vertex_buffer = calc_vertex_normal(skybox_vertex_buffer);
 vertex_freeze(skybox_vertex_buffer);
 #endregion
+
 
 alarm[0] = round(5 * global.display_freq); // starting timer

@@ -6,7 +6,10 @@ if (other != self) {
 			if (!is_completed) {
 				hp -= abs(other.velocity - velocity * dsin(deg)) * (abs(mass - other.mass) / 1000);
 			}
-			zspeed -= velocity / 1000;
+			if (hp <= 0) {
+				zspeed -= velocity / 1000;
+			}
+			
 			push_vector.x += abs(other.velocity - velocity) * dcos(deg) * other.mass;
 			push_vector.y += abs(other.velocity - velocity) * dsin(deg) * other.mass;
 			turn_rate = push_vector.y / (mass * 100);

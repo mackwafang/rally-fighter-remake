@@ -18,10 +18,13 @@ function Vec2() constructor
 		#region Setup
 		
 			/// Set available parameters
-			var paramArray = array_create(2,0);
+			var paramArray = array_create(3,0);
 			for ( var i=0; i<argument_count; i++ )
 			{
 				paramArray[@i] = argument[i];
+			}
+			if (argument_count == 3) {
+				__IS_VEC_3 = true;
 			}
 			
 		#endregion
@@ -45,6 +48,10 @@ function Vec2() constructor
 		
 			x=paramArray[0]; 
 			y=paramArray[1];
+			z = 0;
+			if (__IS_VEC_3) {
+				z=paramArray[2];
+			}
 			
 		#endregion
 		
@@ -57,31 +64,31 @@ function Vec2() constructor
 			{
 				///@func mul(value_or_vec)
 				var v = new Vec2(val);
-				return new Vec2(x * v.x, y * v.y);
+				return new Vec2(x * v.x, y * v.y, z * v.z);
 			}
 			static add=function(val)
 			{
 				///@func add(value_or_vec)
 				var v = new Vec2(val);
-				return new Vec2(x + v.x, y + v.y);
+				return new Vec2(x + v.x, y + v.y, z + v.z);
 			}
 			static subtract=function(val)
 			{
 				///@func sub(value_or_vec)
 				var v = new Vec2(val);
-				return new Vec2(x - v.x, y - v.y);
+				return new Vec2(x - v.x, y - v.y, z - v.z);
 			}
 			static divide=function(val)
 			{
 				///@func divide(value_or_vec)
 				var v = new Vec2(val);
-				return new Vec2(x / v.x, y / v.y);
+				return new Vec2(x / v.x, y / v.y,  z / v.z);
 			}
 			static modulo=function(val)
 			{
 				///@func modulo(value_or_vec)
 				var v = new Vec2(val);
-				return new Vec2(x % v.x, y % v.y);
+				return new Vec2(x % v.x, y % v.y,  z % v.z);
 			}
 			
 		#endregion
@@ -90,7 +97,7 @@ function Vec2() constructor
 			static length_squared = function()
 			{
 				///@func length_squared()
-				return x*x+y*y;
+				return (x*x)+(y*y)+(z*z);
 			}
 			static length = function()
 			{
@@ -147,6 +154,18 @@ function Vec2() constructor
 				var v = new Vec2(val);
 				return point_direction(x,y,v.x,v.y);
 			}
+			static cross = function(vec)
+			{
+				///@func cross(vec)
+				///@desciption create cross product of this vector and vec
+				///@return vec2
+				assert(typeof(vec) == "struct");
+				var c = new Vec2(0, 0, 0);
+				c.x = (y * vec.z) - (z * vec.y);
+				c.y = (z * vec.x) - (x * vec.z);
+				c.z = (x * vec.y) - (y * vec.x);
+				return c;
+			}
 			static lerp_to = function(val,amt)
 			{
 				///@func lerp_to(value_or_vec, amount)
@@ -199,7 +218,12 @@ function Vec2() constructor
 	#endregion
 	
 	toString = function() {
-		return $"({x}, {y})";
+		if (!__IS_VEC_3) {
+			return $"({x}, {y})";
+		}
+		else {
+			return $"({x}, {y}, {z})";
+		}
 	}
 	
 }
