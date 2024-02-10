@@ -25,7 +25,7 @@ control_path = [];
 while (array_length(control_path) == 0) {
 	print("Creating grid");
 	perlin_config = {
-		inc: global.difficulty * 0.55,
+		inc: global.difficulty * 0.45,
 		X: random(1000),
 		Y: random(1000),
 	}
@@ -111,10 +111,10 @@ for (var i = 0; i < array_length(road_list)-1; i++) {
 	
 	if (cur_zone == ZONE.RIVER) {
 		if (road_list[@ i-1].zone != cur_zone) {
-			road.sea_level = road.z + 200;
+			road.sea_level = road.z - 200;
 		}
 		else {
-			road.sea_level = max(road.z+200, initial_river_seg.sea_level);
+			road.sea_level = max(road.z-200, initial_river_seg.sea_level);
 		}
 	}
 	
@@ -241,6 +241,13 @@ function render_control_point(cp, range=0) {
 		var off_shoulder_z = road.z;
 		var next_off_shoulder_z = next_road.z;
 		var adjust_beyond_shoulder_range = beyond_shoulder_range;
+		//if (i > 10) {
+		//	var diff_angle = 0;
+		//	for (j = 0; j < 3; j ++) {
+		//		diff_angle += angle_difference(road_list[@i-j].direction, road.direction)
+		//	}
+		//	adjust_beyond_shoulder_range *= dcos(diff_angle);
+		//}
 		
 		road.beyond_range = [adjust_beyond_shoulder_range, adjust_beyond_shoulder_range];
 		switch(road.zone) {
@@ -322,11 +329,11 @@ function render_control_point(cp, range=0) {
 			[new Point3D(next_road.x+lengthdir_x(adjust_beyond_shoulder_range + 500, next_road.direction+90), next_road.y+lengthdir_y(adjust_beyond_shoulder_range + 500, next_road.direction+90), next_off_shoulder_z + 100), new Point(grass_uv[2], grass_uv[1])],
 		
 			//left grass
-			[new Point3D(road_render_points[0][0], road_render_points[1][0], off_shoulder_z+5), new Point(grass_uv[0], grass_uv[1])],
-			[new Point3D(road_render_points[0][1], road_render_points[1][1], next_off_shoulder_z+5), new Point(grass_uv[2], grass_uv[1])],
+			[new Point3D(road_render_points[0][0], road_render_points[1][0], off_shoulder_z-5), new Point(grass_uv[0], grass_uv[1])],
+			[new Point3D(road_render_points[0][1], road_render_points[1][1], next_off_shoulder_z-5), new Point(grass_uv[2], grass_uv[1])],
 			[new Point3D(road.x+lengthdir_x(adjust_beyond_shoulder_range, road.direction+90), road.y+lengthdir_y(adjust_beyond_shoulder_range, road.direction+90), off_shoulder_z), new Point(grass_uv[0], grass_uv[3])],
 		
-			[new Point3D(road_render_points[0][1], road_render_points[1][1], next_off_shoulder_z+5), new Point(grass_uv[2], grass_uv[1])],
+			[new Point3D(road_render_points[0][1], road_render_points[1][1], next_off_shoulder_z-5), new Point(grass_uv[2], grass_uv[1])],
 			[new Point3D(next_road.x+lengthdir_x(adjust_beyond_shoulder_range, next_road.direction+90), next_road.y+lengthdir_y(adjust_beyond_shoulder_range, next_road.direction+90), next_off_shoulder_z), new Point(grass_uv[2], grass_uv[3])],
 			[new Point3D(road.x+lengthdir_x(adjust_beyond_shoulder_range, road.direction+90), road.y+lengthdir_y(adjust_beyond_shoulder_range, road.direction+90), off_shoulder_z), new Point(grass_uv[0], grass_uv[3])],
 	
@@ -367,11 +374,11 @@ function render_control_point(cp, range=0) {
 			[new Point3D(next_road.x+lengthdir_x(road.lane_width*(next_right_lanes+1), next_road.direction-90), next_road.y+lengthdir_y(next_road.lane_width*(next_right_lanes+1), next_road.direction-90), next_road.z), new Point(shoulder_uv[2], shoulder_uv[3])],
 		
 			// right grass
-			[new Point3D(road_render_points[0][2], road_render_points[1][2], next_off_shoulder_z+5), new Point(grass_uv[0], grass_uv[1])],
-			[new Point3D(road_render_points[0][3], road_render_points[1][3], off_shoulder_z+5), new Point(grass_uv[2], grass_uv[1])],
+			[new Point3D(road_render_points[0][2], road_render_points[1][2], next_off_shoulder_z-5), new Point(grass_uv[0], grass_uv[1])],
+			[new Point3D(road_render_points[0][3], road_render_points[1][3], off_shoulder_z-5), new Point(grass_uv[2], grass_uv[1])],
 			[new Point3D(road.x+lengthdir_x(adjust_beyond_shoulder_range, road.direction-90), road.y+lengthdir_y(adjust_beyond_shoulder_range, road.direction-90), off_shoulder_z), new Point(grass_uv[0], grass_uv[3])],
 		
-			[new Point3D(road_render_points[0][2], road_render_points[1][2], next_off_shoulder_z+5), new Point(grass_uv[2], grass_uv[1])],
+			[new Point3D(road_render_points[0][2], road_render_points[1][2], next_off_shoulder_z-5), new Point(grass_uv[2], grass_uv[1])],
 			[new Point3D(road.x+lengthdir_x(adjust_beyond_shoulder_range, road.direction-90), road.y+lengthdir_y(adjust_beyond_shoulder_range, road.direction-90), off_shoulder_z), new Point(grass_uv[0], grass_uv[3])],
 			[new Point3D(next_road.x+lengthdir_x(adjust_beyond_shoulder_range, next_road.direction-90), next_road.y+lengthdir_y(adjust_beyond_shoulder_range, next_road.direction-90), next_off_shoulder_z), new Point(grass_uv[2], grass_uv[3])],
 			
@@ -426,15 +433,15 @@ function render_control_point(cp, range=0) {
 			var data = road_seg_data[di];
 			var pos = data[0];
 			var uv = data[1];
-			if (global.CAMERA_MODE_3D) {vertex_position_3d(road_vertex_buffers, pos.x, pos.y, pos.z + 3);} else {vertex_position(road_vertex_buffers, pos.x, pos.y);}
+			if (global.CAMERA_MODE_3D) {vertex_position_3d(road_vertex_buffers, pos.x, pos.y, pos.z - 3);} else {vertex_position(road_vertex_buffers, pos.x, pos.y);}
 			vertex_color(road_vertex_buffers, c_white, 1);
 			vertex_texcoord(road_vertex_buffers, uv.x, uv.y);
-			vertex_normal(road_vertex_buffers, 0, 0, 0);
+			vertex_normal(road_vertex_buffers, 0, 0, 1);
 		}
 		#endregion
 	}
 	vertex_end(road_vertex_buffers);
-	road_vertex_buffers = calc_vertex_normal(road_vertex_buffers);
+	road_vertex_buffers = calc_vertex_normal(road_vertex_buffers, road_vertex_format);
 	vertex_freeze(road_vertex_buffers);	
 }
 
@@ -596,7 +603,7 @@ for (var i = 0; i < array_length(road_list) - 1; i++) {
 	}
 }
 vertex_end(global.building_vertex_buffer);
-global.building_vertex_buffer = calc_vertex_normal(global.building_vertex_buffer);
+global.building_vertex_buffer = calc_vertex_normal(global.building_vertex_buffer, building_vertex_format);
 vertex_freeze(global.building_vertex_buffer);
 
 // railing buffer
@@ -667,15 +674,37 @@ for (var i = 0; i < array_length(road_list) - 1; i++) {
 		);
 		railing_obj.image_xscale = railing_obj.length;
 		railing_obj.image_angle = road.direction;
-		railing_obj.z = road.z + 5;
-		railing_obj.z_end = next_road.z + 5;
+		railing_obj.z = road.z - 5;
+		railing_obj.z_end = next_road.z - 5;
 		railing_obj.display_image_index = railing_image;
 		railing_obj.init_vertex_buffer();
 	}
 }
 vertex_end(global.railing_vertex_buffer);
-global.railing_vertex_buffer = calc_vertex_normal(global.railing_vertex_buffer);
+global.railing_vertex_buffer = calc_vertex_normal(global.railing_vertex_buffer, railing_vertex_format);
 vertex_freeze(global.railing_vertex_buffer);
+
+vertex_format_begin();
+vertex_format_add_position_3d();
+vertex_format_add_color();
+vertex_format_add_texcoord();
+vertex_format_add_normal();
+test_vertex_format = vertex_format_end();
+test_vertex_buffer = vertex_create_buffer();
+
+//bottom
+var test_size = 1000;
+vertex_begin(test_vertex_buffer, test_vertex_format);
+vertex_position_3d_uv(test_vertex_buffer, -test_size, -test_size, 0, 0, 0, c_white, 1);
+vertex_position_3d_uv(test_vertex_buffer, test_size, -test_size, 0, 1, 0, c_white, 1);
+vertex_position_3d_uv(test_vertex_buffer, test_size, test_size, 0, 1, 1, c_white, 1);
+
+vertex_position_3d_uv(test_vertex_buffer, test_size, test_size, 0, 1, 1, c_white, 1);
+vertex_position_3d_uv(test_vertex_buffer, -test_size, test_size, 0, 0, 1, c_white, 1);
+vertex_position_3d_uv(test_vertex_buffer, -test_size, -test_size, 0, 0, 0, c_white, 1);
+vertex_end(test_vertex_buffer);
+test_vertex_buffer = calc_vertex_normal(test_vertex_buffer, test_vertex_format);
+vertex_freeze(test_vertex_buffer);
 
 global.road_list_length = array_length(road_list);
 

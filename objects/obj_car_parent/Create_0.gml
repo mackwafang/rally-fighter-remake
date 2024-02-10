@@ -45,6 +45,8 @@ inertia = mass * (wheel_radius * wheel_radius) / 2;		// constant value for car's
 c_drag = 0.5 * air_drag_coef * drag_area * AIR_DENSITY;	// constant value for car's air drag
 c_rr = 20 * c_drag;										// constant value for car's drag
 
+_z_restrict = true;
+
 //gear's ratio
 // gear_ratio = [3, 2.5, 2, 5/3, 10/7, 11/9];
 gear_ratio = [3, 2.25, 1.8, 5/3, 10/7, 11/9];

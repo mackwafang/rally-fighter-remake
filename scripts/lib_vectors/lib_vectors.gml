@@ -81,8 +81,12 @@ function Vec2() constructor
 			static divide=function(val)
 			{
 				///@func divide(value_or_vec)
-				var v = new Vec2(val);
-				return new Vec2(x / v.x, y / v.y,  z / v.z);
+				if (__IS_VEC_3) {
+					return new Vec2(x / val, y / val,  z / val);
+				}
+				else {
+					return new Vec2(x / val, y / val);
+				}
 			}
 			static modulo=function(val)
 			{
@@ -109,13 +113,9 @@ function Vec2() constructor
 				///@func normalize()
 				var mag = length();
 				if ( mag == 0 ) {
-					x=0; y=0;
+					return 0;
 				}
-				else
-				{
-					divide(mag);
-				}
-				return self;
+				return self.divide(mag);
 			}
 			static is_normalized = function()
 			{

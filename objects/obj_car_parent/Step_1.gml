@@ -9,29 +9,31 @@ var vec_to_road = point_to_line(
 	new Point(on_road_index.next_road.x, on_road_index.next_road.y),
 	new Point(x, y)
 );
-var lerp_value = point_distance(on_road_index.x, on_road_index.y, vec_to_road.x, vec_to_road.y) / on_road_index.length;
-zlerp = lerp(on_road_index.z, on_road_index.next_road.z, lerp_value);
-if (on_road_index.zone == ZONE.RIVER and !on_road) {
-	zlerp = on_road_index.sea_level;
-}
-
-vertical_on_road = (z+zspeed >= zlerp);
-if (vertical_on_road) {
-	drive_force *= cos(on_road_index.elevation) + (on_road_index.elevation < 0 ? 2 : 0);
-	z = zlerp;
-	if (zspeed > global.gravity_3d) {
-		zspeed *= -1/3;
-		turn_rate *= 3;
+if (_z_restrict) {
+	var lerp_value = point_distance(on_road_index.x, on_road_index.y, vec_to_road.x, vec_to_road.y) / on_road_index.length;
+	zlerp = lerp(on_road_index.z, on_road_index.next_road.z, lerp_value);
+	if (on_road_index.zone == ZONE.RIVER and !on_road) {
+		zlerp = on_road_index.sea_level;
 	}
+
+	vertical_on_road = (z-zspeed <= zlerp);
+	if (vertical_on_road) {
+		drive_force *= cos(on_road_index.elevation) + (on_road_index.elevation < 0 ? 2 : 0);
+		z = zlerp;
+		if (zspeed > global.gravity_3d) {
+			zspeed *= -1/3;
+			turn_rate *= 3;
+		}
+	}
+	else {
+		// FREE FALLING
+		zspeed -= (global.gravity_3d) * global.deltatime;
+	}
+	z -= zspeed;
+	z = clamp(z, zlerp, 500);
+	// z -= sin(degtorad(nearest_road.next_road.elevation)) * velocity / 60;
+	if (z < on_road_index.next_road.z - 100) {hp = 0;}
 }
-else {
-	// FREE FALLING
-	zspeed += (global.gravity_3d) * global.deltatime;
-}
-z += zspeed;
-z = clamp(z, -500, zlerp);
-// z -= sin(degtorad(nearest_road.next_road.elevation)) * velocity / 60;
-if (z > on_road_index.next_road.z + 100) {hp = 0;}
 
 // move car in direction
 if (!is_respawning) {

@@ -4,7 +4,7 @@ if (other != self) {
 			var deg = angle_difference(image_angle, point_direction(x,y,other.x,other.y));
 			
 			if (!is_completed) {
-				hp -= abs(other.velocity - velocity * dsin(deg)) * (abs(mass - other.mass) / 1000);
+				hp -= abs(other.velocity - velocity * dsin(deg)) * abs(mass - other.mass) / 10000;
 			}
 			if (hp <= 0) {
 				zspeed -= velocity / 1000;

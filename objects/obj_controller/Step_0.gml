@@ -3,8 +3,8 @@
 //if (keyboard_check(ord("S"))) {y += cam_move_speed;}
 //if (keyboard_check(ord("A"))) {x -= cam_move_speed;}
 //if (keyboard_check(ord("D"))) {x += cam_move_speed;}
-//if (keyboard_check(vk_space)) {z += 1;}
-//if (keyboard_check(vk_control)) {z -= 1;}
+if (keyboard_check(vk_space)) {z -= 1;}
+if (keyboard_check(vk_control)) {z += 1;}
 if (keyboard_check(ord("Q"))) {
 	if (global.DEBUG_FREE_CAMERA) {
 		cam_angle -= 5;
@@ -71,14 +71,18 @@ if (!global.DEBUG_FREE_CAMERA) {
 		main_camera_pos.y = main_camera_target.y+lengthdir_y(-60+cam_zoom, main_camera_target.image_angle);
 		main_camera_pos.z = main_camera_target.z + z;
 		
+		main_camera_pos_to.x = main_camera_target.x+lengthdir_x(500, main_camera_target.image_angle);
+		main_camera_pos_to.y = main_camera_target.y+lengthdir_y(500, main_camera_target.image_angle);
+		main_camera_pos_to.z = main_camera_target.z+z-120;
 		gpu_set_zwriteenable(false);
 		global.view_matrix = matrix_build_lookat(
 			main_camera_pos.x,
 			main_camera_pos.y,
 			main_camera_pos.z,
-			main_camera_target.x+lengthdir_x(500, main_camera_target.image_angle),
-			main_camera_target.y+lengthdir_y(500, main_camera_target.image_angle),
-			main_camera_target.z+z+120, 0, 0, 1
+			main_camera_pos_to.x,
+			main_camera_pos_to.y,
+			main_camera_pos_to.z,
+			0, 0, 1
 		);
 		camera_set_view_mat(main_camera, global.view_matrix);
 		camera_set_proj_mat(main_camera, global.projection_matrix);
@@ -89,9 +93,15 @@ if (!global.DEBUG_FREE_CAMERA) {
 		// keep keep camera fixed or move away when finished
 		if (main_camera_target.is_completed) {
 			cam_zoom -= 0.25;
-			z -= 0.125;
+			z += 0.125;
 			cam_zoom = clamp(cam_zoom, -500, 10);
-			z = clamp(z, -250, 10);
+			z = clamp(z, 250, 10);
+		}
+		if (keyboard_check_pressed(ord("R"))) {
+			main_camera_target.x = obj_road_generator.road_list[0].x;
+			main_camera_target.y = obj_road_generator.road_list[0].y;
+			main_camera_target.z = obj_road_generator.road_list[0].z;
+			main_camera_target._z_restrict = false;
 		}
 	}
 }
@@ -128,7 +138,7 @@ if (global.GAMEPLAY_CARS) {
 			car.on_road_index = road_at_view_edge;
 			car.horsepower = 30;
 			car.max_gear = 2;
-			car.z = road_at_view_edge.z - 10;
+			car.z = road_at_view_edge.z + 10;
 			if (side == -1) {
 				car.ai_behavior.reversed_direction = true;
 			}

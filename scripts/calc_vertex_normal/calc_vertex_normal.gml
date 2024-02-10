@@ -1,4 +1,5 @@
-function calc_vertex_normal(vertex_buffer) {
+function calc_vertex_normal(vertex_buffer, vertex_format) {
+	print(vertex_format_get_info(vertex_format));
 	var buff = buffer_create_from_vertex_buffer(vertex_buffer, buffer_fixed, 1);
 	for (var i = 0; i < buffer_get_size(buff); i += 36 * 3) {
 		
@@ -19,11 +20,23 @@ function calc_vertex_normal(vertex_buffer) {
 		var v3 = new Vec2(x3, y3, z3);
 		
 		v1 = v1.subtract(v1);
+		
 		var e1 = v2.subtract(v1);
 		var e2 = v3.subtract(v1);
 		
-		var norm = e1.cross(e2);
-		norm = norm.normalize();
+		var norm = (e1.cross(e2)).normalize();
+		if (i < 108) {
+		show_debug_message($"{x1} {y1} {z1}");
+		show_debug_message($"{x2} {y2} {z2}");
+		show_debug_message($"{x3} {y3} {z3}");
+		show_debug_message($"{v1}");
+		show_debug_message($"{v2}");
+		show_debug_message($"{v3}");
+		show_debug_message($"{e1}");
+		show_debug_message($"{e2}");
+		show_debug_message($"{norm}");
+		show_debug_message("---------");
+		}
 		
 		buffer_poke(buff, i + 24 + 0, buffer_f32, norm.x);
 		buffer_poke(buff, i + 24 + 4, buffer_f32, norm.y);
@@ -37,7 +50,7 @@ function calc_vertex_normal(vertex_buffer) {
 		buffer_poke(buff, i + 72 + 24 + 4, buffer_f32, norm.y);
 		buffer_poke(buff, i + 72 + 24 + 8, buffer_f32, norm.z);
 		
-		var new_buff = vertex_create_buffer_from_buffer(buff, obj_road_generator.road_vertex_format);
+		var new_buff = vertex_create_buffer_from_buffer(buff, vertex_format);
 		buffer_delete(buff);
 		return new_buff;
 	}
