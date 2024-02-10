@@ -395,13 +395,13 @@ function render_control_point(cp, range=0) {
 			if (road.zone == ZONE.RIVER) {
 				road_seg_data = array_concat(road_seg_data,[
 					// missing grass floor on the center
-					[new Point3D(road_render_points[0][1], road_render_points[1][1], next_road.sea_level+5), new Point(grass_uv[0], grass_uv[1])],
-					[new Point3D(road_render_points[0][0], road_render_points[1][0], road.sea_level+5), new Point(grass_uv[0], grass_uv[3])],
-					[new Point3D(road_render_points[0][2], road_render_points[1][2], next_road.sea_level+5), new Point(grass_uv[2], grass_uv[1])],
+					[new Point3D(road_render_points[0][1], road_render_points[1][1], next_road.sea_level-5), new Point(grass_uv[0], grass_uv[1])],
+					[new Point3D(road_render_points[0][0], road_render_points[1][0], road.sea_level-5), new Point(grass_uv[0], grass_uv[3])],
+					[new Point3D(road_render_points[0][2], road_render_points[1][2], next_road.sea_level-5), new Point(grass_uv[2], grass_uv[1])],
 					
-					[new Point3D(road_render_points[0][2], road_render_points[1][2], next_road.sea_level+5), new Point(grass_uv[2], grass_uv[1])],
-					[new Point3D(road_render_points[0][0], road_render_points[1][0], road.sea_level+5), new Point(grass_uv[0], grass_uv[1])],
-					[new Point3D(road_render_points[0][3], road_render_points[1][3], road.sea_level+5), new Point(grass_uv[2], grass_uv[3])],
+					[new Point3D(road_render_points[0][2], road_render_points[1][2], next_road.sea_level-5), new Point(grass_uv[2], grass_uv[1])],
+					[new Point3D(road_render_points[0][0], road_render_points[1][0], road.sea_level-5), new Point(grass_uv[0], grass_uv[1])],
+					[new Point3D(road_render_points[0][3], road_render_points[1][3], road.sea_level-5), new Point(grass_uv[2], grass_uv[3])],
 				]);
 			}
 			

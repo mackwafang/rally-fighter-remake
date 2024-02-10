@@ -6,7 +6,7 @@ z = 50;
 depth = -10000;
 
 participating_vehicles = [];
-global.total_participating_vehicles = 12;
+global.total_participating_vehicles = 1;
 global.difficulty = 2;
 global.gravity_3d = 9.8;
 global.race_completed = false;
@@ -61,7 +61,7 @@ for (var i = 0; i < array_length(participating_vehicles); i++) {
 	
 	car.x = road.x + lengthdir_x(dist, dir);
 	car.y = road.y + lengthdir_y(dist, dir);
-	car.y = road.z + 10;
+	car.z = road.z + 10;
 	car.direction = road.direction;
 	car.can_move = false;
 	car.mass = 200;

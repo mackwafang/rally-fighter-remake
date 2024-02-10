@@ -16,7 +16,7 @@ if (_z_restrict) {
 		zlerp = on_road_index.sea_level;
 	}
 
-	vertical_on_road = (z-zspeed <= zlerp);
+	vertical_on_road = (z+zspeed <= zlerp);
 	if (vertical_on_road) {
 		drive_force *= cos(on_road_index.elevation) + (on_road_index.elevation < 0 ? 2 : 0);
 		z = zlerp;
@@ -29,7 +29,7 @@ if (_z_restrict) {
 		// FREE FALLING
 		zspeed -= (global.gravity_3d) * global.deltatime;
 	}
-	z -= zspeed;
+	z += zspeed;
 	z = clamp(z, zlerp, 500);
 	// z -= sin(degtorad(nearest_road.next_road.elevation)) * velocity / 60;
 	if (z < on_road_index.next_road.z - 100) {hp = 0;}

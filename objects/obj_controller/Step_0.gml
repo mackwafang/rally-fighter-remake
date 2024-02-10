@@ -101,7 +101,7 @@ if (!global.DEBUG_FREE_CAMERA) {
 			main_camera_target.x = obj_road_generator.road_list[0].x;
 			main_camera_target.y = obj_road_generator.road_list[0].y;
 			main_camera_target.z = obj_road_generator.road_list[0].z;
-			main_camera_target._z_restrict = false;
+			//main_camera_target._z_restrict = false;
 		}
 	}
 }

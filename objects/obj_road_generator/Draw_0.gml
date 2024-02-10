@@ -1,9 +1,9 @@
 // draw roads
 if (global.CAMERA_MODE_3D) {
 	shader_set(shd_lighting);
-	shader_set_uniform_f(shader_get_uniform(shd_lighting, "u_LightPosition"), obj_controller.main_camera_pos.x, obj_controller.main_camera_pos.y, abs(obj_controller.main_camera_pos.z+10));
+	shader_set_uniform_f(shader_get_uniform(shd_lighting, "u_LightPosition"), obj_controller.main_camera_pos_to.x, obj_controller.main_camera_pos_to.y, obj_controller.main_camera_pos_to.z+250);
 	shader_set_uniform_f(shader_get_uniform(shd_lighting, "u_LightRadius"), 500);
-	shader_set_uniform_f(shader_get_uniform(shd_lighting, "u_ViewPosition"), obj_controller.main_camera_target.x, obj_controller.main_camera_target.y, abs(obj_controller.main_camera_target.z+10));
+	shader_set_uniform_f(shader_get_uniform(shd_lighting, "u_ViewPosition"), obj_controller.main_camera_pos.x, obj_controller.main_camera_pos.y, obj_controller.main_camera_pos.z+250);
 	
 	//var tex = sprite_get_texture(spr_1x1, 0);
 	//vertex_submit(test_vertex_buffer, pr_trianglelist, tex);
@@ -17,6 +17,10 @@ if (global.CAMERA_MODE_3D) {
 	
 	tex = sprite_get_texture(spr_railing, 0);
 	vertex_submit(global.railing_vertex_buffer, pr_trianglelist, tex);
+	
+	with (obj_prop) {
+		event_perform(ev_draw, 0);
+	}
 	shader_reset();
 }
 
