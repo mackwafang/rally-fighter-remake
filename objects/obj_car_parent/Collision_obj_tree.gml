@@ -7,7 +7,7 @@ var b = new Point(
 	(other.x - x) / dist,
 	(other.y - y) / dist
 );
-var _d = dot_product(b.x, b.y, a.x, a.y);
+var _d = clamp(dot_product(b.x, b.y, a.x, a.y), -1, 1);
 hp *= abs(_d);
 turn_rate *= abs(_d) * 2;
 zspeed -= velocity / mass / 30;

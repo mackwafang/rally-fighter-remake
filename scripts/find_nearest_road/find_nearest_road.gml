@@ -16,14 +16,19 @@ function find_nearest_cp(_x, _y) {
 	return closest_cp;
 }
 
-function find_nearest_road(_x, _y, starting, offset=0) {
+function find_nearest_road(_x, _y, starting, offset=0, control_point=undefined) {
 	/// @function		find_nearest_road(_x, _y, starting, offset)
 	/// @param			_x
 	/// @param			_y
 	
 	// first, find nearest control point
 	// we're effectively finding nearest chunk
-	var closest_cp = find_nearest_cp(_x, _y);
+	if (!is_undefined(control_point)) {
+		assert(typeof(control_point) == "number");
+	}
+	
+	var closest_cp = (is_undefined(control_point) ? find_nearest_cp(_x, _y) : control_point);
+	
 	// find nearest road segment based on visible chunks
 	var closest_road = undefined;
 	var closest_road_dist = infinity;

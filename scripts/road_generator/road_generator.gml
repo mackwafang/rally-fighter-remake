@@ -21,6 +21,8 @@ function RoadNode(_Point) constructor {
 	intersection = false;		// is segment an intersection?
 	beyond_range = [0, 0]		// off road area range
 	sea_level = 0;				// level for water
+	props = [];					// list of props in this segment
+	buildings = [];				// buildings in this segment
 	
 	toString = function() {
 		return $"({x}, {y}, {z}), direction: {direction}, Lanes: {lanes}\n";

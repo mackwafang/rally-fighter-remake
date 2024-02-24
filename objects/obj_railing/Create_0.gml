@@ -13,11 +13,11 @@ init_vertex_buffer = function() {
 		
 	var uv = sprite_get_uvs(spr_railing, display_image_index);
 		
-	vertex_position_3d_uv(global.railing_vertex_buffer, x1, y1, z_end + height, uv[0], uv[1]);
-	vertex_position_3d_uv(global.railing_vertex_buffer, x0, y0, z + height, uv[2], uv[1]);
-	vertex_position_3d_uv(global.railing_vertex_buffer, x1, y1, z_end, uv[0], uv[3]);
+	vertex_position_3d_uv(global.prop_vertex_buffer, x1, y1, z_end + height, uv[0], uv[1]);
+	vertex_position_3d_uv(global.prop_vertex_buffer, x0, y0, z + height, uv[2], uv[1]);
+	vertex_position_3d_uv(global.prop_vertex_buffer, x1, y1, z_end, uv[0], uv[3]);
 		
-	vertex_position_3d_uv(global.railing_vertex_buffer, x0, y0, z + height, uv[2], uv[1]);
-	vertex_position_3d_uv(global.railing_vertex_buffer, x0, y0, z, uv[2], uv[3]);
-	vertex_position_3d_uv(global.railing_vertex_buffer, x1, y1, z_end, uv[0], uv[3]);
+	vertex_position_3d_uv(global.prop_vertex_buffer, x0, y0, z + height, uv[2], uv[1]);
+	vertex_position_3d_uv(global.prop_vertex_buffer, x0, y0, z, uv[2], uv[3]);
+	vertex_position_3d_uv(global.prop_vertex_buffer, x1, y1, z_end, uv[0], uv[3]);
 }

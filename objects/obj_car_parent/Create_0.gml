@@ -130,9 +130,10 @@ vehicle_color = {
 	tetriary: 0,
 };
 racer_color_replace_dst = [];
-dist_along_road = 0;							// how far along the road it is
+dist_along_road = 0;					// how far along the road it is
 
-counter = 0;						// counter for various things
+counter = 0;							// counter for various things
+current_cp = 0;							// current nearest control point
 
 // functions
 gear_shift_up = function() {

@@ -7,11 +7,13 @@ varying vec3 v_worldNormal;
 uniform vec3 u_LightPosition;
 uniform float u_LightRadius;
 uniform vec3 u_ViewPosition;
+uniform vec3 u_ambientColor;
+uniform vec3 u_lightColor;
 
 void main() {
     vec4 starting_color = v_vColour * texture2D(gm_BaseTexture, v_vTexcoord);
-    vec3 ambient_color = vec3(0.1);
-    vec3 light_color = vec3(1.0);
+    vec3 ambient_color = u_ambientColor;
+    vec3 light_color = u_lightColor;
     vec3 light_dir = normalize(v_worldPosition - u_LightPosition);
     
     float specular_strength = 0.5;
@@ -31,4 +33,7 @@ void main() {
     
     vec3 final_color = starting_color.rgb * (ambient_color + diffuse_color + specular_color);
     gl_FragColor = vec4(final_color, starting_color.a);
+	if (gl_FragColor.a < 0.1) {
+		discard;
+	}
 }

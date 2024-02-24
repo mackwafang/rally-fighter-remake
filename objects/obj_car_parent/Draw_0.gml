@@ -33,7 +33,7 @@ if (global.CAMERA_MODE_3D) {
 			draw_sprite_ext(vehicle_detail_index, vehicle_detail_subimage, 0, 0, 0.5 * image_xscale, -0.625, (turn_adjust), c_white, 1);
 			break;
 		case VEHICLE_TYPE.CAR:
-			draw_sprite_ext(spr_car_3d, vehicle_detail_subimage, 0, 0, 1, 1, 0, vehicle_color.primary, image_alpha);
+			draw_sprite_ext(spr_car_3d, vehicle_detail_subimage, 0, 0, 1, -1, 0, vehicle_color.primary, image_alpha);
 			break;
 	}
 	matrix_set(matrix_world, matrix_build_identity());

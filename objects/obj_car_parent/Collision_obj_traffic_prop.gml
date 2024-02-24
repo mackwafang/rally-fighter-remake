@@ -16,7 +16,7 @@ if (abs(z-other.z) < 8) {
 			turn_rate *= _d * 2;
 			break;
 		case 1:
-			zspeed -= velocity / mass / 30;
+			zspeed += velocity / mass / 30;
 			break;
 	}
 }

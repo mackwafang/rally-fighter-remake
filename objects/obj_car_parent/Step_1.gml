@@ -48,7 +48,7 @@ if (!is_respawning) {
 		}
 		else {
 			vehicle_detail_index = spr_bike_3d_detail_2_turn;
-			vehicle_detail_subimage = min(1, abs(turn_rate) * 0.5) * sprite_get_number(spr_bike_3d_detail_2_turn);
+			vehicle_detail_subimage = round(min(sprite_get_number(vehicle_detail_index), (abs(turn_rate) / 2 / global.deltatime) / 100 * sprite_get_number(vehicle_detail_index)));
 		}
 		image_xscale = -(turn_rate == 0 ? 1 : sign(turn_rate));
 		if (!is_completed) {

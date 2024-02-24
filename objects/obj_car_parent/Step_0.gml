@@ -148,7 +148,7 @@ if (!on_road && vertical_on_road && on_road_index.zone == ZONE.RIVER) {
 }
 // create dust particle
 if (!on_road && vertical_on_road) {
-	if (velocity > 0) {
+	if (velocity > 100) {
 		if (!on_road_index.zone == ZONE.CITY) {
 			var dust_part = instance_create_layer(x, y, "Instances", obj_dust_particle);
 			dust_part.z = z;
@@ -235,7 +235,7 @@ if (hp > 0) {
 
 
 // remove non-participating cars when too far away
-if (abs(obj_controller.main_camera_target.dist_along_road - dist_along_road) > 6000) {
+if (abs(obj_controller.main_camera_target.dist_along_road - dist_along_road) > 4000) {
 	if (!global.DEBUG_FREE_CAMERA) {
 		if (!ai_behavior.part_of_race) {
 			instance_destroy()

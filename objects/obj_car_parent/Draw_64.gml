@@ -44,7 +44,7 @@ if (ai_behavior.part_of_race) {
 	else {
 		#region draw data around driver on screen
 		if (obj_controller.main_camera_target.id != id) {
-			var screen_coord = world_to_screen(x, y, z-30, global.view_matrix, global.projection_matrix);
+			var screen_coord = world_to_screen(x, y, z+30, global.view_matrix, global.projection_matrix);
 			var dist_alpha = 1 - (abs(dist_along_road - obj_controller.main_camera_target.dist_along_road) / 1024);
 			// var bar_border = 2;
 			// var bar_height = 8;
@@ -75,15 +75,15 @@ if (obj_controller.main_camera_target.id == id) {
 	//draw_text(port_width - 196, 48, $"brake: {braking}");
 	//draw_text(port_width - 196, 64, $"finish: {is_completed}");
 	// draw_text(port_width - 196, 80, $"turn: {turn_rate}");
-	draw_text(16, 16, $"{x}, {y}, {z}");
-	draw_text(16, 32, $"{direction}");
+	//draw_text(16, 16, $"{x}, {y}, {z}");
+	//draw_text(16, 32, $"{direction}");
 	//for (var i = 0; i < max_gear; i++) {
 	//	draw_text(16, 48 + (i * 16), $"gear {i} {gear_shift_rpm[i]}");
 	//}
 	//draw_text(16, 144, $"mass: {mass}");
 	//draw_text(16, 160, $"transfer eff.: {transfer_eff}");
 	//draw_text(16, 176, $"engine power: {engine_power}");
-	//draw_text(128, 176, $"{solid}");
+	draw_text(128, 176, $"{abs(turn_rate)} {global.deltatime} {abs(turn_rate) / global.deltatime}");
 	
 	// boost bar 
 	var bar_border = 2;
