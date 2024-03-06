@@ -16,7 +16,13 @@ if (abs(z-other.z) < 8) {
 			turn_rate *= _d * 2;
 			break;
 		case 1:
-			zspeed += velocity / mass / 30;
+			if (zspeed <= global.gravity_3d) {
+				zspeed = velocity / mass / 10;
+			}
+			
+			if (is_player) {
+				print($"yeet {zspeed}");
+			}
 			break;
 	}
 }

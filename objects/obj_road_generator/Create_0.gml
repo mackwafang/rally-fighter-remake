@@ -3,7 +3,7 @@ randomize();
 depth = 1000;
 
 // primary_count = 80 * global.difficulty;
-road_segments = 20;
+road_segments = 15;
 control_points = [];
 control_points_dist = 2048;
 lane_width = 80;
@@ -51,7 +51,7 @@ primary_count = array_length(control_path);
 for (var s = 0; s < array_length(control_path); s++) {
 	var xx = ((control_path[s] % grid_width) * control_points_dist) + (irandom(control_points_dist / 5) * choose(-1,1));
 	var yy = ((control_path[s] div grid_width) * control_points_dist) + (irandom(control_points_dist / 5) * choose(-1,1));
-	var zz = grid[|s] * 256 * global.difficulty;
+	var zz = grid[|s] * 128 * global.difficulty;
 	control_points[s] = new Point3D(xx, yy, zz);
 }
 
@@ -92,7 +92,7 @@ var lane_change_to = 1+irandom(2); // change this side of road to this number of
 var cur_lane_change_to = lane_change_to; // current lane change for transition
 var prev_lane_lane_to = lane_change_to; // previous lane change
 var lane_side_affected = ROAD_LANE_CHANGE_AFFECT.BOTH; // which side of the road changes 
-var cur_zone = choose(ZONE.SUBURBAN, ZONE.CITY, ZONE.DESERT, ZONE.RIVER);
+var cur_zone = choose(ZONE.SUBURBAN, ZONE.CITY, ZONE.DESERT);
 var initial_river_seg = (cur_zone == ZONE.RIVER ? road_list[@ 0] : undefined);
 for (var i = 0; i < array_length(road_list)-1; i++) {
 	var road = road_list[@i];
@@ -116,6 +116,11 @@ for (var i = 0; i < array_length(road_list)-1; i++) {
 			}
 			else {
 				road.sea_level = min(road.z - 200, initial_river_seg.sea_level);
+			}
+		}
+		else {
+			if (road_list[@ i-1].zone == ZONE.RIVER) {
+				road.sea_level = road_list[@ i-1].sea_level;
 			}
 		}
 	}
@@ -222,10 +227,11 @@ function render_control_point(cp, range=0) {
 	if (global.road_vertex_buffer == -1) {global.road_vertex_buffer = vertex_create_buffer();}
 	if (global.prop_vertex_buffer == -1) {global.prop_vertex_buffer = vertex_create_buffer();}
 	
-	vertex_begin(global.road_vertex_buffer, road_vertex_format);
 	var ri_start = max(0, (cp - 2) * obj_road_generator.road_segments);
 	var ri_end = min(global.road_list_length, max(1, cp+range) * obj_road_generator.road_segments);
 	var adjust_beyond_shoulder_range = beyond_shoulder_range;
+	
+	vertex_begin(global.road_vertex_buffer, road_vertex_format);
 	for (var i = ri_start; i < ri_end - 1; i++) {
 		var road = road_list[@ i];
 		var next_road = road_list[@ i + 1];
@@ -490,27 +496,21 @@ function render_control_point(cp, range=0) {
 	vertex_freeze(global.road_vertex_buffer);	
 	
 	
-		
-	#region railing render
 	vertex_begin(global.prop_vertex_buffer, prop_vertex_format);
 	for (var i = ri_start; i < ri_end - 1; i++) {
 		var road = road_list[@ i];
 		for (var p_i = 0; p_i < array_length(road.props); p_i++) {
-			if (road.props[p_i].object_index == obj_building) {
-				print("wtf");
-			}
 			road.props[p_i].init_vertex_buffer();
 		}
 	}
 	vertex_end(global.prop_vertex_buffer);
 	global.prop_vertex_buffer = calc_vertex_normal(global.prop_vertex_buffer, prop_vertex_format);
-	vertex_freeze(global.prop_vertex_buffer);	
-	#endregion
+	vertex_freeze(global.prop_vertex_buffer);
 }
 
 // create props, building
 var prop_chain = 0;
-//vertex_begin(global.building_vertex_buffer, building_vertex_format);
+//vertex_begin(global.prop_vertex_buffer, prop_vertex_format);
 for (var i = 0; i < array_length(road_list) - 1; i++) {
 	var road = road_list[@i];
 	var next_road = road_list[@i+1];
@@ -518,19 +518,21 @@ for (var i = 0; i < array_length(road_list) - 1; i++) {
 	var right_lanes = road.get_lanes_right();
 	
 	// create traffic lights at intersections
-	if (road.intersection) {
-		if (!next_road.transition_lane) {
-			var traffic_light = instance_create_layer(
-				next_road.x + lengthdir_x((next_road.get_lanes_right() + 0.5) * lane_width, next_road.direction - 90),
-				next_road.y + lengthdir_y((next_road.get_lanes_right() + 0.5) * lane_width, next_road.direction - 90),
-				"Instances",
-				obj_traffic_light
-			);
-			traffic_light.image_index = 0;
-			traffic_light.z = next_road.z;
-			traffic_light.direction = direction;
-			array_push(road.props, prop_obj);
-		}
+	if (road.intersection and !next_road.transition_lane) {
+		var traffic_light = instance_create_layer(
+			next_road.x + lengthdir_x(next_road.get_lanes_right() * lane_width, next_road.direction - 90),
+			next_road.y + lengthdir_y(next_road.get_lanes_right() * lane_width, next_road.direction - 90),
+			"Instances",
+			obj_traffic_prop
+		);
+		traffic_light.image_xscale = 12;
+		traffic_light.image_yscale = 12;
+		traffic_light.image_index = 0;
+		traffic_light.display_sprite_index = spr_traffic_light;
+		traffic_light.display_image_index = 0;
+		traffic_light.z = next_road.z;
+		traffic_light.direction = road.direction;
+		array_push(road.props, traffic_light);
 	}
 	
 	// create speed limit sign
@@ -558,7 +560,7 @@ for (var i = 0; i < array_length(road_list) - 1; i++) {
 		);
 		prop_obj.display_image_index = 1;
 		prop_obj.z = road.z;
-		prop_obj.image_xscale = 10;
+		prop_obj.image_xscale = 8;
 		prop_obj.image_yscale = 24;
 		prop_obj.direction = road.direction;
 		array_push(road.props, prop_obj);
@@ -682,9 +684,9 @@ for (var i = 0; i < array_length(road_list) - 1; i++) {
 			break;
 	}
 }
-//vertex_end(global.building_vertex_buffer);
-//global.building_vertex_buffer = calc_vertex_normal(global.building_vertex_buffer, building_vertex_format);
-//vertex_freeze(global.building_vertex_buffer);
+//vertex_end(global.prop_vertex_buffer);
+//global.prop_vertex_buffer = calc_vertex_normal(global.prop_vertex_buffer, prop_vertex_format);
+//vertex_freeze(global.prop_vertex_buffer);
 
 // railing buffer
 //vertex_begin(global.prop_vertex_buffer, building_vertex_format);
@@ -765,34 +767,34 @@ for (var i = 0; i < array_length(road_list) - 1; i++) {
 //global.prop_vertex_buffer = calc_vertex_normal(global.prop_vertex_buffer, prop_vertex_format);
 //vertex_freeze(global.prop_vertex_buffer);
 
-vertex_format_begin();
-vertex_format_add_position_3d();
-vertex_format_add_color();
-vertex_format_add_texcoord();
-vertex_format_add_normal();
-test_vertex_format = vertex_format_end();
-test_vertex_buffer = vertex_create_buffer();
+//vertex_format_begin();
+//vertex_format_add_position_3d();
+//vertex_format_add_color();
+//vertex_format_add_texcoord();
+//vertex_format_add_normal();
+//test_vertex_format = vertex_format_end();
+//test_vertex_buffer = vertex_create_buffer();
 
-//bottom
-var test_size = 1000;
-vertex_begin(test_vertex_buffer, test_vertex_format);
-vertex_position_3d_uv(test_vertex_buffer, -test_size, -test_size, 0, 0, 0, c_white, 1);
-vertex_position_3d_uv(test_vertex_buffer, test_size, -test_size, 0, 1, 0, c_white, 1);
-vertex_position_3d_uv(test_vertex_buffer, test_size, test_size, 0, 1, 1, c_white, 1);
+////bottom
+//var test_size = 1000;
+//vertex_begin(test_vertex_buffer, test_vertex_format);
+//vertex_position_3d_uv(test_vertex_buffer, -test_size, -test_size, 0, 0, 0, c_white, 1);
+//vertex_position_3d_uv(test_vertex_buffer, test_size, -test_size, 0, 1, 0, c_white, 1);
+//vertex_position_3d_uv(test_vertex_buffer, test_size, test_size, 0, 1, 1, c_white, 1);
 
-vertex_position_3d_uv(test_vertex_buffer, test_size, test_size, 0, 1, 1, c_white, 1);
-vertex_position_3d_uv(test_vertex_buffer, -test_size, test_size, 0, 0, 1, c_white, 1);
-vertex_position_3d_uv(test_vertex_buffer, -test_size, -test_size, 0, 0, 0, c_white, 1);
-vertex_end(test_vertex_buffer);
-test_vertex_buffer = calc_vertex_normal(test_vertex_buffer, test_vertex_format);
-vertex_freeze(test_vertex_buffer);
+//vertex_position_3d_uv(test_vertex_buffer, test_size, test_size, 0, 1, 1, c_white, 1);
+//vertex_position_3d_uv(test_vertex_buffer, -test_size, test_size, 0, 0, 1, c_white, 1);
+//vertex_position_3d_uv(test_vertex_buffer, -test_size, -test_size, 0, 0, 0, c_white, 1);
+//vertex_end(test_vertex_buffer);
+//test_vertex_buffer = calc_vertex_normal(test_vertex_buffer, test_vertex_format);
+//vertex_freeze(test_vertex_buffer);
 
 global.road_list_length = array_length(road_list);
 
 obj_controller.x = road_list[0].x;
 obj_controller.y = road_list[0].y;
 
-render_control_point(0);
+render_control_point(-2, 2);
 
 show_debug_message($"road generation completed in {current_time - t}ms");
 show_debug_message($"global.road_vertex_buffer has {vertex_get_buffer_size(global.road_vertex_buffer)} bytes");

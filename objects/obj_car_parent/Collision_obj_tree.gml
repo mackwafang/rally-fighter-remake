@@ -11,4 +11,9 @@ var _d = clamp(dot_product(b.x, b.y, a.x, a.y), -1, 1);
 hp *= abs(_d);
 turn_rate *= abs(_d) * 2;
 zspeed -= velocity / mass / 30;
-move_contact_all(arccos(_d), 1);
+if (abs(_d) > 1) {
+	print(_d);
+}
+else {
+	move_contact_all(arccos(_d), 1);
+}

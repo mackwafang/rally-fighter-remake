@@ -83,7 +83,6 @@ if (obj_controller.main_camera_target.id == id) {
 	//draw_text(16, 144, $"mass: {mass}");
 	//draw_text(16, 160, $"transfer eff.: {transfer_eff}");
 	//draw_text(16, 176, $"engine power: {engine_power}");
-	draw_text(128, 176, $"{abs(turn_rate)} {global.deltatime} {abs(turn_rate) / global.deltatime}");
 	
 	// boost bar 
 	var bar_border = 2;

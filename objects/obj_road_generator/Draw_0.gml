@@ -13,13 +13,14 @@ if (global.CAMERA_MODE_3D) {
 	//vertex_submit(test_vertex_buffer, pr_trianglelist, tex);
 	
 	var tex = sprite_get_texture(spr_road, 0);
+	var prop_tex = sprite_get_texture(spr_tree, 0);
+	
+	vertex_submit(global.prop_vertex_buffer, pr_trianglelist, prop_tex);
 	vertex_submit(global.road_vertex_buffer, pr_trianglelist, tex);
 	
 	//tex = sprite_get_texture(spr_building_side, 0);
 	//vertex_submit(global.building_vertex_buffer, pr_trianglelist, tex);
 	//gpu_set_cullmode(cull_noculling);
-	tex = sprite_get_texture(spr_railing, 0);
-	vertex_submit(global.prop_vertex_buffer, pr_trianglelist, tex);
 	
 	//shader_reset();
 }

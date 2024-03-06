@@ -7,7 +7,7 @@ if (other != self) {
 				hp -= abs(other.velocity - velocity * dsin(deg)) * abs(mass - other.mass) / 10000;
 			}
 			if (hp <= 0) {
-				zspeed += velocity / 1000;
+				zspeed += velocity / 4000;
 			}
 			
 			push_vector.x += abs(other.velocity - velocity) * dcos(deg) * other.mass;

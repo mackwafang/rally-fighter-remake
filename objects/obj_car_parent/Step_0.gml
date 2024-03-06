@@ -139,12 +139,12 @@ if (can_move) {
 }
 
 // "crash" on river
-if (!on_road && vertical_on_road && on_road_index.zone == ZONE.RIVER) {
-	hp = 0;
-	if (vertical_on_road) {
+if (on_road_index.zone == ZONE.RIVER) {
+	if (z <= on_road_index.sea_level) {
+		hp = 0;
 		velocity = 0;
 		image_alpha = 0;
-	}	
+	}
 }
 // create dust particle
 if (!on_road && vertical_on_road) {
@@ -188,7 +188,7 @@ var drive_torque = engine_torque * engine_to_wheel_ratio * transfer_eff;
 	
 var f_drag = -c_drag * velocity;
 var f_rr = -c_rr * velocity;
-var f_surface = -mass * global.gravity_3d * ((on_road) ? 0.2 : 20) * (vertical_on_road ? 1 : 0);
+var f_surface = -mass * global.gravity_3d * ((on_road) ? 0.2 : 10) * (vertical_on_road ? 1 : 0);
 if (hp <= 0) {
 	f_surface = -mass * global.gravity_3d * (vertical_on_road ? 30 : 0);
 }

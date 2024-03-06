@@ -12,11 +12,20 @@ var vec_to_road = point_to_line(
 if (_z_restrict) {
 	var lerp_value = point_distance(on_road_index.x, on_road_index.y, vec_to_road.x, vec_to_road.y) / on_road_index.length;
 	zlerp = lerp(on_road_index.z, on_road_index.next_road.z, lerp_value);
-	if (on_road_index.zone == ZONE.RIVER and !on_road) {
-		zlerp = on_road_index.sea_level;
-	}
-
 	vertical_on_road = (z+zspeed <= zlerp);
+	
+	if (on_road_index.zone == ZONE.RIVER) {
+		if (!on_road) {
+			zlerp += on_road_index.sea_level;
+		}
+		
+		vertical_on_road = on_road;
+		if (on_road && z < zlerp - min(20, abs(on_road_index.z - on_road_index.next_road.z)*2)) {
+			vertical_on_road = false;
+			on_road = false;
+		}
+	}
+	
 	if (vertical_on_road) {
 		drive_force *= cos(on_road_index.elevation) + (on_road_index.elevation < 0 ? 2 : 0);
 		z = zlerp;
@@ -48,7 +57,7 @@ if (!is_respawning) {
 		}
 		else {
 			vehicle_detail_index = spr_bike_3d_detail_2_turn;
-			vehicle_detail_subimage = round(min(sprite_get_number(vehicle_detail_index), (abs(turn_rate) / 2 / global.deltatime) / 100 * sprite_get_number(vehicle_detail_index)));
+			vehicle_detail_subimage = round(min(sprite_get_number(vehicle_detail_index), (abs(turn_rate) / 4 / global.deltatime) / 100 * sprite_get_number(vehicle_detail_index)));
 		}
 		image_xscale = -(turn_rate == 0 ? 1 : sign(turn_rate));
 		if (!is_completed) {

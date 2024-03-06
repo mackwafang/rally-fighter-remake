@@ -13,7 +13,8 @@ display_sprite_index = 0;
 display_image_index = 0;
 matrix = matrix_build(0,0,0,0,0,0,0,0,0);
 identity_matrix = matrix_build_identity();
-assigned_cp = undefined; // assigned cp to render when camera on said cp
+assigned_cp = undefined; // assigned cp to render when camera on said 
+image_alpha = 0;
 alarm[0] = 1;
 
 function init_vertex_buffer() {
