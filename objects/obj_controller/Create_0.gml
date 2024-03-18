@@ -220,5 +220,4 @@ skybox_vertex_buffer = calc_vertex_normal(skybox_vertex_buffer, skybox_vertex_fo
 vertex_freeze(skybox_vertex_buffer);
 #endregion
 
-
-alarm[0] = round(5 * global.display_freq); // starting timer
+alarm[0] = round(6 * global.display_freq); // starting timer

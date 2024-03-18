@@ -43,7 +43,7 @@ while (array_length(control_path) == 0) {
 	print("Creating road");
 	var init_grid = irandom(grid_height-1);
 	var control_start = init_grid * grid_width;
-	var control_end = (min(grid_height, max(0, init_grid + irandom_range(-8 * global.difficulty, 8 * global.difficulty))) * grid_width) - 1;
+	var control_end = (min(grid_height, max(0, init_grid + irandom_range(-4 * global.difficulty, 4 * global.difficulty))) * grid_width) - 1;
 	control_path = a_star(grid, control_start, control_end, grid_width, a_star_heuristic); // holds grid values to generate control poitns
 }
 
@@ -226,7 +226,6 @@ function render_control_point(cp, range=0) {
 	// calculate render polygons
 	if (global.road_vertex_buffer == -1) {global.road_vertex_buffer = vertex_create_buffer();}
 	if (global.prop_vertex_buffer == -1) {global.prop_vertex_buffer = vertex_create_buffer();}
-	
 	var ri_start = max(0, (cp - 2) * obj_road_generator.road_segments);
 	var ri_end = min(global.road_list_length, max(1, cp+range) * obj_road_generator.road_segments);
 	var adjust_beyond_shoulder_range = beyond_shoulder_range;
@@ -793,11 +792,12 @@ global.road_list_length = array_length(road_list);
 
 obj_controller.x = road_list[0].x;
 obj_controller.y = road_list[0].y;
-
-render_control_point(-2, 2);
+	
 
 show_debug_message($"road generation completed in {current_time - t}ms");
 show_debug_message($"global.road_vertex_buffer has {vertex_get_buffer_size(global.road_vertex_buffer)} bytes");
 show_debug_message($"building_vertex_buffer has {vertex_get_buffer_size(global.building_vertex_buffer)} bytes");
 
 vehicle_current_pos_ping = 0;
+
+alarm[0] = 15;
