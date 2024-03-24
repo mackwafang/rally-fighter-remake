@@ -7,10 +7,10 @@ function torque_lookup(rpm) {
 		510,		// 4k rpm
 		520,		// 5k rpm
 		490,		// 6k rpm
-		450,		// 7k rpm
-		400,		// 8k rpm
-		370,		// 9k rpm
-		250,		// 10k rpm
+		460,		// 7k rpm
+		430,		// 8k rpm
+		400,		// 9k rpm
+		300,		// 10k rpm
 	]
 	var index = max(1, min(array_length(torque_table)-2, rpm div 1000));
 	var lerp_value = (rpm - (rpm div 1000)) / 1000;

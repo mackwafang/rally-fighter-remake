@@ -74,18 +74,18 @@ if (can_move) {
 				// off road, trying to get back on it
 				// find the nearest road
 				//var side = angle_difference(image_angle, point_direction(x,y,road.x,road.y));
-				turn_rate += side / 600;
+				turn_rate = side / 600;
 			}
 			else {
 				// car turning on curved road and moving to its desired lane
-				var tr = (angle_diff / 35) * turn_adjustments; // moving along curved road
+				var tr = (angle_diff / 15) * turn_adjustments; // moving along curved road
 				
 				// moving go desired lane
 				if (dist_to_road > 32) {
 					tr += (sign(side) / 10);
 				}
 				
-				turn_rate += clamp(tr, -1, 1);
+				turn_rate = tr;
 				
 				braking = (abs(tr) > 1) | ((nav_road.get_ideal_throttle() < 0.25) && (abs(angle_diff) > 15));
 			}
@@ -101,7 +101,7 @@ if (can_move) {
 			var is_off_road_left = !is_on_road(x+lengthdir_x(look_ahead_threshold/4, image_angle+90), y+lengthdir_y(look_ahead_threshold/4, image_angle+90), last_road_index) ? 1 : 0;
 			var is_off_road_right = !is_on_road(x+lengthdir_x(look_ahead_threshold/4, image_angle-90), y+lengthdir_y(look_ahead_threshold/4, image_angle-90), last_road_index) ? 1 : 0;
 			
-			var evade_turn_rate = 0.2;
+			var evade_turn_rate = 0.5;
 			if (car_look_left ^ car_look_right) {
 				if (car_look_left) {turn_rate -= evade_turn_rate;}
 				if (car_look_right) {turn_rate += evade_turn_rate;}
@@ -116,11 +116,11 @@ if (can_move) {
 			if (!is_off_road_left | !is_off_road_right) {
 				turn_rate += (-(is_off_road_left/10) + (is_off_road_right/10));
 			}
-			if (ai_behavior.part_of_race) {
-				turn_rate *= max(1 - (velocity / max_velocity), (velocity / max_velocity)) * 1.2;
-			}
+			//if (ai_behavior.part_of_race) {
+			//	turn_rate *= max(1 - (velocity / max_velocity), (velocity / max_velocity)) * 1.2;
+			//}
 			
-			turning = (turn_rate < 0.1 ? 2 : (turn_rate > 0.1 ? 1 : 0));
+			turning += (turn_rate < 0.1 ? 2 : (turn_rate > 0.1 ? 1 : 0));
 			// enables boost
 			if (boost_juice >= 100) {
 				if (irandom(20) < global.difficulty) {
@@ -182,7 +182,7 @@ if (is_completed) {
 
 // calculate engine stuff for acceleration
 var engine_to_wheel_ratio = gear_ratio[gear-1] * diff_ratio;
-var engine_torque_max = ((horsepower / engine_rpm * 5252) * 8 * global.difficulty);// * (torque_lookup(engine_rpm) / 400);
+var engine_torque_max = (torque_lookup(engine_rpm) * power(global.difficulty, 1.5));//((horsepower / engine_rpm * 5252) * 8 * global.difficulty);
 var engine_torque = engine_torque_max * (boost_active ? 2 : engine_power);
 var drive_torque = engine_torque * engine_to_wheel_ratio * transfer_eff;
 	
@@ -193,7 +193,7 @@ if (hp <= 0) {
 	f_surface = -mass * global.gravity_3d * (vertical_on_road ? 30 : 0);
 }
 var f_brake = ((braking) ? -braking_power * 1000 : 0);
-var f_turn = -abs(turn_rate) * mass;
+var f_turn = -abs(turn_rate) * mass * 3;
 if (velocity <= 0) {
 	f_brake = 0;
 	f_surface = 0;

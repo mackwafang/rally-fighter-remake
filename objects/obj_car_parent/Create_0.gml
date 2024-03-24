@@ -15,12 +15,11 @@ engine_rpm = 1000;		// engine rpm
 test_rpm = 0;
 velocity = 0;			// car's speed
 max_velocity = 3000;	// car's max speed
-wheel_radius = 0.34;	// wheel radius in m
+wheel_radius = 0.32;	// wheel radius in m
 mass = 300;				// vehicle mass, in kg
 horsepower = 300;		// horsepower
 turn_rate = 0;			// car's turning rate
 gear = 1;				// car's gear 
-max_gear = 6;
 engine_power = 0;		// throttle position
 transfer_eff = 0.8;		// transfer efficiency
 acceleration = 0;		// acceleration value
@@ -47,21 +46,26 @@ c_rr = 20 * c_drag;										// constant value for car's drag
 
 _z_restrict = true;
 
+// max gear based on difficulty
+switch(global.difficulty) {
+	case 1:		max_gear = 4; break;
+	case 1.25:	max_gear = 5; break;
+	case 1.5:	max_gear = 6; break;
+	case 1.75:	max_gear = 6; break;
+	case 2:		max_gear = 6; break;
+}
+
 //gear's ratio
 // gear_ratio = [3, 2.5, 2, 5/3, 10/7, 11/9];
-gear_ratio = [3, 2.25, 1.8, 5/3, 10/7, 11/9];
-gear_shift_rpm = [
-	[0, 4500],
-	[2000, 4250],
-	[2750, 4000],
-	[2750, 4000],
-	[2750, 4000],
-	[2750, 2750],
-];
-for (var g = 0; g < array_length(gear_shift_rpm); g++) {
-	gear_shift_rpm[g][0] *= global.difficulty;
-	gear_shift_rpm[g][1] *= global.difficulty;
-}
+gear_ratio = [3, 2.25, 1.9, 5/3, 10/7, 11/9];
+//gear_shift_rpm = [
+//	[0, 4500],
+//	[2000, 4250],
+//	[2750, 4000],
+//	[2750, 4000],
+//	[2750, 4000],
+//	[2750, 2750],
+//];
 //gear_shift_rpm = [
 //	[0, 9000],
 //	[4000, 8500],
@@ -71,16 +75,20 @@ for (var g = 0; g < array_length(gear_shift_rpm); g++) {
 //	[5500, 5500],
 //];
 //gear_ratio = [2.66, 1.78, 1.3, 1, 0.74, 0.5];
-//gear_shift_rpm = [
-//	[0, 8000],
-//	[4000, 8500],
-//	[4500, 7000],
-//	[4500, 5500],
-//	[4500, 5000],
-//	[3500, 5500],
-//];
+gear_shift_rpm = [
+	[0, 4000],
+	[2000, 4000],
+	[2250, 3750],
+	[2250, 3500],
+	[2250, 3250],
+	[1250, 3000],
+];
+for (var g = 0; g < array_length(gear_shift_rpm); g++) {
+	gear_shift_rpm[g][0] *= global.difficulty;
+	gear_shift_rpm[g][1] *= global.difficulty;
+}
 
-diff_ratio = 3.5;
+diff_ratio = 1.5 + global.difficulty;
 gear_shift_wait = 0;		//  time wait to change gear again
 
 accelerating = false;		// flag to check if car is accelerating
