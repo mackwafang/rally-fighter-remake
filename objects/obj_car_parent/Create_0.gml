@@ -48,9 +48,9 @@ _z_restrict = true;
 
 // max gear based on difficulty
 switch(global.difficulty) {
-	case 1:		max_gear = 4; break;
-	case 1.25:	max_gear = 5; break;
-	case 1.5:	max_gear = 6; break;
+	case 1:		max_gear = 3; break;
+	case 1.25:	max_gear = 4; break;
+	case 1.5:	max_gear = 5; break;
 	case 1.75:	max_gear = 6; break;
 	case 2:		max_gear = 6; break;
 }

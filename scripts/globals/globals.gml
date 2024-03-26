@@ -17,6 +17,8 @@ global.CAMERA_MODE_3D = true;
 global.WORLD_TO_REAL_SCALE = 1.5;
 global.REAL_TO_WORLD_SCALE = 1/global.WORLD_TO_REAL_SCALE;
 
+global.LEVEL_TO_DIFFICULTY = [1, 1.25, 1.5, 1.75, 2];
+
 // player_input
 global.player_input = {
 	accelerate: ord("C"),

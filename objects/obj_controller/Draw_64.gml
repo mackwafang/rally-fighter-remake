@@ -188,3 +188,7 @@ draw_set_halign(fa_center);
 var race_minute = round(global.race_timer) div 60;
 var race_second = round(global.race_timer) % 60;
 draw_text(port_width / 2, 32, $"{string_replace(string_format(race_minute, 2, 0), " ", 0)}:{string_replace(string_format(race_second, 2, 0), " ", 0)}");
+
+// race difficulty
+
+draw_text(port_width / 2, 12, $"Level {round((global.difficulty - 1) / 0.25)}");
