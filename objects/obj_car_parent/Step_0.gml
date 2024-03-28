@@ -74,7 +74,7 @@ if (can_move) {
 				// off road, trying to get back on it
 				// find the nearest road
 				//var side = angle_difference(image_angle, point_direction(x,y,road.x,road.y));
-				turn_rate = side / 600;
+				turn_rate = side / 300;
 			}
 			else {
 				// car turning on curved road and moving to its desired lane

@@ -191,4 +191,4 @@ draw_text(port_width / 2, 32, $"{string_replace(string_format(race_minute, 2, 0)
 
 // race difficulty
 
-draw_text(port_width / 2, 12, $"Level {round((global.difficulty - 1) / 0.25)}");
+draw_text(port_width / 2, 12, $"Level {round((global.difficulty - 1) / 0.25) + 1}");

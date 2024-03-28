@@ -85,7 +85,6 @@ vertex_format_add_normal();
 road_vertex_format = vertex_format_end();
 global.road_vertex_buffer = vertex_create_buffer();
 
-
 // set up road node data
 var lane_change_duration = 50; //how many nodes until change to new lane
 var lane_change_to = 1+irandom(2); // change this side of road to this number of lanes

@@ -96,6 +96,11 @@ if (!global.DEBUG_FREE_CAMERA) {
 			z += 0.125;
 			cam_zoom = clamp(cam_zoom, -500, 10);
 			z = clamp(z, 0, 250);
+			
+			if (cam_zoom == -500) {
+				clean_level();
+				room_goto(rm_title);
+			}
 		}
 		if (keyboard_check_pressed(ord("R"))) {
 			main_camera_target.x = obj_road_generator.road_list[0].x;
